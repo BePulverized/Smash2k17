@@ -68,6 +68,8 @@ public class Map extends Game{
         throw new NotImplementedException();
     }
 
+    public ArrayList<Entity> getEntitys(){return players;}
+
 
     @Override
     public void create()

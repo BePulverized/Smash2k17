@@ -9,8 +9,8 @@ public class Player extends Entity{
 
     private int lives;
 
-    public Player(String name, int hitPoints, Point position, int strength, int armor, int lives) {
-        super(name, hitPoints, position, strength, armor);
+    public Player(String name, int hitPoints, Point position, int strength, int armor, Map map, int lives) {
+        super(name, hitPoints, position, strength, armor, map);
         this.lives = 3;
     }
 
@@ -20,5 +20,12 @@ public class Player extends Entity{
 
     public void setLives(int lives) {
         this.lives = lives;
+    }
+
+    @Override
+    public void Respawn(){
+        if (hitPoints <= 0 && lives > 0){
+            hitPoints = 100;
+        }
     }
 }
