@@ -62,6 +62,8 @@ public class Map {
         throw new NotImplementedException();
     }
 
+    public ArrayList<Entity> getEntitys(){return players;}
+
 
 
 }
