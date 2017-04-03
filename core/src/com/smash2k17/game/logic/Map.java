@@ -24,11 +24,12 @@ public class Map extends Game{
     private ArrayList<Entity> players;
     private Texture img;
 
+
     public Map()
     {
         this.name = name;
-        this.gridWidth = gridWidth;
-        this.gridHeight = gridHeight;
+        this.gridWidth = 400;
+        this.gridHeight = 208;
         this.gameMode = GameMode.TDM;
         players = new ArrayList<Entity>();
     }
@@ -75,7 +76,7 @@ public class Map extends Game{
     public void create()
     {
         batch = new SpriteBatch();
-        setScreen(new PlayScreen());
+        setScreen(new PlayScreen(this));
 
     }
     @Override
