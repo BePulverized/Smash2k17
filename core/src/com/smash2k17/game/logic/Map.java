@@ -18,6 +18,7 @@ public class Map extends Game{
     private String name;
     private int gridWidth;
     private int gridHeight;
+    public static final float PPM = 100;
     private GameMode gameMode;
     private ArrayList<Point> deathZones;
     private ArrayList<ItemDrop> itemDrops;
@@ -83,5 +84,9 @@ public class Map extends Game{
     public void render()
     {
         super.render();
+    }
+
+    public float getPPM() {
+        return PPM;
     }
 }
