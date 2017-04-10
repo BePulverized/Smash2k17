@@ -1,11 +1,14 @@
 package com.smash2k17.game.logic;
 
-import Screens.PlayScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
+
+import java.awt.event.KeyEvent;
 
 /**
  * Created by BePul on 27-3-2017.
@@ -16,8 +19,9 @@ public class Player extends Entity {
     private int lives;
 
 
-    public Player(World world, PlayScreen screen) {
-        super(world, screen);
+    public Player(Map map) {
+        super(map);
+
         defineEntity();
         this.lives = 3;
 
@@ -26,13 +30,13 @@ public class Player extends Entity {
     @Override
     public void defineEntity() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(200 / Map.PPM, 200/ Map.PPM);
+        bdef.position.set(200 / com.smash2k17.game.logic.World.PPM, 200/ com.smash2k17.game.logic.World.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(20 / Map.PPM);
+        shape.setRadius(20 / com.smash2k17.game.logic.World.PPM);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
@@ -95,6 +99,24 @@ public class Player extends Entity {
 
     public void setLives(int lives) {
         this.lives = lives;
+    }
+
+    @Override
+    public void Move(KeyEvent e) {
+
+    }
+
+    public void handleInput(float dt)
+    {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 2)
+            b2body.applyLinearImpulse(new Vector2(0.1f, 0), b2body.getWorldCenter(), true);
+
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2)
+            b2body.applyLinearImpulse(new Vector2(-0.1f, 0), b2body.getWorldCenter(), true);
+
     }
 
     @Override

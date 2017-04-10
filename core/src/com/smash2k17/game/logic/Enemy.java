@@ -1,21 +1,20 @@
 package com.smash2k17.game.logic;
 
-import Screens.PlayScreen;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by pieni on 03/04/2017.
  */
 public class Enemy extends Entity {
 
-    private World world;
     public Body b2body;
+    private World world;
 
-    public Enemy(World world, PlayScreen screen) {
-        super(world, screen);
+    public Enemy(Map map) {
+        super(map);
     }
 
     @Override
@@ -30,5 +29,10 @@ public class Enemy extends Entity {
 
     public void lowerHitpoints(int attack) {
         hitPoints -= attack;
+    }
+
+    @Override
+    public void Move(KeyEvent e) {
+
     }
 }
