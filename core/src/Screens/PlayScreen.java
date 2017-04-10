@@ -5,8 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -20,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.smash2k17.game.logic.Map;
 import com.smash2k17.game.logic.Player;
-import javafx.scene.text.Text;
 
 /**
  * Created by BePul on 3-4-2017.
@@ -47,12 +44,12 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(Map map)
     {
-        atlas = new TextureAtlas("core\\assets\\player_runnning.pack");
+        atlas = new TextureAtlas("PLAYER.pack");
         this.map = map;
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(map.getGridWidth() / map.getPPM(), map.getGridHeight() / map.getPPM(), gameCam);
         mapLoader = new TmxMapLoader();
-        tiledMap = mapLoader.load(Gdx.files.internal("core\\assets\\Map_1.tmx").file().getAbsolutePath());
+        tiledMap = mapLoader.load(Gdx.files.internal("Map_1.tmx").file().getAbsolutePath());
         renderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / map.getPPM());
         gameCam.position.set(gamePort.getWorldWidth() /2, gamePort.getWorldHeight() /2, 0);
         world = new World(new Vector2(0, -10), true);

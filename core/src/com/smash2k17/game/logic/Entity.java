@@ -1,57 +1,56 @@
 package com.smash2k17.game.logic;
 
 import Screens.PlayScreen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.model.Animation;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.smash2k17.game.logic.interfaces.IPlayable;
-import javafx.animation.AnimationTimer;
-import javafx.scene.text.Text;
-import com.badlogic.gdx.utils.Array;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.Array;
+
 
 /**
  * Created by BePul on 27-3-2017.
  */
 public abstract class Entity extends Sprite implements IPlayable {
 
-    public enum State{ FALLING, JUMPING, STANDING, RUNNING};
-    public State currentState;
+        public State currentState;;
     public State previousState;
-    private String name;
+    public World world;
+    public Body b2body;
+    public TextureRegion playerStand;
+    public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerRun;
+    public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerJump;
+    public float stateTimer;
+    public boolean runningRight;
     int hitPoints;
+    private String name;
     private Point position;
     private int strength;
     private int armor;
     private Map map;
-    public World world;
-    public Body b2body;
-    private TextureRegion playerStand;
-    private Animation playerRun;
-    private Animation playerJump;
-    private float stateTimer;
-    private boolean runningRight;
-
     public Entity(World world, PlayScreen screen)
     {
-        super(screen.getTextureAtlas().findRegion("running", 1));
+        super(screen.getTextureAtlas().findRegion("frame-1"));
         com.badlogic.gdx.utils.Array<TextureRegion> frames = new com.badlogic.gdx.utils.Array<TextureRegion>();
-        for(int i = 1; i < 4; i++)
+        for(int i = 1; i < 2; i++)
         {
-            frames.add(new TextureRegion(getTexture(), i * 33, i * 45));
-//            playerRun = new Animation(0.1f, frames);
-//            frames.clear();
+            frames.add(new TextureRegion(getTexture(), i * 500,  450));
+            playerRun = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
+            frames.clear();
         }
 
-        playerStand = new TextureRegion(getTexture(),0, 0, 33,45 );
-        setBounds(0,30, 33/ Map.PPM, 45/ Map.PPM);
+        for(int i = 2; i < 6; i++)
+        {
+            frames.add(new TextureRegion(getTexture(), 500, 450));
+            playerJump = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
+
+        }
+
+        playerStand = new TextureRegion(getTexture(),0, 0, 500,450 );
+        setBounds(0,30, 40/ Map.PPM, 40/ Map.PPM);
         setRegion(playerStand);
         this.world = world;
         defineEntity();
@@ -72,6 +71,7 @@ public abstract class Entity extends Sprite implements IPlayable {
     public abstract void defineEntity();
 
     public abstract void update(float dt);
+
     public void Move(KeyEvent e){
         if(KeyEvent.getKeyText(e.getKeyCode()) == "a"){
             //als position groter is als het einde van de map
@@ -101,6 +101,8 @@ public abstract class Entity extends Sprite implements IPlayable {
     }
 
     public void Respawn(){}
+
+public enum State{ FALLING, JUMPING, STANDING, RUNNING}
 
 
 
