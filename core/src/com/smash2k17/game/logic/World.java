@@ -19,13 +19,10 @@ public class World extends Game{
     private int gridWidth;
     private int gridHeight;
 
-
     public World()
     {
-
         this.gridWidth = 400;
         this.gridHeight = 208;
-
     }
 
     public int getGridWidth()
@@ -72,7 +69,6 @@ public class World extends Game{
     {
         batch = new SpriteBatch();
         setScreen(new Map(this));
-
     }
 
     @Override

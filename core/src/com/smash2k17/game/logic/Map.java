@@ -41,9 +41,6 @@ public class Map implements Screen{
     private OrthogonalTiledMapRenderer renderer;
     private TextureAtlas atlas;
 
-
-
-
     //Box2d
     private com.badlogic.gdx.physics.box2d.World worldlib;
     private Box2DDebugRenderer b2dr;

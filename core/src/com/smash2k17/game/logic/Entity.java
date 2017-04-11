@@ -71,8 +71,6 @@ public abstract class Entity extends Sprite implements IPlayable {
 
     public abstract void update(float dt);
 
-
-
     public void Jump(){
         position.y += 20;
     }

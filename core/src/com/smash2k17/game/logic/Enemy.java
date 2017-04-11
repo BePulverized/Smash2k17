@@ -12,9 +12,14 @@ public class Enemy extends Entity {
 
     public Body b2body;
     private World world;
+    private boolean touching = false;
 
     public Enemy(Map map) {
         super(map);
+    }
+
+    public void setTouching(boolean touching){
+        this.touching = touching;
     }
 
     @Override
@@ -28,7 +33,9 @@ public class Enemy extends Entity {
     }
 
     public void lowerHitpoints(int attack) {
-        hitPoints -= attack;
+        if(touching){
+            hitPoints -= attack;
+        }
     }
 
     @Override
