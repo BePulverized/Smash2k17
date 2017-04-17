@@ -40,7 +40,7 @@ public class Player extends Entity {
         CircleShape shape = new CircleShape();
         shape.setRadius(15 / com.smash2k17.game.logic.World.PPM);
         fdef.filter.categoryBits = World.PLAYER_BIT;
-        fdef.filter.maskBits = World.GROUND_BIT | World.OBJECT_BIT | World.ITEM_BIT;
+        fdef.filter.maskBits = World.GROUND_BIT | World.OBJECT_BIT | World.ITEM_BIT | World.ENEMY_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
@@ -127,7 +127,7 @@ public class Player extends Entity {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2)
                 b2body.applyLinearImpulse(new Vector2(-0.1f, 0), b2body.getWorldCenter(), true);
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
-                jump();
+                attack();
         }
 
     }
@@ -158,5 +158,8 @@ public class Player extends Entity {
 
     public void loseHealth(int i) {
         hitPoints = hitPoints - i;
+    }
+
+    public void addHealth(int i) {
     }
 }
