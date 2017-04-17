@@ -155,4 +155,8 @@ public class Player extends Entity {
             hitPoints = 100;
         }
     }
+
+    public void loseHealth(int i) {
+        hitPoints = hitPoints - i;
+    }
 }
