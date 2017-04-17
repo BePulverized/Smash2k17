@@ -14,7 +14,7 @@ import java.awt.*;
  */
 public abstract class Entity extends Sprite implements IPlayable {
 
-    public State currentState;;
+    public State currentState;
     public State previousState;
     public World world;
     public Body b2body;
