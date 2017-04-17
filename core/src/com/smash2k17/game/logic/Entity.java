@@ -28,28 +28,29 @@ public abstract class Entity extends Sprite implements IPlayable {
     private Point position;
     private int strength;
     private int armor;
+    public boolean playerIsDead;
     private com.smash2k17.game.logic.Map map;
     public Entity(com.smash2k17.game.logic.Map map)
     {
-        super(map.getTextureAtlas().findRegion("frame-1"));
+        super(map.getTextureAtlas().findRegion("kirby_walk"));
         this.map = map;
         com.badlogic.gdx.utils.Array<TextureRegion> frames = new com.badlogic.gdx.utils.Array<TextureRegion>();
-        for(int i = 1; i < 2; i++)
-        {
-            frames.add(new TextureRegion(getTexture(), i * 500,  450));
+        for(int i = 1; i < 4; i++) {
+            frames.add(new TextureRegion(getTexture(), 176 + (i * 19), 0, 18, 30));
             playerRun = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
-            frames.clear();
         }
+            frames.clear();
+
 
         for(int i = 2; i < 6; i++)
         {
-            frames.add(new TextureRegion(getTexture(), 500, 450));
+            frames.add(new TextureRegion(getTexture(),(12*16), 0, 20, 30));
             playerJump = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
 
         }
 
-        playerStand = new TextureRegion(getTexture(),0, 0, 500,450 );
-        setBounds(0,30, 40/ com.smash2k17.game.logic.World.PPM, 40/ com.smash2k17.game.logic.World.PPM);
+        playerStand = new TextureRegion(getTexture(),192, 0, 20,30 );
+        setBounds(0,0, 40/ com.smash2k17.game.logic.World.PPM, 40/ com.smash2k17.game.logic.World.PPM);
         setRegion(playerStand);
         this.world = map.getWorld();
         defineEntity();
@@ -86,7 +87,9 @@ public abstract class Entity extends Sprite implements IPlayable {
 
     public void Respawn(){}
 
-public enum State{ FALLING, JUMPING, STANDING, RUNNING}
+    public boolean isDead(){return  playerIsDead;}
+
+public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING}
 
 
 

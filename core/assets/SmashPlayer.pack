@@ -1,0 +1,12 @@
+
+SmashPlayer.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Illusion_Walk
+  rotate: false
+  xy: 1, 1
+  size: 169, 192
+  orig: 169, 192
+  offset: 0, 0
+  index: -1

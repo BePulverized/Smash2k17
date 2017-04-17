@@ -12,6 +12,10 @@ import java.util.Date;
 public class World extends Game{
 
     public static final float PPM = 100;
+    public static final short OBJECT_BIT = 32;
+    public static final short ITEM_BIT = 256;
+    public static final short PLAYER_BIT = 2;
+    public static final short GROUND_BIT = 1;
     public SpriteBatch batch;
     private Date dateCreated;
     private Date dateEnded;
@@ -19,10 +23,13 @@ public class World extends Game{
     private int gridWidth;
     private int gridHeight;
 
+
     public World()
     {
-        this.gridWidth = 400;
-        this.gridHeight = 208;
+
+        this.gridWidth = 600;
+        this.gridHeight = 300;
+
     }
 
     public int getGridWidth()
@@ -69,6 +76,7 @@ public class World extends Game{
     {
         batch = new SpriteBatch();
         setScreen(new Map(this));
+
     }
 
     @Override

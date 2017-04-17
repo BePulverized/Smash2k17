@@ -13,12 +13,16 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.Random;
 
 /**
  * Created by BePul on 27-3-2017.
@@ -40,6 +44,8 @@ public class Map implements Screen{
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
     private TextureAtlas atlas;
+    private long lastBuffDropTime;
+    private long lastDebuffDropTime;
 
     //Box2d
     private com.badlogic.gdx.physics.box2d.World worldlib;
@@ -47,18 +53,20 @@ public class Map implements Screen{
 
     //Sprites
     private Player player;
+    private Array<ItemDrop> items;
+    private PriorityQueue<ItemDef> itemsToSpawn;
 
     public Map(World world)
     {
         this.name = name;
         players = new ArrayList<Entity>();
         this.gameMode = GameMode.TDM;
-        atlas = new TextureAtlas("PLAYER.pack");
+        atlas = new TextureAtlas("core\\assets\\PLAYER.pack");
         this.game = world;
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(game.getGridWidth() / game.getPPM(), game.getGridHeight() / game.getPPM(), gameCam);
         mapLoader = new TmxMapLoader();
-        tiledMap = mapLoader.load(Gdx.files.internal("Map_1.tmx").file().getAbsolutePath());
+        tiledMap = mapLoader.load(Gdx.files.internal("core\\assets\\Map_1.tmx").file().getAbsolutePath());
         renderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / game.getPPM());
         gameCam.position.set(gamePort.getWorldWidth() /2, gamePort.getWorldHeight() /2, 0);
         worldlib = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -10), true);
@@ -86,6 +94,46 @@ public class Map implements Screen{
 
         player = new Player(this);
 
+        worldlib.setContactListener(new WorldContactListener());
+        items = new Array<ItemDrop>();
+        itemsToSpawn = new PriorityQueue<ItemDef>();
+
+    }
+
+    public void spawnItem(ItemDef idef)
+    {
+        itemsToSpawn.add(idef);
+        lastBuffDropTime = TimeUtils.millis();
+        lastDebuffDropTime = TimeUtils.millis();
+    }
+
+    public void handleSpawningItems()
+    {
+        Random rnddebuff = new Random();
+        if(TimeUtils.millis() - lastDebuffDropTime > 5000 && items.size < 2) {
+            int randomx = rnddebuff.nextInt(6 + 1 - 1) + 1;
+            int randomy = rnddebuff.nextInt(3 +1 - 1) + 1;
+            spawnItem(new ItemDef(new Vector2(randomx, randomy), Debuff.class));
+        }
+        Random rndbuff = new Random();
+        if(TimeUtils.millis() - lastBuffDropTime > 4000 && items.size < 2) {
+            int randomx = rndbuff.nextInt(6 + 1 - 1) + 1;
+            int randomy = rndbuff.nextInt(3 +1 - 1) + 1;
+            spawnItem(new ItemDef(new Vector2(randomx, randomy), PowerUp.class));
+        }
+        if(!itemsToSpawn.isEmpty())
+        {
+
+            ItemDef idef = itemsToSpawn.poll();
+            if(idef.type == PowerUp.class)
+            {
+                items.add(new PowerUp(this, idef.position.x, idef.position.y));
+            }
+            if(idef.type == Debuff.class)
+            {
+                items.add(new Debuff(this, idef.position.x, idef.position.y));
+            }
+        }
     }
 
     public String getName()
@@ -108,6 +156,10 @@ public class Map implements Screen{
         return false;
     }
 
+    public void pickUpItem(ItemDrop item){
+
+        items.removeValue(item, true);}
+
     public void end()
     {
         throw new NotImplementedException();
@@ -123,11 +175,16 @@ public class Map implements Screen{
     public void update(float dt)
     {
         player.handleInput(dt);
+        handleSpawningItems();
         worldlib.step(1/60f, 6, 2);
         player.update(dt);
         gameCam.position.x = player.b2body.getPosition().x;
         gameCam.update();
         renderer.setView(gameCam);
+        for(ItemDrop item : items)
+        {
+            item.update(dt);
+        }
     }
 
 
@@ -146,6 +203,10 @@ public class Map implements Screen{
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         player.draw(game.batch);
+        for(ItemDrop item : items)
+        {
+            item.draw(game.batch);
+        }
         game.batch.end();
     }
 
