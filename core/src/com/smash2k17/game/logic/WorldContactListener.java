@@ -24,7 +24,14 @@ public class WorldContactListener implements ContactListener {
                     ((ItemDrop)fixB.getUserData()).use((Player) fixA.getUserData());
                 }
                 break;
-
+            /*case World.ENEMY_BIT | World.PLAYER_BIT:
+                if(fixA.getFilterData().categoryBits == World.ENEMY_BIT){
+                    ((Enemy)fixA.getUserData()).lowerHitpoints(((Player) fixB.getUserData()).getStrength());
+                }
+                else{
+                    ((Enemy)fixB.getUserData()).lowerHitpoints(((Player) fixA.getUserData()).getStrength());
+                }
+                break;*/
 
         }
     }

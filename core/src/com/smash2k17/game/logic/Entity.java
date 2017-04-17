@@ -21,9 +21,10 @@ public abstract class Entity extends Sprite implements IPlayable {
     public TextureRegion playerStand;
     public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerRun;
     public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerJump;
+    public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerAttack;
     public float stateTimer;
     public boolean runningRight;
-    public int hitPoints;
+    int hitPoints;
     private String name;
     private Point position;
     private int strength;
@@ -49,6 +50,13 @@ public abstract class Entity extends Sprite implements IPlayable {
 
         }
 
+        for(int i = 2; i < 6; i++)
+        {
+            frames.add(new TextureRegion(getTexture(),(12*16), 0, 20, 30));
+            playerRun = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
+
+        }
+
         playerStand = new TextureRegion(getTexture(),192, 0, 20,30 );
         setBounds(0,0, 40/ com.smash2k17.game.logic.World.PPM, 40/ com.smash2k17.game.logic.World.PPM);
         setRegion(playerStand);
@@ -66,6 +74,13 @@ public abstract class Entity extends Sprite implements IPlayable {
         runningRight = true;
 
 
+    }
+    public int getStrength(){
+        return strength;
+    }
+
+    public int getHealth(){
+        return hitPoints;
     }
 
     public abstract void defineEntity();
@@ -87,15 +102,9 @@ public abstract class Entity extends Sprite implements IPlayable {
 
     public void Respawn(){}
 
-    public int getHealth(){ return hitPoints;}
+    public boolean isDead(){return  playerIsDead;}
 
-    public void addHealth(int health){ if(this.hitPoints < 150){this.hitPoints = this.hitPoints + health;}}
-
-    public void loseHealth(int health) {this.hitPoints = this.hitPoints - health;}
-
-
-
-    public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING}
+public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING, ATTACK}
 
 
 

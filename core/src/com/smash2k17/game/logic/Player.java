@@ -40,7 +40,7 @@ public class Player extends Entity {
         CircleShape shape = new CircleShape();
         shape.setRadius(15 / com.smash2k17.game.logic.World.PPM);
         fdef.filter.categoryBits = World.PLAYER_BIT;
-        fdef.filter.maskBits = World.GROUND_BIT | World.OBJECT_BIT | World.ITEM_BIT;
+        fdef.filter.maskBits = World.GROUND_BIT | World.OBJECT_BIT | World.ITEM_BIT | World.ENEMY_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
@@ -63,6 +63,9 @@ public class Player extends Entity {
                 break;
             case RUNNING:
                 region = playerRun.getKeyFrame(stateTimer, true);
+                break;
+            case ATTACK:
+                region = playerAttack.getKeyFrame(stateTimer, true);
                 break;
             case FALLING:
             case STANDING:
@@ -123,6 +126,8 @@ public class Player extends Entity {
                 b2body.applyLinearImpulse(new Vector2(0.1f, 0), b2body.getWorldCenter(), true);
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2)
                 b2body.applyLinearImpulse(new Vector2(-0.1f, 0), b2body.getWorldCenter(), true);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+                attack();
         }
 
     }
@@ -136,11 +141,25 @@ public class Player extends Entity {
         }
     }
 
+    public void attack()
+    {
+        if(currentState != State.ATTACK)
+        {
+            currentState = State.ATTACK;
+        }
+    }
 
     @Override
     public void Respawn(){
         if (hitPoints <= 0 && lives > 0){
             hitPoints = 100;
         }
+    }
+
+    public void loseHealth(int i) {
+        hitPoints = hitPoints - i;
+    }
+
+    public void addHealth(int i) {
     }
 }
