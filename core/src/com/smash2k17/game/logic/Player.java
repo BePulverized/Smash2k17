@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 import java.awt.event.KeyEvent;
@@ -36,10 +37,14 @@ public class Player extends Entity {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(20 / com.smash2k17.game.logic.World.PPM);
+        shape.setRadius(15 / com.smash2k17.game.logic.World.PPM);
+        fdef.filter.categoryBits = World.PLAYER_BIT;
+        fdef.filter.maskBits = World.GROUND_BIT | World.OBJECT_BIT | World.ITEM_BIT;
 
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData(this);
+
+
     }
 
     @Override
@@ -64,13 +69,13 @@ public class Player extends Entity {
                 region = playerStand;
                 break;
         }
-        if ((b2body.getLinearVelocity().x > 0 || runningRight) && !region.isFlipX()) {
-            region.flip(true, false);
-            runningRight = true;
-        }
-         else if ((b2body.getLinearVelocity().x < 0 || !runningRight) && region.isFlipX()) {
+        if ((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
             region.flip(true, false);
             runningRight = false;
+        }
+         else if ((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
+            region.flip(true, false);
+            runningRight = true;
         }
 
         stateTimer = currentState == previousState ? stateTimer + dt : 0;
