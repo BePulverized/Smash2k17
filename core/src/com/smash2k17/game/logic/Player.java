@@ -87,7 +87,7 @@ public class Player extends Entity {
 
 
     private State getState() {
-        if(playerIsDead)
+        if(b2body.getPosition().y < 0 || getHealth() <= 0)
             return State.DEAD;
         if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
             return State.JUMPING;
@@ -135,6 +135,7 @@ public class Player extends Entity {
             currentState = State.JUMPING;
         }
     }
+
 
     @Override
     public void Respawn(){

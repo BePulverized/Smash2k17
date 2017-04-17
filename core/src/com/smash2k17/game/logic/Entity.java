@@ -23,7 +23,7 @@ public abstract class Entity extends Sprite implements IPlayable {
     public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerJump;
     public float stateTimer;
     public boolean runningRight;
-    int hitPoints;
+    public int hitPoints;
     private String name;
     private Point position;
     private int strength;
@@ -72,8 +72,6 @@ public abstract class Entity extends Sprite implements IPlayable {
 
     public abstract void update(float dt);
 
-
-
     public void Jump(){
         position.y += 20;
     }
@@ -89,9 +87,15 @@ public abstract class Entity extends Sprite implements IPlayable {
 
     public void Respawn(){}
 
-    public boolean isDead(){return  playerIsDead;}
+    public int getHealth(){ return hitPoints;}
 
-public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING}
+    public void addHealth(int health){ if(this.hitPoints < 150){this.hitPoints = this.hitPoints + health;}}
+
+    public void loseHealth(int health) {this.hitPoints = this.hitPoints - health;}
+
+
+
+    public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING}
 
 
 

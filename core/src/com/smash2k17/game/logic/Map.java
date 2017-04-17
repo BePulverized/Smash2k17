@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.utils.Box2DBuild;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -46,15 +47,17 @@ public class Map implements Screen{
     private TextureAtlas atlas;
     private long lastBuffDropTime;
     private long lastDebuffDropTime;
-
-
-
+    // Interface
+    private UserInterface ui;
 
     //Box2d
     private com.badlogic.gdx.physics.box2d.World worldlib;
-    private Box2DDebugRenderer b2dr;
+    // Build
+    private Box2DBuild b2dr;
+    //Debug
+//    private Box2DDebugRenderer b2dr;
 
-    //Sprites
+    //items
     private Player player;
     private Array<ItemDrop> items;
     private PriorityQueue<ItemDef> itemsToSpawn;
@@ -68,14 +71,16 @@ public class Map implements Screen{
         this.game = world;
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(game.getGridWidth() / game.getPPM(), game.getGridHeight() / game.getPPM(), gameCam);
+        ui = new UserInterface(game.batch);
         mapLoader = new TmxMapLoader();
         tiledMap = mapLoader.load(Gdx.files.internal("core\\assets\\Map_1.tmx").file().getAbsolutePath());
         renderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / game.getPPM());
         gameCam.position.set(gamePort.getWorldWidth() /2, gamePort.getWorldHeight() /2, 0);
         worldlib = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -10), true);
-        b2dr = new Box2DDebugRenderer();
-
-
+        //build
+        b2dr = new Box2DBuild();
+        //debug
+//        b2dr = new Box2DDebugRenderer();
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
@@ -100,7 +105,7 @@ public class Map implements Screen{
         worldlib.setContactListener(new WorldContactListener());
         items = new Array<ItemDrop>();
         itemsToSpawn = new PriorityQueue<ItemDef>();
-
+        UserInterface.updateInfo(player);
     }
 
     public void spawnItem(ItemDef idef)
@@ -181,13 +186,17 @@ public class Map implements Screen{
         handleSpawningItems();
         worldlib.step(1/60f, 6, 2);
         player.update(dt);
-        gameCam.position.x = player.b2body.getPosition().x;
+        if(player.currentState != Player.State.DEAD) {
+            gameCam.position.x = player.b2body.getPosition().x;
+        }
         gameCam.update();
         renderer.setView(gameCam);
         for(ItemDrop item : items)
         {
             item.update(dt);
         }
+
+
     }
 
 
@@ -202,7 +211,7 @@ public class Map implements Screen{
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.render();
-        b2dr.render(worldlib, gameCam.combined);
+//        b2dr.render(worldlib, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         player.draw(game.batch);
@@ -211,6 +220,11 @@ public class Map implements Screen{
             item.draw(game.batch);
         }
         game.batch.end();
+        game.batch.setProjectionMatrix(ui.stage.getCamera().combined);
+        ui.stage.draw();
+        if(player.currentState == Player.State.DEAD)
+            game.setScreen(new GameOver(game));
+            dispose();
     }
 
     @Override

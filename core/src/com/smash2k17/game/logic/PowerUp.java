@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 public class PowerUp extends ItemDrop {
     public PowerUp(Map map, float x, float y) {
         super(map, x, y);
-        setRegion(map.getTextureAtlas().findRegion("Illusion_Walk"), 0, 0, 22,22);
+        setRegion(map.getTextureAtlas().findRegion("Illusion_Walk"), 88, 0, 22,22);
         velocity = new Vector2(0,0);
 
     }
@@ -21,7 +21,8 @@ public class PowerUp extends ItemDrop {
     @Override
     public void use(Player player) {
         destroy();
-
+        player.addHealth(10);
+        UserInterface.updateInfo(player);
     }
 
 
