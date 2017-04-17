@@ -64,6 +64,9 @@ public class Player extends Entity {
             case RUNNING:
                 region = playerRun.getKeyFrame(stateTimer, true);
                 break;
+            case ATTACK:
+                region = playerAttack.getKeyFrame(stateTimer, true);
+                break;
             case FALLING:
             case STANDING:
             default:
@@ -123,6 +126,8 @@ public class Player extends Entity {
                 b2body.applyLinearImpulse(new Vector2(0.1f, 0), b2body.getWorldCenter(), true);
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2)
                 b2body.applyLinearImpulse(new Vector2(-0.1f, 0), b2body.getWorldCenter(), true);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+                jump();
         }
 
     }
@@ -133,6 +138,14 @@ public class Player extends Entity {
         {
             b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
             currentState = State.JUMPING;
+        }
+    }
+
+    public void attack()
+    {
+        if(currentState != State.ATTACK)
+        {
+            currentState = State.ATTACK;
         }
     }
 

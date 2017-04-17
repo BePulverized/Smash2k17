@@ -21,6 +21,7 @@ public abstract class Entity extends Sprite implements IPlayable {
     public TextureRegion playerStand;
     public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerRun;
     public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerJump;
+    public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerAttack;
     public float stateTimer;
     public boolean runningRight;
     int hitPoints;
@@ -46,6 +47,13 @@ public abstract class Entity extends Sprite implements IPlayable {
         {
             frames.add(new TextureRegion(getTexture(),(12*16), 0, 20, 30));
             playerJump = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
+
+        }
+
+        for(int i = 2; i < 6; i++)
+        {
+            frames.add(new TextureRegion(getTexture(),(12*16), 0, 20, 30));
+            playerRun = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
 
         }
 
@@ -92,7 +100,7 @@ public abstract class Entity extends Sprite implements IPlayable {
 
     public boolean isDead(){return  playerIsDead;}
 
-public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING}
+public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING, ATTACK}
 
 
 
