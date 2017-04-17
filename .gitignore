@@ -112,3 +112,5 @@ gradle-app.setting
 ## OS Specific
 .DS_Store
 Thumbs.db
+/AEX_Banner/nbproject/private/
+/AEX_Banner/build/
