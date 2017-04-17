@@ -20,6 +20,7 @@ public class Player extends Entity {
     private int lives;
 
 
+
     public Player(Map map) {
         super(map);
 
@@ -86,6 +87,8 @@ public class Player extends Entity {
 
 
     private State getState() {
+        if(playerIsDead)
+            return State.DEAD;
         if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
             return State.JUMPING;
         if(b2body.getLinearVelocity().y < 0)
@@ -113,15 +116,24 @@ public class Player extends Entity {
 
     public void handleInput(float dt)
     {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
+        if(currentState != State.DEAD) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+                jump();
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 2)
+                b2body.applyLinearImpulse(new Vector2(0.1f, 0), b2body.getWorldCenter(), true);
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2)
+                b2body.applyLinearImpulse(new Vector2(-0.1f, 0), b2body.getWorldCenter(), true);
+        }
+
+    }
+
+    public void jump()
+    {
+        if(currentState != State.JUMPING)
+        {
             b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
-
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 2)
-            b2body.applyLinearImpulse(new Vector2(0.1f, 0), b2body.getWorldCenter(), true);
-
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2)
-            b2body.applyLinearImpulse(new Vector2(-0.1f, 0), b2body.getWorldCenter(), true);
-
+            currentState = State.JUMPING;
+        }
     }
 
     @Override

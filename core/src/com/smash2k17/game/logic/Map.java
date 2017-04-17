@@ -44,7 +44,8 @@ public class Map implements Screen{
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
     private TextureAtlas atlas;
-    private long lastDropTime;
+    private long lastBuffDropTime;
+    private long lastDebuffDropTime;
 
 
 
@@ -105,23 +106,35 @@ public class Map implements Screen{
     public void spawnItem(ItemDef idef)
     {
         itemsToSpawn.add(idef);
-        lastDropTime = TimeUtils.millis();
+        lastBuffDropTime = TimeUtils.millis();
+        lastDebuffDropTime = TimeUtils.millis();
     }
 
     public void handleSpawningItems()
     {
-        Random rnd = new Random();
-        if(TimeUtils.millis() - lastDropTime > 5000) {
-            int randomx = rnd.nextInt(6 + 1 - 1) + 1;
-            int randomy = rnd.nextInt(3 +1 - 1) + 1;
+        Random rnddebuff = new Random();
+        if(TimeUtils.millis() - lastDebuffDropTime > 5000 && items.size < 2) {
+            int randomx = rnddebuff.nextInt(6 + 1 - 1) + 1;
+            int randomy = rnddebuff.nextInt(3 +1 - 1) + 1;
+            spawnItem(new ItemDef(new Vector2(randomx, randomy), Debuff.class));
+        }
+        Random rndbuff = new Random();
+        if(TimeUtils.millis() - lastBuffDropTime > 4000 && items.size < 2) {
+            int randomx = rndbuff.nextInt(6 + 1 - 1) + 1;
+            int randomy = rndbuff.nextInt(3 +1 - 1) + 1;
             spawnItem(new ItemDef(new Vector2(randomx, randomy), PowerUp.class));
         }
         if(!itemsToSpawn.isEmpty())
         {
+
             ItemDef idef = itemsToSpawn.poll();
             if(idef.type == PowerUp.class)
             {
                 items.add(new PowerUp(this, idef.position.x, idef.position.y));
+            }
+            if(idef.type == Debuff.class)
+            {
+                items.add(new Debuff(this, idef.position.x, idef.position.y));
             }
         }
     }
@@ -145,6 +158,10 @@ public class Map implements Screen{
     {
         return false;
     }
+
+    public void pickUpItem(ItemDrop item){
+
+        items.removeValue(item, true);}
 
     public void end()
     {

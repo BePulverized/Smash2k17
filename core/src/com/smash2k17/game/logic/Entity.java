@@ -28,6 +28,7 @@ public abstract class Entity extends Sprite implements IPlayable {
     private Point position;
     private int strength;
     private int armor;
+    public boolean playerIsDead;
     private com.smash2k17.game.logic.Map map;
     public Entity(com.smash2k17.game.logic.Map map)
     {
@@ -88,7 +89,9 @@ public abstract class Entity extends Sprite implements IPlayable {
 
     public void Respawn(){}
 
-public enum State{ FALLING, JUMPING, STANDING, RUNNING}
+    public boolean isDead(){return  playerIsDead;}
+
+public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING}
 
 
 

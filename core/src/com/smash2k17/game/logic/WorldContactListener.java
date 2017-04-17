@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
  */
 public class WorldContactListener implements ContactListener {
 
+
     @Override
     public void beginContact(Contact contact) {
         Fixture fixA = contact.getFixtureA();

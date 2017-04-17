@@ -34,13 +34,28 @@ public abstract class ItemDrop extends Sprite implements IPickable {
         destroyed = false;
     }
 
-    protected abstract void defineItem();
+    protected void defineItem(){
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(getX(), getY());
+        bdef.type = BodyDef.BodyType.StaticBody;
+        body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(6/ World.PPM);
+        fdef.filter.categoryBits = World.ITEM_BIT;
+        fdef.filter.maskBits = World.PLAYER_BIT | World.OBJECT_BIT | World.GROUND_BIT;
+
+        fdef.shape = shape;
+        body.createFixture(fdef).setUserData(this);
+    }
     public abstract void use(Player player);
 
     public void update(float dt){
         if(toDestroy && !destroyed){
             world.destroyBody(body);
             destroyed = true;
+            map.pickUpItem(this);
         }
     }
 
@@ -49,8 +64,9 @@ public abstract class ItemDrop extends Sprite implements IPickable {
             super.draw(batch);
     }
 
-    public void destroy(){
+    public void destroy() {
         toDestroy = true;
+
     }
 
     @Override
