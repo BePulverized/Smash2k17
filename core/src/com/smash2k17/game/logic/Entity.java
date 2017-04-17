@@ -67,6 +67,9 @@ public abstract class Entity extends Sprite implements IPlayable {
 
 
     }
+    public int getStrength(){
+        return strength;
+    }
 
     public abstract void defineEntity();
 

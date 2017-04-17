@@ -24,7 +24,19 @@ public class Enemy extends Entity {
 
     @Override
     public void defineEntity() {
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(200 / com.smash2k17.game.logic.World.PPM, 200/ com.smash2k17.game.logic.World.PPM);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
 
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(15 / com.smash2k17.game.logic.World.PPM);
+        fdef.filter.categoryBits = World.ENEMY_BIT;
+        fdef.filter.maskBits = World.GROUND_BIT | World.OBJECT_BIT | World.ITEM_BIT | World.PLAYER_BIT;
+
+        fdef.shape = shape;
+        b2body.createFixture(fdef).setUserData(this);
     }
 
     @Override

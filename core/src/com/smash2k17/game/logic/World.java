@@ -15,6 +15,7 @@ public class World extends Game{
     public static final short OBJECT_BIT = 32;
     public static final short ITEM_BIT = 256;
     public static final short PLAYER_BIT = 2;
+    public static final short ENEMY_BIT = 2;
     public static final short GROUND_BIT = 1;
     public SpriteBatch batch;
     private Date dateCreated;
