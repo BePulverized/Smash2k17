@@ -18,7 +18,7 @@ public class Store {
         return items;
     }
 
-    public void AddItems(StoreItem item)
+    public void addItems(StoreItem item)
     {
         items.add(item);
     }
