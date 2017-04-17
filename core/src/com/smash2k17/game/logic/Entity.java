@@ -79,6 +79,10 @@ public abstract class Entity extends Sprite implements IPlayable {
         return strength;
     }
 
+    public int getHealth(){
+        return hitPoints;
+    }
+
     public abstract void defineEntity();
 
     public abstract void update(float dt);
