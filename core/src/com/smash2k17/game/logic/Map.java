@@ -56,12 +56,12 @@ public class Map implements Screen{
         this.name = name;
         players = new ArrayList<Entity>();
         this.gameMode = GameMode.TDM;
-        atlas = new TextureAtlas("PLAYER.pack");
+        atlas = new TextureAtlas("core\\assets\\PLAYER.pack");
         this.game = world;
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(game.getGridWidth() / game.getPPM(), game.getGridHeight() / game.getPPM(), gameCam);
         mapLoader = new TmxMapLoader();
-        tiledMap = mapLoader.load(Gdx.files.internal("Map_1.tmx").file().getAbsolutePath());
+        tiledMap = mapLoader.load(Gdx.files.internal("core\\assets\\Map_1.tmx").file().getAbsolutePath());
         renderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / game.getPPM());
         gameCam.position.set(gamePort.getWorldWidth() /2, gamePort.getWorldHeight() /2, 0);
         worldlib = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -10), true);
