@@ -3,7 +3,6 @@ package com.smash2k17.game.logic;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.smash2k17.game.logic.Menus.LoginScreen;
-import com.smash2k17.game.logic.Menus.MainMenuScreen;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Date;
@@ -75,9 +74,10 @@ public class World extends Game{
     }
 
     @Override
-    public void create(){
+    public void create()
+    {
         batch = new SpriteBatch();
-        setScreen(new Map(this));
+        setScreen(new LoginScreen(this));
 
     }
 

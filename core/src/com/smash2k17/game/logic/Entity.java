@@ -21,7 +21,7 @@ public abstract class Entity extends Sprite implements IPlayable {
     public TextureRegion playerStand;
     public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerRun;
     public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerJump;
-    public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> playerAttack;
+    public TextureRegion playerAttack;
     public float stateTimer;
     public boolean runningRight;
     int hitPoints;
@@ -33,7 +33,7 @@ public abstract class Entity extends Sprite implements IPlayable {
     private com.smash2k17.game.logic.Map map;
     public Entity(com.smash2k17.game.logic.Map map)
     {
-        super(map.getTextureAtlas().findRegion("kirby_walk"));
+        super(map.getTextureAtlas().findRegion("PLAYER"));
         this.map = map;
         com.badlogic.gdx.utils.Array<TextureRegion> frames = new com.badlogic.gdx.utils.Array<TextureRegion>();
         for(int i = 1; i < 4; i++) {
@@ -45,12 +45,15 @@ public abstract class Entity extends Sprite implements IPlayable {
 
         for(int i = 2; i < 6; i++)
         {
-            frames.add(new TextureRegion(getTexture(),(12*16), 0, 20, 30));
+            frames.add(new TextureRegion(getTexture(),1 +(12*16), 0, 20, 30));
             playerJump = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
 
         }
 
-        playerStand = new TextureRegion(getTexture(),192, 0, 20,30 );
+
+
+        playerStand = new TextureRegion(getTexture(),193, 0, 20,30 );
+        playerAttack = new TextureRegion(getTexture(),258, 0, 20, 30);
         setBounds(0,0, 40/ com.smash2k17.game.logic.World.PPM, 40/ com.smash2k17.game.logic.World.PPM);
         setRegion(playerStand);
         this.world = map.getWorld();
