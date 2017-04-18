@@ -68,6 +68,7 @@ public class MainMenuScreen implements Screen {
         TextButton playBtn = new TextButton("Play", skin);
         TextButton leaderboardBtn = new TextButton("Leaderboard",skin);
         TextButton shopBtn = new TextButton("Shop",skin);
+        TextButton optionsBtn = new TextButton("Options",skin);
         TextButton logoutBtn = new TextButton("Logout",skin);
         TextButton exitBtn = new TextButton("Exit",skin);
 
@@ -102,11 +103,14 @@ public class MainMenuScreen implements Screen {
         header.add(head);
         header.row();
         main.row().left();
-        main.add(playBtn);
-        main.add(leaderboardBtn); main.row();
-        main.add(shopBtn);
-        main.add(logoutBtn);
-        main.add(exitBtn);
+        main.add(playBtn).width(leaderboardBtn.getWidth());
+        main.add(leaderboardBtn);
+        main.row();
+        main.add(shopBtn).width(leaderboardBtn.getWidth());
+        main.add(optionsBtn).width(leaderboardBtn.getWidth());
+        main.row();
+        main.add(logoutBtn).width(leaderboardBtn.getWidth());
+        main.add(exitBtn).width(leaderboardBtn.getWidth());
         header.row();
         header.add(main);
         stage.addActor(header);
