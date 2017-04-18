@@ -1,5 +1,7 @@
 package com.smash2k17.game.logic;
 
+import com.smash2k17.game.logic.Database.Account;
+import com.smash2k17.game.logic.Database.Store;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -17,6 +19,9 @@ public class Lobby {
 
     public Account login(String userName, String Password)
     {
+//        Account acc = database.Login(userName, Password);
+//        return Account;
+
         throw new NotImplementedException();
     }
 

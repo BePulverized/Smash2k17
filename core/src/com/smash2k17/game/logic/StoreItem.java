@@ -18,6 +18,12 @@ public abstract class StoreItem {
         this.previewImage = previewImage;
     }
 
+    public StoreItem(double price, String name)
+    {
+        this.price = price;
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

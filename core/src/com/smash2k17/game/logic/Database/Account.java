@@ -1,4 +1,6 @@
-package com.smash2k17.game.logic;
+package com.smash2k17.game.logic.Database;
+
+import com.smash2k17.game.logic.StoreItem;
 
 import java.util.ArrayList;
 
@@ -7,31 +9,22 @@ import java.util.ArrayList;
  */
 public class Account {
 
+    private int id;
     private String email;
-    private String userName;
     private String password;
     private double balance;
     private ArrayList<StoreItem> inventory;
 
-    public Account(String email, String userName, String password)
+    public Account(int doid, String email, double balance)
     {
+        this.id = id;
         this.email = email;
-        this.userName = userName;
-        this.password = password;
-        balance = 0;
+        this.balance = balance;
         inventory = new ArrayList<StoreItem>();
     }
 
     public String getEmail() {
         return email;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public double getBalance() {

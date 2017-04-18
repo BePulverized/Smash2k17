@@ -1,4 +1,6 @@
-package com.smash2k17.game.logic;
+package com.smash2k17.game.logic.Database;
+
+import com.smash2k17.game.logic.StoreItem;
 
 import java.util.ArrayList;
 
