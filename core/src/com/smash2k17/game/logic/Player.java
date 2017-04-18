@@ -124,7 +124,7 @@ public class Player extends Entity {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2)
                 b2body.applyLinearImpulse(new Vector2(-0.1f, 0), b2body.getWorldCenter(), true);
         }
-
+    //hai gimme sec ff iets kijken
     }
 
     public void jump()

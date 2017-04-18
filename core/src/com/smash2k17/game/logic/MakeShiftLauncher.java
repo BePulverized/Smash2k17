@@ -2,6 +2,8 @@ package com.smash2k17.game.logic;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.smash2k17.game.logic.Menus.LoginScreen;
+import com.smash2k17.game.logic.Menus.MainMenuScreen;
 import com.smash2k17.game.logic.World;
 
 public class MakeShiftLauncher {
