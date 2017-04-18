@@ -57,6 +57,8 @@ public class LoginScreen implements Screen {
 
         TextField nameField = new TextField("",skin);
         TextField passField = new TextField("", skin);
+        passField.setPasswordMode(true);
+        passField.setPasswordCharacter("*".charAt(0));
         TextButton loginBtn = new TextButton("Login", skin);
         TextButton exitBtn = new TextButton("Exit", skin);
 
