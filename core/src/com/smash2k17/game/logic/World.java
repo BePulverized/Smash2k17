@@ -77,7 +77,7 @@ public class World extends Game{
     @Override
     public void create(){
         batch = new SpriteBatch();
-        setScreen(new Map(this));
+        setScreen(new LoginScreen(this));
 
     }
 

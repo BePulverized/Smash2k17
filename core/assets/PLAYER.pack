@@ -3,17 +3,10 @@ PLAYER.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-Illusion_Walk
+PLAYER
   rotate: false
   xy: 1, 1
-  size: 168, 23
-  orig: 168, 23
-  offset: 0, 0
-  index: -1
-kirby_walk
-  rotate: false
-  xy: 171, 5
-  size: 80, 19
-  orig: 80, 19
+  size: 281, 32
+  orig: 281, 32
   offset: 0, 0
   index: -1

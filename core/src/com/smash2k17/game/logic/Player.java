@@ -63,7 +63,7 @@ public class Player extends Entity {
                 region = playerRun.getKeyFrame(stateTimer, true);
                 break;
             case ATTACK:
-                region = playerAttack.getKeyFrame(stateTimer, true);
+                region = playerAttack;
                 break;
             case FALLING:
             case STANDING:
@@ -96,6 +96,8 @@ public class Player extends Entity {
             return State.FALLING;
         if(b2body.getLinearVelocity().x != 0)
             return State.RUNNING;
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
+            return State.ATTACK;
         else
             return State.STANDING;
 
@@ -139,12 +141,14 @@ public class Player extends Entity {
         }
     }
 
-    public void attack()
+    public boolean attack()
     {
         if(currentState != State.ATTACK)
         {
             currentState = State.ATTACK;
+            return true;
         }
+        return false;
     }
 
     @Override
