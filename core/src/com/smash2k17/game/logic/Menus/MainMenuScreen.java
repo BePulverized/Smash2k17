@@ -75,6 +75,7 @@ public class MainMenuScreen implements Screen {
         playBtn.addListener(new ClickListener(){
            @Override
             public void clicked(InputEvent event, float x, float y){
+               Gdx.graphics.setWindowedMode(980,500);
                game.setScreen(new Map(game));
            }
         });
