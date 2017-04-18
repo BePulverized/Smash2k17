@@ -23,8 +23,6 @@ public class Player extends Entity {
 
     public Player(Map map) {
         super(map);
-
-        defineEntity();
         this.lives = 3;
 
     }
@@ -32,7 +30,7 @@ public class Player extends Entity {
     @Override
     public void defineEntity() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(200 / com.smash2k17.game.logic.World.PPM, 200/ com.smash2k17.game.logic.World.PPM);
+        bdef.position.set(300 / com.smash2k17.game.logic.World.PPM, 200/ com.smash2k17.game.logic.World.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -156,10 +154,5 @@ public class Player extends Entity {
         }
     }
 
-    public void loseHealth(int i) {
-        hitPoints = hitPoints - i;
-    }
 
-    public void addHealth(int i) {
-    }
 }
