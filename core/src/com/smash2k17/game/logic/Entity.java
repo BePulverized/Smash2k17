@@ -50,13 +50,6 @@ public abstract class Entity extends Sprite implements IPlayable {
 
         }
 
-        for(int i = 2; i < 6; i++)
-        {
-            frames.add(new TextureRegion(getTexture(),(12*16), 0, 20, 30));
-            playerRun = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
-
-        }
-
         playerStand = new TextureRegion(getTexture(),192, 0, 20,30 );
         setBounds(0,0, 40/ com.smash2k17.game.logic.World.PPM, 40/ com.smash2k17.game.logic.World.PPM);
         setRegion(playerStand);
@@ -83,6 +76,10 @@ public abstract class Entity extends Sprite implements IPlayable {
         return hitPoints;
     }
 
+    public void addHealth(int health){if(this.hitPoints < 150){this.hitPoints = this.hitPoints + health;}}
+
+    public void loseHealth(int health) {this.hitPoints = this.hitPoints - health;}
+
     public abstract void defineEntity();
 
     public abstract void update(float dt);
@@ -104,7 +101,7 @@ public abstract class Entity extends Sprite implements IPlayable {
 
     public boolean isDead(){return  playerIsDead;}
 
-public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING, ATTACK}
+    public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING, ATTACK}
 
 
 
