@@ -79,7 +79,7 @@ public class ShopScreen implements Screen{
             }
         });
         main.add("");
-        main.add(new Label("WELCOME TO THE ITEM SHOP!", skin));
+        main.add(new Label("WELCOME TO THE KIRBY SHOP!", skin));
         main.add(tb).right();
         main.row();
 

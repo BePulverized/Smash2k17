@@ -76,12 +76,11 @@ public class LoginScreen implements Screen {
         });
 
         main.add(nameField);
+        main.add(loginBtn).center();
         main.row();
         main.add(passField);
+        main.add(exitBtn).width(loginBtn.getWidth()).center();
         main.row();
-        main.add(loginBtn).left();
-        main.add(exitBtn).left();
-        main.align(1);
         stage.addActor(main);
     }
 
