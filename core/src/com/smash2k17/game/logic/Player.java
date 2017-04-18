@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 import java.awt.event.KeyEvent;
@@ -17,6 +18,7 @@ public class Player extends Entity {
 
 
     private int lives;
+
 
 
     public Player(Map map) {
@@ -36,10 +38,14 @@ public class Player extends Entity {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(20 / com.smash2k17.game.logic.World.PPM);
+        shape.setRadius(15 / com.smash2k17.game.logic.World.PPM);
+        fdef.filter.categoryBits = World.PLAYER_BIT;
+        fdef.filter.maskBits = World.GROUND_BIT | World.OBJECT_BIT | World.ITEM_BIT;
 
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData(this);
+
+
     }
 
     @Override
@@ -64,13 +70,13 @@ public class Player extends Entity {
                 region = playerStand;
                 break;
         }
-        if ((b2body.getLinearVelocity().x > 0 || runningRight) && !region.isFlipX()) {
-            region.flip(true, false);
-            runningRight = true;
-        }
-         else if ((b2body.getLinearVelocity().x < 0 || !runningRight) && region.isFlipX()) {
+        if ((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
             region.flip(true, false);
             runningRight = false;
+        }
+         else if ((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
+            region.flip(true, false);
+            runningRight = true;
         }
 
         stateTimer = currentState == previousState ? stateTimer + dt : 0;
@@ -81,6 +87,8 @@ public class Player extends Entity {
 
 
     private State getState() {
+        if(b2body.getPosition().y < 0 || getHealth() <= 0)
+            return State.DEAD;
         if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
             return State.JUMPING;
         if(b2body.getLinearVelocity().y < 0)
@@ -108,16 +116,26 @@ public class Player extends Entity {
 
     public void handleInput(float dt)
     {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
-
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 2)
-            b2body.applyLinearImpulse(new Vector2(0.1f, 0), b2body.getWorldCenter(), true);
-
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2)
-            b2body.applyLinearImpulse(new Vector2(-0.1f, 0), b2body.getWorldCenter(), true);
+        if(currentState != State.DEAD) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+                jump();
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 2)
+                b2body.applyLinearImpulse(new Vector2(0.1f, 0), b2body.getWorldCenter(), true);
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2)
+                b2body.applyLinearImpulse(new Vector2(-0.1f, 0), b2body.getWorldCenter(), true);
+        }
 
     }
+
+    public void jump()
+    {
+        if(currentState != State.JUMPING)
+        {
+            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+            currentState = State.JUMPING;
+        }
+    }
+
 
     @Override
     public void Respawn(){

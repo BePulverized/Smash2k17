@@ -7,9 +7,9 @@ import java.awt.event.KeyEvent;
  */
 public interface IPlayable {
 
-    public void Move(KeyEvent e);
-    public void Jump();
-    public void Attack();
-    public void Respawn();
+    void Move(KeyEvent e);
+    void Jump();
+    void Attack();
+    void Respawn();
 
 }
