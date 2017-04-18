@@ -2,12 +2,14 @@ package com.smash2k17.game.logic.Menus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -15,9 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.smash2k17.game.logic.Map;
 import com.smash2k17.game.logic.World;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Martien on 17-Apr-17.
@@ -54,27 +58,67 @@ public class ShopScreen implements Screen{
     @Override
     public void show() {
         Table main = new Table(skin);
+        Table row1 = new Table(skin);
+        Table row2 = new Table(skin);
+        Table row3 = new Table(skin);
         main.setFillParent(true);
+
         ArrayList<ImageButton> items = new ArrayList<ImageButton>();
+        for(int i = 0; i < 6; i++){
+            ImageButton s = new ImageButton(new SpriteDrawable(new Sprite(new Texture("core\\assets\\kirbyshop.png"))));
+            s.getImageCell().expand().fill();
+            items.add(s);
+        }
 
-        // database code om alle items in de lijst te krijgen
-        items.add(new ImageButton(new SpriteDrawable(new Sprite(new Texture("core\\assets\\badlogic.jpg")))));
-        items.add(new ImageButton(new SpriteDrawable(new Sprite(new Texture("core\\assets\\menubackground.jpg")))));
-        items.add(new ImageButton(new SpriteDrawable(new Sprite(new Texture("core\\assets\\badlogic.jpg")))));
-        items.add(new ImageButton(new SpriteDrawable(new Sprite(new Texture("core\\assets\\menubackground.jpg")))));
-
+        TextButton tb = new TextButton("Back", skin);
+        tb.right();
+        tb.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new MainMenuScreen(game));
+            }
+        });
+        main.add("");
         main.add(new Label("WELCOME TO THE ITEM SHOP!", skin));
+        main.add(tb).right();
         main.row();
 
-        int count = 0;
+        int count = 1;
+        Random rnd = new Random();
         for(ImageButton ib : items){
-            main.add(ib).width(100).height(100);
+            switch(count){
+                case 1: ib.getImage().setColor(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat(), 1);
+                        row1.add(ib).width(100).height(100);
+                        row1.row();
+                        row1.add(new Label("Kirby", skin));
+                        row1.row();
+                    break;
+                case 2: ib.getImage().setColor(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat(), 1);
+                        row2.add(ib).width(100).height(100);
+                        row2.row();
+                        row2.add(new Label("Kirby", skin));
+                        row2.row();
+                    break;
+                case 3: ib.getImage().setColor(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat(), 1);
+                        row3.add(ib).width(100).height(100);
+                        row3.row();
+                        row3.add(new Label("Kirby", skin));
+                        row3.row();
+                    break;
+                default:
+                    System.out.println("adding buttons messed up");
+            }
             count++;
-            if(count >= 3) {
-                count = 0;
-                main.row();
+            if(count > 3) {
+                count = 1;
             }
         }
+        row1.top();
+        row2.top();
+        row3.top();
+        main.add(row1);
+        main.add(row2);
+        main.add(row3);
         stage.addActor(main);
     }
 

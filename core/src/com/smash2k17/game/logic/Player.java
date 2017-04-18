@@ -129,7 +129,7 @@ public class Player extends Entity {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
                 attack();
         }
-
+    //hai gimme sec ff iets kijken
     }
 
     public void jump()

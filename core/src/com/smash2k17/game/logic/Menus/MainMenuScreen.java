@@ -54,9 +54,13 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
+        Table header = new Table(skin);
+        header.setFillParent(true);
+        header.setBackground(new SpriteDrawable(background));
+        header.top();
+        header.center();
+
         Table main = new Table(skin);
-        main.setFillParent(true);
-        main.setBackground(new SpriteDrawable(background));
         main.top();
         main.center();
         main.row().padLeft(10); main.row().padRight(10);
@@ -67,7 +71,7 @@ public class MainMenuScreen implements Screen {
         TextButton logoutBtn = new TextButton("Logout",skin);
         TextButton exitBtn = new TextButton("Exit",skin);
 
-        Label header = new Label("SMASH2K17", skin);
+        Label head = new Label("SMASH2K17", skin);
 
         playBtn.addListener(new ClickListener(){
            @Override
@@ -93,16 +97,19 @@ public class MainMenuScreen implements Screen {
                 System.exit(0);
             }
         });
-        main.row().fillY();
-        main.row().fillX();
-        main.add(header);
+//        main.row().fillY();
+//        main.row().fillX();
+        header.add(head);
+        header.row();
         main.row().left();
         main.add(playBtn);
         main.add(leaderboardBtn); main.row();
         main.add(shopBtn);
         main.add(logoutBtn);
         main.add(exitBtn);
-        stage.addActor(main);
+        header.row();
+        header.add(main);
+        stage.addActor(header);
     }
 
     @Override
