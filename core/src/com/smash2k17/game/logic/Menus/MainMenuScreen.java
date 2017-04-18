@@ -63,8 +63,6 @@ public class MainMenuScreen implements Screen {
         Table main = new Table(skin);
         main.top();
         main.center();
-        main.row().padLeft(10); main.row().padRight(10);
-
         TextButton playBtn = new TextButton("Play", skin);
         TextButton leaderboardBtn = new TextButton("Leaderboard",skin);
         TextButton shopBtn = new TextButton("Shop",skin);
@@ -103,14 +101,14 @@ public class MainMenuScreen implements Screen {
         header.add(head);
         header.row();
         main.row().left();
-        main.add(playBtn).width(leaderboardBtn.getWidth());
-        main.add(leaderboardBtn);
+        main.add(playBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
+        main.add(leaderboardBtn).pad(10,10,10,10);
         main.row();
-        main.add(shopBtn).width(leaderboardBtn.getWidth());
-        main.add(optionsBtn).width(leaderboardBtn.getWidth());
+        main.add(shopBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
+        main.add(optionsBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
         main.row();
-        main.add(logoutBtn).width(leaderboardBtn.getWidth());
-        main.add(exitBtn).width(leaderboardBtn.getWidth());
+        main.add(logoutBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
+        main.add(exitBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
         header.row();
         header.add(main);
         stage.addActor(header);
