@@ -63,11 +63,10 @@ public class MainMenuScreen implements Screen {
         Table main = new Table(skin);
         main.top();
         main.center();
-        main.row().padLeft(10); main.row().padRight(10);
-
         TextButton playBtn = new TextButton("Play", skin);
         TextButton leaderboardBtn = new TextButton("Leaderboard",skin);
         TextButton shopBtn = new TextButton("Shop",skin);
+        TextButton optionsBtn = new TextButton("Options",skin);
         TextButton logoutBtn = new TextButton("Logout",skin);
         TextButton exitBtn = new TextButton("Exit",skin);
 
@@ -76,6 +75,7 @@ public class MainMenuScreen implements Screen {
         playBtn.addListener(new ClickListener(){
            @Override
             public void clicked(InputEvent event, float x, float y){
+               Gdx.graphics.setWindowedMode(980,500);
                game.setScreen(new Map(game));
            }
         });
@@ -102,11 +102,14 @@ public class MainMenuScreen implements Screen {
         header.add(head);
         header.row();
         main.row().left();
-        main.add(playBtn);
-        main.add(leaderboardBtn); main.row();
-        main.add(shopBtn);
-        main.add(logoutBtn);
-        main.add(exitBtn);
+        main.add(playBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
+        main.add(leaderboardBtn).pad(10,10,10,10);
+        main.row();
+        main.add(shopBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
+        main.add(optionsBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
+        main.row();
+        main.add(logoutBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
+        main.add(exitBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
         header.row();
         header.add(main);
         stage.addActor(header);
