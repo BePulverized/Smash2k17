@@ -1,6 +1,8 @@
 package com.smash2k17.game.logic.Database;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 /**
@@ -12,11 +14,11 @@ public class AccountContext {
     private static String connUser = "dbi307792";
     private static String connPassword = "Wachtwoord1";
 
-    public String encrypt(String base) {
+    public String encrypt(String base) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         try {
             MessageDigest mDigest = MessageDigest.getInstance("SHA-256");
             byte[] hash = mDigest.digest(base.getBytes("UTF-8"));
-            StringBuffer hexString = new StringBuffer();
+            StringBuilder hexString = new StringBuilder();
 
             for (int i = 0; i < hash.length; i++) {
                 String hex = Integer.toHexString(0xff & hash[i]);
@@ -25,32 +27,35 @@ public class AccountContext {
             }
 
             return hexString.toString();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (NoSuchAlgorithmException e) {
+            throw e;
+        } catch (UnsupportedEncodingException e) {
+            throw e;
         }
     }
 
-    public Account logIn(String email, String password) throws SQLException {
+    public Account logIn(String email, String password) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
         Account result = null;
         Connection myConn = DriverManager.getConnection(connString, connUser, connPassword);
         PreparedStatement preparedStmt;
         ResultSet myRs;
         String hash = "";
-        password = encrypt(password);
+        String encryptedPassword = encrypt(password);
 
         String query = "select password, Email, Balance from Account where Email = ?;";
         preparedStmt = myConn.prepareStatement(query);
         preparedStmt.setString(1, email);
         myRs = preparedStmt.executeQuery();
-
+        preparedStmt.close();
+        myConn.close();
         while (myRs.next()) {
             hash = myRs.getString("password");
             result = new Account(myRs.getInt("ID"), myRs.getString("Email"), myRs.getDouble("Balance"));
         }
-        if (hash.equals(password)) {
-
-            myConn.close();
-            preparedStmt.close();
+        if (hash.equals(encryptedPassword)) {
             myRs.close();
         }
         else {
@@ -59,20 +64,30 @@ public class AccountContext {
         return result;
     }
 
-    public void addUser(String email, String password, double balance) throws SQLException {
-        Connection myConn = DriverManager.getConnection(connString, connUser, connPassword);
-        PreparedStatement preparedStmt;
-        password = encrypt(password);
-
+    public void addUser(String email, String password, double balance) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
+        Connection myConn = null;
+        PreparedStatement preparedStmt = null;
+        String encryptedPassword = encrypt(password);
         String query = " insert into Account (Email, Password, Balance)"
                 + " values (?, ?, ?)";
+        try {
+        myConn = DriverManager.getConnection(connString, connUser, connPassword);
         preparedStmt = myConn.prepareStatement(query);
         preparedStmt.setString(1, email);
-        preparedStmt.setString(2, password);
+        preparedStmt.setString(2, encryptedPassword);
         preparedStmt.setDouble(3, 0.00);
-
         preparedStmt.execute();
-        myConn.close();
-        preparedStmt.close();
+           }
+           catch (SQLException e){
+               throw e;
+           }
+           finally {
+               if(preparedStmt !=null) {
+                   preparedStmt.close();
+               }
+               if(myConn !=null) {
+                   myConn.close();
+               }
+           }
     }
 }
