@@ -59,6 +59,7 @@ public class Map implements Screen{
 
     //items
     private Player player;
+    private Enemy enemy;
     private Array<ItemDrop> items;
     private PriorityQueue<ItemDef> itemsToSpawn;
 
@@ -101,6 +102,7 @@ public class Map implements Screen{
         }
 
         player = new Player(this);
+        enemy = new Enemy(this);
 
         worldlib.setContactListener(new WorldContactListener());
         items = new Array<ItemDrop>();
@@ -215,6 +217,7 @@ public class Map implements Screen{
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         player.draw(game.batch);
+        enemy.draw(game.batch);
         for(ItemDrop item : items)
         {
             item.draw(game.batch);
