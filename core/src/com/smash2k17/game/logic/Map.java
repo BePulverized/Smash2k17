@@ -32,7 +32,6 @@ public class Map implements Screen{
 
     private ArrayList<Point> deathZones;
     private ArrayList<ItemDrop> itemDrops;
-    private ArrayList<Entity> players;
     private Texture img;
     private String name;
     private GameMode gameMode;
@@ -66,7 +65,6 @@ public class Map implements Screen{
     public Map(World world)
     {
         this.name = name;
-        players = new ArrayList<Entity>();
         this.gameMode = GameMode.TDM;
         atlas = new TextureAtlas("core\\assets\\PLAYER.pack");
         this.game = world;
@@ -175,7 +173,6 @@ public class Map implements Screen{
         throw new NotImplementedException();
     }
 
-    public ArrayList<Entity> getEntitys(){return players;}
 
     public TextureAtlas getTextureAtlas()
     {
