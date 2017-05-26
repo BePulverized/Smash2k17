@@ -18,7 +18,7 @@ public class Enemy extends Entity {
 
     public Enemy(Map map) {
         super(map);
-        setPosition(250 / com.smash2k17.game.logic.World.PPM, 60/ com.smash2k17.game.logic.World.PPM);
+        //setPosition(250 / com.smash2k17.game.logic.World.PPM, 60/ com.smash2k17.game.logic.World.PPM);
         //setBounds(getX(), getY(), 16 / com.smash2k17.game.logic.World.PPM, 16 / com.smash2k17.game.logic.World.PPM);
     }
 
@@ -26,10 +26,13 @@ public class Enemy extends Entity {
         this.touching = touching;
     }
 
+    public boolean getTouching(){ return touching; }
+
     @Override
     public void defineEntity() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(getX(), getY());
+        bdef.position.set(300 / com.smash2k17.game.logic.World.PPM, 200/ com.smash2k17.game.logic.World.PPM);
+        setPosition(bdef.position.x, bdef.position.y);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -39,19 +42,19 @@ public class Enemy extends Entity {
         fdef.filter.categoryBits = com.smash2k17.game.logic.World.ENEMY_BIT;
         fdef.filter.maskBits = com.smash2k17.game.logic.World.GROUND_BIT | com.smash2k17.game.logic.World.OBJECT_BIT | com.smash2k17.game.logic.World.ITEM_BIT | com.smash2k17.game.logic.World.PLAYER_BIT;
 
+
         fdef.shape = shape;
         fdef.restitution = 0.5f;
         b2body.createFixture(fdef).setUserData(this);
 
     }
 
-    @Override
-    public void update(float dt) {
+    public void update() {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        setRegion(getFrame(dt));
+        //setRegion(getFrame(dt));
     }
 
-    private TextureRegion getFrame(float dt) {
+    /*private TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region;
         switch (currentState) {
@@ -82,9 +85,9 @@ public class Enemy extends Entity {
         stateTimer = currentState == previousState ? stateTimer + dt : 0;
         previousState = currentState;
         return  region;
-    }
+    }*/
 
-    private State getState() {
+    /*private State getState() {
         if(b2body.getPosition().y < 0 || getHealth() <= 0)
             return State.DEAD;
         if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
@@ -98,17 +101,21 @@ public class Enemy extends Entity {
         else
             return State.STANDING;
 
-    }
+    }*/
 
-    public void lowerHitpoints(int attack) {
-        if(touching){
-            hitPoints -= attack;
-            System.out.println(hitPoints);
-        }
+    public void lowerHitpoints(int s) {
+        hitPoints -= s;
+        System.out.println(hitPoints);
+
     }
 
     @Override
-    public void Move(KeyEvent e) {
+    public void move(KeyEvent e) {
+
+    }
+
+    @Override
+    public void jump() {
 
     }
 }

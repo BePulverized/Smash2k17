@@ -59,11 +59,13 @@ public class Map implements Screen{
     //items
     private Player player;
     private Enemy enemy;
+    private ArrayList<Entity> entitys;
     private Array<ItemDrop> items;
     private PriorityQueue<ItemDef> itemsToSpawn;
 
     public Map(World world)
     {
+        entitys = new ArrayList<Entity>();
         this.name = name;
         this.gameMode = GameMode.TDM;
         atlas = new TextureAtlas("core\\assets\\PLAYER.pack");
@@ -101,11 +103,14 @@ public class Map implements Screen{
 
         player = new Player(this);
         enemy = new Enemy(this);
+        entitys.add(player);
+        entitys.add(enemy);
 
         worldlib.setContactListener(new WorldContactListener());
         items = new Array<ItemDrop>();
         itemsToSpawn = new PriorityQueue<ItemDef>();
         UserInterface.updateInfo(player);
+        UserInterface.updateInfo(enemy);
     }
 
     public void spawnItem(ItemDef idef)
@@ -154,6 +159,8 @@ public class Map implements Screen{
         return gameMode;
     }
 
+    public ArrayList<Entity> getEntitys() { return entitys; }
+
     public ArrayList<Point> getDeathzones()
     {
         return  deathZones;
@@ -185,6 +192,7 @@ public class Map implements Screen{
         handleSpawningItems();
         worldlib.step(1/60f, 6, 2);
         player.update(dt);
+        enemy.update();
         if(player.currentState != Player.State.DEAD) {
             gameCam.position.x = player.b2body.getPosition().x;
         }

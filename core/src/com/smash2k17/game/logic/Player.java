@@ -18,7 +18,7 @@ public class Player extends Entity {
 
 
     private int lives;
-
+    private Enemy touchEnemy;
 
 
     public Player(Map map) {
@@ -46,7 +46,6 @@ public class Player extends Entity {
 
     }
 
-    @Override
     public void update(float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
@@ -103,6 +102,9 @@ public class Player extends Entity {
 
     }
 
+    public Enemy getTouchEnemy(){ return touchEnemy; }
+
+    public void setTouchEnemy(Enemy te){ this.touchEnemy = te; }
 
     public int getLives() {
         return lives;
@@ -113,7 +115,7 @@ public class Player extends Entity {
     }
 
     @Override
-    public void Move(KeyEvent e) {
+    public void move(KeyEvent e) {
 
     }
 
@@ -129,7 +131,6 @@ public class Player extends Entity {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
                 attack();
         }
-    //hai gimme sec ff iets kijken
     }
 
     public void jump()
@@ -146,13 +147,18 @@ public class Player extends Entity {
         if(currentState != State.ATTACK)
         {
             currentState = State.ATTACK;
+
+            if(touchEnemy != null){
+                touchEnemy.lowerHitpoints(getStrength());
+            }
+
             return true;
         }
         return false;
     }
 
     @Override
-    public void Respawn(){
+    public void respawn(){
         if (hitPoints <= 0 && lives > 0){
             hitPoints = 100;
         }

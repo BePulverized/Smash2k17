@@ -27,10 +27,14 @@ public class WorldContactListener implements ContactListener {
             case World.ENEMY_BIT | World.PLAYER_BIT:
                 System.out.println("Enemy player touch");
                 if(fixA.getFilterData().categoryBits == World.ENEMY_BIT){
-                    ((Enemy)fixA.getUserData()).lowerHitpoints(((Player) fixB.getUserData()).getStrength());
+                    Enemy e = (Enemy)fixB.getUserData();
+                    Player p = (Player) fixA.getUserData();
+                    p.setTouchEnemy(e);
                 }
                 else{
-                    ((Enemy)fixB.getUserData()).lowerHitpoints(((Player) fixA.getUserData()).getStrength());
+                    Enemy e = (Enemy)fixA.getUserData();
+                    Player p = (Player) fixB.getUserData();
+                    p.setTouchEnemy(e);
                 }
                 break;
 
@@ -39,7 +43,27 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
+        Fixture fixA = contact.getFixtureA();
+        Fixture fixB = contact.getFixtureB();
 
+        int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
+        switch(cDef)
+        {
+            case World.ENEMY_BIT | World.PLAYER_BIT:
+                System.out.println("Enemy player touch end");
+                if(fixA.getFilterData().categoryBits == World.ENEMY_BIT){
+                    Enemy e = (Enemy)fixB.getUserData();
+                    Player p = (Player) fixA.getUserData();
+                    p.setTouchEnemy(null);
+                }
+                else{
+                    Enemy e = (Enemy)fixA.getUserData();
+                    Player p = (Player) fixB.getUserData();
+                    p.setTouchEnemy(e);
+                }
+                break;
+
+        }
     }
 
     @Override

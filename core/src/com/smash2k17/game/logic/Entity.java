@@ -61,7 +61,7 @@ public abstract class Entity extends Sprite implements IPlayable {
         this.name = name;
         this.hitPoints = 100;
         this.position = position;
-        this.strength = 100;
+        this.strength = 10;
         this.armor = 0;
         this.map = map;
         currentState = State.STANDING;
@@ -71,13 +71,15 @@ public abstract class Entity extends Sprite implements IPlayable {
 
 
     }
-    public int getStrength(){
+    public synchronized int getStrength(){
         return strength;
     }
 
-    public int getHealth(){
+    public synchronized int getHealth(){
         return hitPoints;
     }
+
+    public synchronized void setHealth(int hitpoints) { this.hitPoints = hitpoints; }
 
     public void addHealth(int health){if(this.hitPoints < 150){this.hitPoints = this.hitPoints + health;}}
 
@@ -85,22 +87,17 @@ public abstract class Entity extends Sprite implements IPlayable {
 
     public abstract void defineEntity();
 
-    public abstract void update(float dt);
-
-    public void Jump(){
-        position.y += 20;
-    }
-
-    public void Attack(){
+    public void attackEnemy(){
         for (Entity e : map.getEntitys()){
-            if(position.x >= e.position.x && (e.position.x + 20) <= e.position.x && e != this){
+            if(b2body.getPosition().x >= e.b2body.getPosition().x && (e.b2body.getPosition().x + 50) <= b2body.getPosition().x && e != this){
                 Enemy en = (Enemy)e;
-                en.lowerHitpoints(strength);
+                //en.lowerHitpoints(strength);
+                System.out.println("Enemy hp: " + en.hitPoints);
             }
         }
     }
 
-    public void Respawn(){}
+    public void respawn(){}
 
     public boolean isDead(){return  playerIsDead;}
 
