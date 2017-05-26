@@ -4,6 +4,7 @@ import com.smash2k17.game.logic.Entity;
 import com.smash2k17.game.logic.PowerUp;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -11,9 +12,9 @@ import java.util.List;
  */
 public interface IWorld extends Remote
 {
-    List<Entity> getAllPlayers();
-    void deletePlayer();
-    List<PowerUp> getAllBuffs();
-    void deleteBuff();
-    void addPlayer();
+    List<Entity> getAllPlayers() throws RemoteException;
+    void deletePlayer() throws RemoteException;
+    List<PowerUp> getAllBuffs() throws RemoteException;
+    void deleteBuff() throws RemoteException;
+    void addPlayer() throws RemoteException;
 }

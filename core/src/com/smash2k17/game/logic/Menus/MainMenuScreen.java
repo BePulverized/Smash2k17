@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Map;
 import com.smash2k17.game.logic.World;
 
@@ -34,10 +35,11 @@ public class MainMenuScreen implements Screen {
     private TextureAtlas atlas;
     private Skin skin;
     private TextButtonStyle textButtonStyle;
+    private Account activeAccount;
 
-    public MainMenuScreen(World w) {
+    public MainMenuScreen(World w, Account activeAccount) {
         this.game = w;
-
+        this.activeAccount = activeAccount;
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"),atlas);
         background = new Sprite(new Texture("core\\assets\\menubackground.jpg"));
@@ -66,6 +68,7 @@ public class MainMenuScreen implements Screen {
         TextButton playBtn = new TextButton("Play", skin);
         TextButton leaderboardBtn = new TextButton("Leaderboard",skin);
         TextButton shopBtn = new TextButton("Shop",skin);
+        TextButton lobbyBtn = new TextButton("Lobby", skin);
         TextButton optionsBtn = new TextButton("Options",skin);
         TextButton logoutBtn = new TextButton("Logout",skin);
         TextButton exitBtn = new TextButton("Exit",skin);
@@ -88,7 +91,13 @@ public class MainMenuScreen implements Screen {
         shopBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new ShopScreen(game));
+                game.setScreen(new ShopScreen(game,activeAccount));
+            }
+        });
+        lobbyBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new LobbyScreen(game, activeAccount));
             }
         });
         exitBtn.addListener(new ClickListener(){
@@ -104,6 +113,7 @@ public class MainMenuScreen implements Screen {
         main.row().left();
         main.add(playBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
         main.add(leaderboardBtn).pad(10,10,10,10);
+        main.add(lobbyBtn).pad(10,10,10,10);
         main.row();
         main.add(shopBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
         main.add(optionsBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);

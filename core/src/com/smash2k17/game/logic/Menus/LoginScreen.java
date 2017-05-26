@@ -15,8 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.smash2k17.game.logic.Database.Account;
+import com.smash2k17.game.logic.Database.AccountContext;
 import com.smash2k17.game.logic.Map;
 import com.smash2k17.game.logic.World;
+
+import java.rmi.RemoteException;
 
 /**
  * Created by Martien on 17-Apr-17.
@@ -32,10 +36,10 @@ public class LoginScreen implements Screen {
     private TextureAtlas atlas;
     private Skin skin;
     private TextButton.TextButtonStyle textButtonStyle;
+    private Account activeAccount;
 
     public LoginScreen(World w) {
         this.game = w;
-
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"), atlas);
 
@@ -65,7 +69,12 @@ public class LoginScreen implements Screen {
         loginBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new MainMenuScreen(game));
+                try {
+                    activeAccount = new Account(1, "jordy", 0);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                game.setScreen(new MainMenuScreen(game, activeAccount));
             }
         });
         exitBtn.addListener(new ClickListener(){

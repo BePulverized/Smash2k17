@@ -1,6 +1,7 @@
 package com.smash2k17.game.logic.Database;
 
 import java.io.UnsupportedEncodingException;
+import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -13,6 +14,7 @@ public class AccountContext {
     private static String connString = "jdbc:mysql://studmysql01.fhict.local/dbi307792?useSSL=false";
     private static String connUser = "dbi307792";
     private static String connPassword = "Wachtwoord1";
+
 
     public String encrypt(String base) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         try {
@@ -37,7 +39,7 @@ public class AccountContext {
         }
     }
 
-    public Account logIn(String email, String password) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    public Account logIn(String email, String password) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException, RemoteException {
         Account result = null;
         Connection myConn = DriverManager.getConnection(connString, connUser, connPassword);
         PreparedStatement preparedStmt;

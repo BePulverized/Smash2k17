@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.smash2k17.game.logic.Menus.LoginScreen;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by BePul on 27-3-2017.
  */
-public class World extends Game{
+public class World extends Game implements Serializable{
 
     public static final float PPM = 100;
     public static final short OBJECT_BIT = 32;
@@ -24,6 +25,7 @@ public class World extends Game{
     private Chat chat;
     private int gridWidth;
     private int gridHeight;
+    private String name;
 
 
     public World()
@@ -31,7 +33,12 @@ public class World extends Game{
 
         this.gridWidth = 600;
         this.gridHeight = 300;
+        this.name = "test";
+    }
 
+    public World(String name)
+    {
+        this.name = name;
     }
 
     public int getGridWidth()
@@ -71,6 +78,11 @@ public class World extends Game{
     public void removePlayer()
     {
 
+    }
+    @Override
+    public String toString()
+    {
+        return name;
     }
 
     @Override

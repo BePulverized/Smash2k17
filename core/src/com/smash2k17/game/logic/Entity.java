@@ -92,12 +92,7 @@ public abstract class Entity extends Sprite implements IPlayable {
     }
 
     public void Attack(){
-        for (Entity e : map.getEntitys()){
-            if(position.x >= e.position.x && (e.position.x + 20) <= e.position.x && e != this){
-                Enemy en = (Enemy)e;
-                en.lowerHitpoints(strength);
-            }
-        }
+        
     }
 
     public void Respawn(){}
