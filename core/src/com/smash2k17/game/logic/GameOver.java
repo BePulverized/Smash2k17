@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.rmi.RemoteException;
+
 /**
  * Created by BePulverized on 17-4-2017.
  */
@@ -42,7 +44,11 @@ public class GameOver implements Screen {
     @Override
     public void render(float delta) {
         if(Gdx.input.justTouched()) {
-            game.setScreen(new Map(new World(), new WorldData("test")));
+            try {
+                game.setScreen(new Map(new World(), new WorldData("test")));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
             dispose();
         }
         Gdx.gl.glClearColor(0, 0, 0, 1);

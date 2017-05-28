@@ -19,9 +19,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.smash2k17.game.logic.Menus.LoginScreen;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import sun.rmi.runtime.Log;
 
 import java.awt.*;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -104,9 +107,13 @@ public class Map implements Screen{
         }
 
         player = new Player(this);
-        enemies = new ArrayList<Entity>();
-        spawnPlayers();
 
+        try {
+            LoginScreen.conn.newPlayer(player.getData(), 0);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        enemies = new ArrayList<Entity>();
         worldlib.setContactListener(new WorldContactListener());
         items = new Array<ItemDrop>();
         itemsToSpawn = new PriorityQueue<ItemDef>();
@@ -149,14 +156,6 @@ public class Map implements Screen{
         }
     }
 
-    public void spawnPlayers()
-    {
-        for(Entity entity: worldData.getPlayers())
-        {
-            enemies.add(new Enemy(this, entity.getPosition().x, entity.getPosition().y));
-        }
-    }
-
     public String getName()
     {
         return name;
@@ -196,6 +195,13 @@ public class Map implements Screen{
     {
         player.handleInput(dt);
         handleSpawningItems();
+        enemies.clear();
+        if(LoginScreen.conn.getPlayerWorld() != null) {
+            for (EntityData ent : LoginScreen.conn.getPlayerWorld().getPlayers()) {
+                enemies.add(new Enemy(this, ent.getPosition().getX(), ent.getPosition().getY()));
+            }
+        }
+        //getworlddata
         worldlib.step(1/60f, 6, 2);
         player.update(dt);
         if(player.currentState != Player.State.DEAD) {

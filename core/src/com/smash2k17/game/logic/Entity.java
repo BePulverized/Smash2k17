@@ -4,10 +4,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.smash2k17.game.logic.RMI.IClientSignal;
 import com.smash2k17.game.logic.interfaces.IPlayable;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.Random;
 
 
 /**
@@ -27,11 +29,12 @@ public abstract class Entity extends Sprite implements IPlayable, Serializable {
     public boolean runningRight;
     int hitPoints;
     private String name;
-    private Point position;
     private int strength;
     private int armor;
     public boolean playerIsDead;
     private com.smash2k17.game.logic.Map map;
+    private EntityData data;
+
     public Entity(com.smash2k17.game.logic.Map map)
     {
         super(map.getTextureAtlas().findRegion("PLAYER"));
@@ -61,7 +64,6 @@ public abstract class Entity extends Sprite implements IPlayable, Serializable {
         defineEntity();
         this.name = name;
         this.hitPoints = 100;
-        this.position = position;
         this.strength = 100;
         this.armor = 0;
         this.map = map;
@@ -70,15 +72,6 @@ public abstract class Entity extends Sprite implements IPlayable, Serializable {
         stateTimer = 0;
         runningRight = true;
 
-
-    }
-
-    public Entity(Point position)
-    {
-        this.position = position;
-    }
-    public int getStrength(){
-        return strength;
     }
 
     public int getHealth(){
@@ -93,14 +86,6 @@ public abstract class Entity extends Sprite implements IPlayable, Serializable {
 
     public abstract void update(float dt);
 
-    public Point getPosition()
-    {
-        return position;
-    }
-
-    public void Jump(){
-        position.y += 20;
-    }
 
     public void Attack(){
         

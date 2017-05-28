@@ -38,13 +38,13 @@ public class LoginScreen implements Screen {
     private Skin skin;
     private TextButton.TextButtonStyle textButtonStyle;
     private Account activeAccount;
-    private ServerConnection conn;
+    public static ServerConnection conn;
 
-    public LoginScreen(World w) {
+    public LoginScreen(World w) throws RemoteException {
         this.game = w;
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"), atlas);
-
+        conn = new ServerConnection();
         sb = new SpriteBatch();
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

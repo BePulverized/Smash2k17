@@ -3,9 +3,11 @@ package com.smash2k17.game.logic;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.smash2k17.game.logic.Menus.LoginScreen;
+import com.smash2k17.game.logic.RMI.ServerConnection;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.Date;
 
 /**
@@ -15,12 +17,11 @@ public class World extends Game {
 
 
     public SpriteBatch batch;
-
     private int gridWidth;
     private int gridHeight;
 
-    public World()
-    {
+    public World() throws RemoteException {
+
         gridHeight = 350;
         gridWidth = 400;
     }
@@ -58,7 +59,11 @@ public class World extends Game {
     public void create()
     {
         batch = new SpriteBatch();
-        setScreen(new LoginScreen(this));
+        try {
+            setScreen(new LoginScreen(this));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
 
     }
 

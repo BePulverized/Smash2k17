@@ -29,10 +29,7 @@ public class Enemy extends Entity {
         //setBounds(getX(), getY(), 16 / com.smash2k17.game.logic.World.PPM, 16 / com.smash2k17.game.logic.World.PPM);
     }
 
-    public Enemy(Point position)
-    {
-        super(position);
-    }
+
 
     public void setTouching(boolean touching){
         this.touching = touching;
@@ -73,6 +70,11 @@ public class Enemy extends Entity {
 
     @Override
     public void Move(KeyEvent e) {
+
+    }
+
+    @Override
+    public void Jump() {
 
     }
 }

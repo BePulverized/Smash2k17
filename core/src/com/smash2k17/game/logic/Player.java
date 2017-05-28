@@ -8,8 +8,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.smash2k17.game.logic.Menus.LoginScreen;
 
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 
 /**
  * Created by BePul on 27-3-2017.
@@ -18,13 +20,13 @@ public class Player extends Entity {
 
 
     private int lives;
-
+    private EntityData data;
 
 
     public Player(Map map) {
         super(map);
         this.lives = 3;
-
+        data = new EntityData(0, 200, 300, 1);
     }
 
     @Override
@@ -43,14 +45,18 @@ public class Player extends Entity {
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
 
-
     }
 
     @Override
     public void update(float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
-
+        data = new EntityData(0, (int)b2body.getPosition().x, (int)b2body.getPosition().y, 1);
+        try {
+            LoginScreen.conn.sendPlayerData(data);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     private TextureRegion getFrame(float dt) {
@@ -118,6 +124,11 @@ public class Player extends Entity {
 
     }
 
+    @Override
+    public void Jump() {
+
+    }
+
     public void handleInput(float dt)
     {
         if(currentState != State.DEAD) {
@@ -160,4 +171,7 @@ public class Player extends Entity {
     }
 
 
+    public EntityData getData() {
+        return data;
+    }
 }

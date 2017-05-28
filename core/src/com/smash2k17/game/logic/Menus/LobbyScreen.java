@@ -95,6 +95,7 @@ public class LobbyScreen implements Screen {
         joinBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
+
             game.setScreen(new Map(game, worlds.get(list.getSelectedIndex())));
             }
         });

@@ -23,6 +23,8 @@ import com.smash2k17.game.logic.World;
 import com.smash2k17.game.logic.WorldData;
 import com.sun.security.ntlm.Server;
 
+import java.rmi.RemoteException;
+
 /**
  * Created by Martien on 10-Apr-17.
  */
@@ -88,7 +90,11 @@ public class MainMenuScreen implements Screen {
         logoutBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new LoginScreen(game));
+                try {
+                    game.setScreen(new LoginScreen(game));
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         });
         shopBtn.addListener(new ClickListener(){

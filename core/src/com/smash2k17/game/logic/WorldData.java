@@ -20,20 +20,18 @@ public class WorldData implements Serializable{
     private Date dateEnded;
     private Chat chat;
     private String name;
+    private int ID;
 
     //Players
-    private ArrayList<Entity> players;
+    private ArrayList<EntityData> players;
 
     public WorldData(String name){
-
+        this.ID = 1;
         this.name = name;
-        players = new ArrayList<Entity>();
-
-        players.add(new Enemy(new Point(300,75)));
-        players.add(new Enemy(new Point(250, 75)));
+        players = new ArrayList<EntityData>();
     }
 
-    public ArrayList<Entity> getPlayers()
+    public ArrayList<EntityData> getPlayers()
     {
         return players;
     }
@@ -63,5 +61,13 @@ public class WorldData implements Serializable{
     public String toString()
     {
         return name;
+    }
+
+    public void addPlayer(EntityData ent) {
+        players.add(ent);
+    }
+
+    public int getID() {
+        return ID;
     }
 }
