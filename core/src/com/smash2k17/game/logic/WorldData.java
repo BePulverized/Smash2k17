@@ -38,6 +38,17 @@ public class WorldData implements Serializable{
         return players;
     }
 
+ /**   public void changePlayerPosition(Entity entity)
+    {
+        for(Entity ent: players)
+        {
+            if(ent.name == entity.name)
+            {
+                ent.position = entity.position;
+            }
+        }
+    }
+**/
     public Date getDateCreated()
     {
         return dateCreated;

@@ -16,6 +16,7 @@ import static java.lang.Thread.sleep;
 /**
  * Created by BePul on 27-3-2017.
  */
+//Serverhost
 public class Lobby {
 
     private Store store;
@@ -55,14 +56,7 @@ public class Lobby {
         store = new Store();
     }
 
-    public Account login(String userName, String Password)
-    {
 
-//        Account acc = database.Login(userName, Password);
-//        return Account;
-
-        throw new NotImplementedException();
-    }
 
     public void UpdateWorlds() throws RemoteException
     {

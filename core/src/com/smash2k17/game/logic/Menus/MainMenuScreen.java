@@ -18,13 +18,16 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Map;
+import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
 import com.smash2k17.game.logic.WorldData;
+import com.sun.security.ntlm.Server;
 
 /**
  * Created by Martien on 10-Apr-17.
  */
 public class MainMenuScreen implements Screen {
+    private ServerConnection conn;
     private World game;
     private SpriteBatch sb;
     private Stage stage;
@@ -35,12 +38,11 @@ public class MainMenuScreen implements Screen {
     private Sprite background;
     private TextureAtlas atlas;
     private Skin skin;
-    private TextButtonStyle textButtonStyle;
-    private Account activeAccount;
 
-    public MainMenuScreen(World w, Account activeAccount) {
+
+    public MainMenuScreen(World w, ServerConnection conn) {
         this.game = w;
-        this.activeAccount = activeAccount;
+        this.conn = conn;
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"),atlas);
         background = new Sprite(new Texture("core\\assets\\menubackground.jpg"));
@@ -92,13 +94,13 @@ public class MainMenuScreen implements Screen {
         shopBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new ShopScreen(game,activeAccount));
+                game.setScreen(new ShopScreen(game,conn));
             }
         });
         lobbyBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new LobbyScreen(game, activeAccount));
+                game.setScreen(new LobbyScreen(game, conn));
             }
         });
         exitBtn.addListener(new ClickListener(){

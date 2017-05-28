@@ -17,15 +17,14 @@ import java.util.ArrayList;
 /**
  * Created by BePul on 27-3-2017.
  */
-public class Account extends UnicastRemoteObject implements IRemotePropertyListener {
+public class Account {
 
     private int id;
     private String email;
     private String password;
     private double balance;
     private ArrayList<StoreItem> inventory;
-    private ArrayList<WorldData> avWorlds;
-    private static IRemotePublisherForListener publisher;
+
 
     public Account(int doid, String email, double balance) throws RemoteException {
         super();
@@ -33,22 +32,7 @@ public class Account extends UnicastRemoteObject implements IRemotePropertyListe
         this.email = email;
         this.balance = balance;
         inventory = new ArrayList<StoreItem>();
-        try{
-            Registry reg = LocateRegistry.getRegistry("localhost", 1099);
-            System.out.println("Reg created");
-            publisher = (IRemotePublisherForListener) reg.lookup("publisher");
 
-        } catch (NotBoundException e) {
-            e.printStackTrace();
-            return;
-        }
-        try {
-            publisher.subscribeRemoteListener(this, "worlddata");
-        }
-        catch(RemoteException ex)
-        {
-            ex.printStackTrace();
-        }
     }
 
     public String getEmail() {
@@ -63,13 +47,7 @@ public class Account extends UnicastRemoteObject implements IRemotePropertyListe
         this.balance = balance;
     }
 
-    public ArrayList<WorldData> getAvWorlds(){ return avWorlds;}
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) throws RemoteException {
-        System.out.println("Update");
-        avWorlds = (ArrayList<WorldData>) evt.getNewValue();
-        System.out.println(avWorlds.get(0).toString());
 
-    }
+
 }

@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Database.AccountContext;
 import com.smash2k17.game.logic.Map;
+import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
 import com.smash2k17.game.logic.WorldData;
 
@@ -39,11 +40,11 @@ public class LobbyScreen implements Screen {
     private AccountContext ctxt;
     private ScrollPane scrollPane;
     private List<String> list;
-    private Account activeAccount;
+    private ServerConnection conn;
     private ArrayList<WorldData> worlds;
-    public LobbyScreen(World w, Account activeAccount) {
+    public LobbyScreen(World w, ServerConnection conn) {
         this.game = w;
-        this.activeAccount = activeAccount;
+        this.conn = conn;
         ctxt = new AccountContext();
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"), atlas);
@@ -69,7 +70,7 @@ public class LobbyScreen implements Screen {
         TextButton joinBtn = new TextButton("Join Game", skin);
         list = new List<String>(skin);
         String[] listEntries = new String[3];
-        worlds = activeAccount.getAvWorlds();
+        worlds = conn.getAvWorlds();
         if(worlds == null)
         {
             listEntries[0] = "No games found";

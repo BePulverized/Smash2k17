@@ -19,7 +19,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Map;
+import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
+import com.sun.security.ntlm.Server;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -38,11 +40,11 @@ public class ShopScreen implements Screen{
     private TextureAtlas atlas;
     private Skin skin;
     private TextButton.TextButtonStyle textButtonStyle;
-    private Account activeAccount;
+    private ServerConnection conn;
 
-    public ShopScreen(World w, Account activeAccount) {
+    public ShopScreen(World w, ServerConnection conn) {
         this.game = w;
-        this.activeAccount = activeAccount;
+        this.conn = conn;
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"), atlas);
 
@@ -77,7 +79,7 @@ public class ShopScreen implements Screen{
         tb.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new MainMenuScreen(game, activeAccount));
+                game.setScreen(new MainMenuScreen(game, conn));
             }
         });
         main.add("");

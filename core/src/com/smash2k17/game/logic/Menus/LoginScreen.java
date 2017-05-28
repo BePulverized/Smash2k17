@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Database.AccountContext;
 import com.smash2k17.game.logic.Map;
+import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
 
 import java.rmi.RemoteException;
@@ -37,6 +38,7 @@ public class LoginScreen implements Screen {
     private Skin skin;
     private TextButton.TextButtonStyle textButtonStyle;
     private Account activeAccount;
+    private ServerConnection conn;
 
     public LoginScreen(World w) {
         this.game = w;
@@ -71,10 +73,11 @@ public class LoginScreen implements Screen {
             public void clicked(InputEvent event, float x, float y){
                 try {
                     activeAccount = new Account(1, "jordy", 0);
+                    conn = new ServerConnection();
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-                game.setScreen(new MainMenuScreen(game, activeAccount));
+                game.setScreen(new MainMenuScreen(game, conn));
             }
         });
         exitBtn.addListener(new ClickListener(){
