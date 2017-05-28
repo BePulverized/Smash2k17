@@ -20,8 +20,9 @@ public class Lobby {
 
     private Store store;
     private Account activeAccount;
-    private ArrayList<World> worlds = new ArrayList<World>();
+    private ArrayList<WorldData> worlds = new ArrayList<WorldData>();
     private RemotePublisher publisher;
+    private int count = 0;
     public Lobby()
     {
         try{
@@ -47,7 +48,7 @@ public class Lobby {
         }
 
         try{
-            publisher.registerProperty("worlds");
+            publisher.registerProperty("worlddata");
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -65,14 +66,15 @@ public class Lobby {
 
     public void UpdateWorlds() throws RemoteException
     {
-        int count = 0;
+
         if(worlds.size() < 3)
         {
-            worlds.add(new World("World " + Integer.toString(count)));
+            worlds.add(new WorldData("World " + Integer.toString(count)));
             count++;
         }
         try{
-            publisher.inform("worlds", null, worlds);
+            publisher.inform("worlddata", null, worlds);
+            System.out.println("Inform");
         }
         catch(Exception ex)
         {

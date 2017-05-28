@@ -30,15 +30,15 @@ public class Player extends Entity {
     @Override
     public void defineEntity() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(300 / com.smash2k17.game.logic.World.PPM, 200/ com.smash2k17.game.logic.World.PPM);
+        bdef.position.set(300 / com.smash2k17.game.logic.WorldData.PPM, 200/ com.smash2k17.game.logic.WorldData.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(15 / com.smash2k17.game.logic.World.PPM);
-        fdef.filter.categoryBits = World.PLAYER_BIT;
-        fdef.filter.maskBits = World.GROUND_BIT | World.OBJECT_BIT | World.ITEM_BIT | World.ENEMY_BIT;
+        shape.setRadius(15 / com.smash2k17.game.logic.WorldData.PPM);
+        fdef.filter.categoryBits = WorldData.PLAYER_BIT;
+        fdef.filter.maskBits = WorldData.GROUND_BIT | WorldData.OBJECT_BIT | WorldData.ITEM_BIT | WorldData.ENEMY_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);

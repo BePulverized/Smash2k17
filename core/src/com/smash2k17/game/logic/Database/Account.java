@@ -2,6 +2,7 @@ package com.smash2k17.game.logic.Database;
 
 import com.smash2k17.game.logic.StoreItem;
 import com.smash2k17.game.logic.World;
+import com.smash2k17.game.logic.WorldData;
 import fontyspublisher.IRemotePropertyListener;
 import fontyspublisher.IRemotePublisherForListener;
 
@@ -23,7 +24,7 @@ public class Account extends UnicastRemoteObject implements IRemotePropertyListe
     private String password;
     private double balance;
     private ArrayList<StoreItem> inventory;
-    private ArrayList<World> avWorlds;
+    private ArrayList<WorldData> avWorlds;
     private static IRemotePublisherForListener publisher;
 
     public Account(int doid, String email, double balance) throws RemoteException {
@@ -34,13 +35,15 @@ public class Account extends UnicastRemoteObject implements IRemotePropertyListe
         inventory = new ArrayList<StoreItem>();
         try{
             Registry reg = LocateRegistry.getRegistry("localhost", 1099);
+            System.out.println("Reg created");
             publisher = (IRemotePublisherForListener) reg.lookup("publisher");
+
         } catch (NotBoundException e) {
             e.printStackTrace();
             return;
         }
         try {
-            publisher.subscribeRemoteListener((IRemotePropertyListener) this, "worlds");
+            publisher.subscribeRemoteListener(this, "worlddata");
         }
         catch(RemoteException ex)
         {
@@ -60,12 +63,12 @@ public class Account extends UnicastRemoteObject implements IRemotePropertyListe
         this.balance = balance;
     }
 
-    public ArrayList<World> getAvWorlds(){ return avWorlds;}
+    public ArrayList<WorldData> getAvWorlds(){ return avWorlds;}
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) throws RemoteException {
         System.out.println("Update");
-        avWorlds = (ArrayList<World>) evt.getNewValue();
+        avWorlds = (ArrayList<WorldData>) evt.getNewValue();
         System.out.println(avWorlds.get(0).toString());
 
     }

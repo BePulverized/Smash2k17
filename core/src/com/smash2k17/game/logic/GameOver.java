@@ -42,7 +42,7 @@ public class GameOver implements Screen {
     @Override
     public void render(float delta) {
         if(Gdx.input.justTouched()) {
-            game.setScreen(new Map((World) game));
+            game.setScreen(new Map(new World(), new WorldData("test")));
             dispose();
         }
         Gdx.gl.glClearColor(0, 0, 0, 1);

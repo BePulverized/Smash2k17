@@ -16,6 +16,7 @@ import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Database.AccountContext;
 import com.smash2k17.game.logic.Map;
 import com.smash2k17.game.logic.World;
+import com.smash2k17.game.logic.WorldData;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class LobbyScreen implements Screen {
     private ScrollPane scrollPane;
     private List<String> list;
     private Account activeAccount;
+    private ArrayList<WorldData> worlds;
     public LobbyScreen(World w, Account activeAccount) {
         this.game = w;
         this.activeAccount = activeAccount;
@@ -55,6 +57,7 @@ public class LobbyScreen implements Screen {
 
         stage = new Stage(viewport, sb);
         Gdx.input.setInputProcessor(stage);
+
     }
 
     @Override
@@ -63,10 +66,23 @@ public class LobbyScreen implements Screen {
         main.setFillParent(true);
 
 
-        TextButton joinBtn = new TextButton("Login", skin);
+        TextButton joinBtn = new TextButton("Join Game", skin);
         list = new List<String>(skin);
+        String[] listEntries = new String[3];
+        worlds = activeAccount.getAvWorlds();
+        if(worlds == null)
+        {
+            listEntries[0] = "No games found";
+            list.setItems(listEntries);
+        }
+        else {
+            for (int i = 0, k = 0; i < worlds.size(); i++) {
+                listEntries[k++] = worlds.get(i).toString();
+            }
+            list.setItems(listEntries);
+        }
 
-        list.setItems(activeAccount.getAvWorlds().toString());
+
         scrollPane = new ScrollPane(list);
         scrollPane.setBounds(0, 0, 200, 500 + 100);
         scrollPane.setSmoothScrolling(false);
@@ -78,12 +94,12 @@ public class LobbyScreen implements Screen {
         joinBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-
-
+            game.setScreen(new Map(game, worlds.get(list.getSelectedIndex())));
             }
         });
 
         main.row();
+        main.add(joinBtn);
         stage.addActor(main);
         stage.addActor(scrollPane);
     }

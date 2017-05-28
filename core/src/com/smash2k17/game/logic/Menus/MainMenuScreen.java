@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Map;
 import com.smash2k17.game.logic.World;
+import com.smash2k17.game.logic.WorldData;
 
 /**
  * Created by Martien on 10-Apr-17.
@@ -79,7 +80,7 @@ public class MainMenuScreen implements Screen {
            @Override
             public void clicked(InputEvent event, float x, float y){
                Gdx.graphics.setWindowedMode(980,500);
-               game.setScreen(new Map(game));
+               game.setScreen(new Map(game, new WorldData("test")));
            }
         });
         logoutBtn.addListener(new ClickListener(){

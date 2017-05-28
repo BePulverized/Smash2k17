@@ -27,7 +27,7 @@ public abstract class ItemDrop extends Sprite implements IPickable {
         this.map = map;
         this.world = map.getWorld();
         setPosition(x, y);
-        setBounds(getX(), getY(), 16 / World.PPM, 16/ World.PPM);
+        setBounds(getX(), getY(), 16 / WorldData.PPM, 16/ WorldData.PPM);
         defineItem();
         toDestroy = false;
         destroyed = false;
@@ -41,9 +41,9 @@ public abstract class ItemDrop extends Sprite implements IPickable {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(6/ World.PPM);
-        fdef.filter.categoryBits = World.ITEM_BIT;
-        fdef.filter.maskBits = World.PLAYER_BIT | World.OBJECT_BIT | World.GROUND_BIT;
+        shape.setRadius(6/ WorldData.PPM);
+        fdef.filter.categoryBits = WorldData.ITEM_BIT;
+        fdef.filter.maskBits = WorldData.PLAYER_BIT | WorldData.OBJECT_BIT | WorldData.GROUND_BIT;
 
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);

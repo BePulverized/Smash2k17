@@ -7,12 +7,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.smash2k17.game.logic.interfaces.IPlayable;
 
 import java.awt.*;
+import java.io.Serializable;
 
 
 /**
  * Created by BePul on 27-3-2017.
  */
-public abstract class Entity extends Sprite implements IPlayable {
+public abstract class Entity extends Sprite implements IPlayable, Serializable {
 
     public State currentState;
     public State previousState;
@@ -54,7 +55,7 @@ public abstract class Entity extends Sprite implements IPlayable {
 
         playerStand = new TextureRegion(getTexture(),193, 0, 20,30 );
         playerAttack = new TextureRegion(getTexture(),258, 0, 20, 30);
-        setBounds(0,0, 40/ com.smash2k17.game.logic.World.PPM, 40/ com.smash2k17.game.logic.World.PPM);
+        setBounds(0,0, 40/ com.smash2k17.game.logic.WorldData.PPM, 40/ com.smash2k17.game.logic.WorldData.PPM);
         setRegion(playerStand);
         this.world = map.getWorld();
         defineEntity();
@@ -71,6 +72,11 @@ public abstract class Entity extends Sprite implements IPlayable {
 
 
     }
+
+    public Entity(Point position)
+    {
+        this.position = position;
+    }
     public int getStrength(){
         return strength;
     }
@@ -86,6 +92,11 @@ public abstract class Entity extends Sprite implements IPlayable {
     public abstract void defineEntity();
 
     public abstract void update(float dt);
+
+    public Point getPosition()
+    {
+        return position;
+    }
 
     public void Jump(){
         position.y += 20;

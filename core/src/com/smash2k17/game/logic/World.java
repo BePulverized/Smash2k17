@@ -11,35 +11,21 @@ import java.util.Date;
 /**
  * Created by BePul on 27-3-2017.
  */
-public class World extends Game implements Serializable{
+public class World extends Game {
 
-    public static final float PPM = 100;
-    public static final short OBJECT_BIT = 32;
-    public static final short ITEM_BIT = 256;
-    public static final short PLAYER_BIT = 2;
-    public static final short ENEMY_BIT = 2;
-    public static final short GROUND_BIT = 1;
+
     public SpriteBatch batch;
-    private Date dateCreated;
-    private Date dateEnded;
-    private Chat chat;
+
     private int gridWidth;
     private int gridHeight;
-    private String name;
-
 
     public World()
     {
-
-        this.gridWidth = 600;
-        this.gridHeight = 300;
-        this.name = "test";
+        gridHeight = 350;
+        gridWidth = 400;
     }
 
-    public World(String name)
-    {
-        this.name = name;
-    }
+
 
     public int getGridWidth()
     {
@@ -51,19 +37,7 @@ public class World extends Game implements Serializable{
         return gridHeight;
     }
 
-    public float getPPM() {
-        return PPM;
-    }
 
-    public Date getDateCreated()
-    {
-        return dateCreated;
-    }
-
-    public Date getDateEnded()
-    {
-        return dateEnded;
-    }
 
     public void endWorld()
     {
@@ -78,11 +52,6 @@ public class World extends Game implements Serializable{
     public void removePlayer()
     {
 
-    }
-    @Override
-    public String toString()
-    {
-        return name;
     }
 
     @Override
