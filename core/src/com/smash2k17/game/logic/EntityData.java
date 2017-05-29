@@ -12,11 +12,11 @@ import java.util.Random;
 public class EntityData implements Serializable{
 
     private int ID;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
     private IClientSignal signal;
     private int WorldID;
-    public EntityData(int ID, int x, int y, int worldID)
+    public EntityData(int ID, double x, double y, int worldID)
     {
         this.ID = ID;
 
@@ -41,14 +41,19 @@ public class EntityData implements Serializable{
         return ID;
     }
 
-    public void setPosition(int x, int y)
+    public void setPosition(double x, double y)
     {
         this.x = x;
         this.y = y;
     }
 
-    public Point getPosition()
+    public double getX()
     {
-        return new Point(this.x, this.y);
+        return x;
+    }
+
+    public double getY()
+    {
+        return y;
     }
 }

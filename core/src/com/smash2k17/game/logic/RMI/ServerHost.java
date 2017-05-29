@@ -67,13 +67,14 @@ public class ServerHost implements IServer{
         {
             if(entity.getID() == ent.getID())
             {
-                entity.setPosition(ent.getPosition().x, ent.getPosition().y);
+                entity.setPosition(ent.getX(), ent.getY());
             }
         }
 
         //signal
         for(EntityData lobby: playerWorld.getPlayers())
         {
+            if(lobby.getID() != ent.getID())
             lobby.getSignal().signal(playerWorld, "playermovement");
         }
     }
