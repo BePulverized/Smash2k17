@@ -1,8 +1,8 @@
 package com.smash2k17.game.logic;
 
 import com.smash2k17.game.logic.RMI.IClientSignal;
-import org.lwjgl.util.Point;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.Random;
 

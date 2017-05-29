@@ -17,11 +17,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Database.AccountContext;
+import com.smash2k17.game.logic.Database.AccountRepository;
 import com.smash2k17.game.logic.Map;
 import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
 
+import java.io.UnsupportedEncodingException;
 import java.rmi.RemoteException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 
 /**
  * Created by Martien on 17-Apr-17.
@@ -39,6 +43,8 @@ public class LoginScreen implements Screen {
     private TextButton.TextButtonStyle textButtonStyle;
     private Account activeAccount;
     public static ServerConnection conn;
+    private static Account user;
+    private AccountRepository accountRepo = new AccountRepository(new AccountContext());
 
     public LoginScreen(World w) throws RemoteException {
         this.game = w;
@@ -61,8 +67,8 @@ public class LoginScreen implements Screen {
         Table main = new Table(skin);
         main.setFillParent(true);
 
-        TextField nameField = new TextField("",skin);
-        TextField passField = new TextField("", skin);
+        final TextField nameField = new TextField("",skin);
+        final TextField passField = new TextField("", skin);
         passField.setPasswordMode(true);
         passField.setPasswordCharacter("*".charAt(0));
         TextButton loginBtn = new TextButton("Login", skin);
@@ -72,12 +78,26 @@ public class LoginScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 try {
-                    activeAccount = new Account(1, "jordy", 0);
                     conn = new ServerConnection();
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-                game.setScreen(new MainMenuScreen(game, conn));
+                try {
+                    user = accountRepo.logIn(nameField.getText(),passField.getText());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                if(user != null) {
+                    game.setScreen(new MainMenuScreen(game, conn, user));
+                }
+
+
             }
         });
         exitBtn.addListener(new ClickListener(){

@@ -2,9 +2,7 @@ package com.smash2k17.game.logic.RMI;
 
 import com.smash2k17.game.logic.Entity;
 import com.smash2k17.game.logic.EntityData;
-import com.smash2k17.game.logic.Lobby;
 import com.smash2k17.game.logic.WorldData;
-
 import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -69,7 +67,7 @@ public class ServerHost implements IServer{
         {
             if(entity.getID() == ent.getID())
             {
-                entity.setPosition(ent.getPosition().getX(), ent.getPosition().getY());
+                entity.setPosition(ent.getPosition().x, ent.getPosition().y);
             }
         }
 

@@ -40,11 +40,12 @@ public class MainMenuScreen implements Screen {
     private Sprite background;
     private TextureAtlas atlas;
     private Skin skin;
+    private Account activeAccount;
 
-
-    public MainMenuScreen(World w, ServerConnection conn) {
+    public MainMenuScreen(World w, ServerConnection conn, Account activeAccount) {
         this.game = w;
         this.conn = conn;
+        this.activeAccount = activeAccount;
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"),atlas);
         background = new Sprite(new Texture("core\\assets\\menubackground.jpg"));
@@ -100,7 +101,7 @@ public class MainMenuScreen implements Screen {
         shopBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new ShopScreen(game,conn));
+                game.setScreen(new ShopScreen(game,conn, activeAccount));
             }
         });
         lobbyBtn.addListener(new ClickListener(){

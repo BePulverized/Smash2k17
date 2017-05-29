@@ -198,7 +198,7 @@ public class Map implements Screen{
         enemies.clear();
         if(LoginScreen.conn.getPlayerWorld() != null) {
             for (EntityData ent : LoginScreen.conn.getPlayerWorld().getPlayers()) {
-                enemies.add(new Enemy(this, ent.getPosition().getX(), ent.getPosition().getY()));
+                enemies.add(new Enemy(this, ent.getPosition().x, ent.getPosition().y));
             }
         }
         //getworlddata

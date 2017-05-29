@@ -3,8 +3,7 @@ package com.smash2k17.game.logic.RMI;
 import com.smash2k17.game.logic.Entity;
 import com.smash2k17.game.logic.EntityData;
 import com.smash2k17.game.logic.WorldData;
-import fontyspublisher.IRemotePropertyListener;
-import fontyspublisher.IRemotePublisherForListener;
+
 
 import java.beans.PropertyChangeEvent;
 import java.net.MalformedURLException;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 public class ServerConnection extends UnicastRemoteObject implements IClientSignal {
 
     private ArrayList<WorldData> avWorlds;
-    private static IRemotePublisherForListener publisher;
     private IServer remoteService;
     private WorldData playerWorld;
 
