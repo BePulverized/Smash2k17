@@ -23,10 +23,10 @@ public class Player extends Entity {
     private EntityData data;
 
 
-    public Player(Map map) {
+    public Player(Map map, int id) {
         super(map);
         this.lives = 3;
-        data = new EntityData(0, 200, 300, 1);
+        data = new EntityData(id, 200, 300, 1);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class Player extends Entity {
     public void update(float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
-        data = new EntityData(0, (int)b2body.getPosition().x, (int)b2body.getPosition().y, 1);
+        data = new EntityData(data.getID(), (int)b2body.getPosition().x, (int)b2body.getPosition().y, 1);
         try {
             LoginScreen.conn.sendPlayerData(data);
         } catch (RemoteException e) {

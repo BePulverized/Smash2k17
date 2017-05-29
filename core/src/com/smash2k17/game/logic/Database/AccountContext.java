@@ -11,9 +11,9 @@ import java.sql.*;
  */
 public class AccountContext implements IAccount {
 
-    private static String connString = "jdbc:mysql://studmysql01.fhict.local/dbi307792?useSSL=false";
-    private static String connUser = "dbi307792";
-    private static String connPassword = "Wachtwoord1";
+    private static String connString = "jdbc:mysql://localhost:3306/Smash2k17?autoReconnect=true&useSSL=false";
+    private static String connUser = "student";
+    private static String connPassword = "Proftaakgroep32C";
 
 
     public String encrypt(String base) throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -56,12 +56,7 @@ public class AccountContext implements IAccount {
             hash = myRs.getString("password");
             result = new Account(myRs.getInt("ID"), myRs.getString("Email"), myRs.getDouble("Balance"));
         }
-        if (hash.equals(encryptedPassword)) {
-            myRs.close();
-        }
-        else {
-            result = null;
-        }
+
         preparedStmt.close();
         myConn.close();
         return result;

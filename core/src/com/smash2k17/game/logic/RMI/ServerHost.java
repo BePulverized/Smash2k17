@@ -91,6 +91,7 @@ public class ServerHost implements IServer{
         }
         //Voeg player toe in list
         playerWorld.addPlayer(ent);
+        System.out.println("Player" + ent.getID() + "Added to server");
 
         //signal
         for(EntityData lobby: playerWorld.getPlayers())

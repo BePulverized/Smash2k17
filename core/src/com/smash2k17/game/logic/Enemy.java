@@ -24,7 +24,7 @@ public class Enemy extends Entity {
         super(map);
         this.x = x;
         this.y = y;
-        setPosition(x / com.smash2k17.game.logic.WorldData.PPM, y/ com.smash2k17.game.logic.WorldData.PPM);
+        setPosition(x , y);
 
         //setBounds(getX(), getY(), 16 / com.smash2k17.game.logic.World.PPM, 16 / com.smash2k17.game.logic.World.PPM);
     }

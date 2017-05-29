@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Menus.LoginScreen;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import sun.rmi.runtime.Log;
@@ -67,11 +68,13 @@ public class Map implements Screen{
     private ArrayList<Entity> enemies;
     private PriorityQueue<ItemDef> itemsToSpawn;
     private WorldData worldData;
+    private Account activeAccount;
 
-    public Map(World world, WorldData worldData)
+    public Map(World world, WorldData worldData, Account activeAccount)
     {
         this.worldData = worldData;
         this.name = name;
+        this.activeAccount =activeAccount;
         this.gameMode = GameMode.TDM;
         atlas = new TextureAtlas("core\\assets\\PLAYER.pack");
         this.game = world;
@@ -106,7 +109,7 @@ public class Map implements Screen{
             body.createFixture(fdef);
         }
 
-        player = new Player(this);
+        player = new Player(this, activeAccount.getId());
 
         try {
             LoginScreen.conn.newPlayer(player.getData(), 0);
@@ -245,7 +248,7 @@ public class Map implements Screen{
         game.batch.setProjectionMatrix(ui.stage.getCamera().combined);
         ui.stage.draw();
         if(player.currentState == Player.State.DEAD)
-            game.setScreen(new GameOver(game));
+            game.setScreen(new GameOver(game, activeAccount));
             dispose();
     }
 

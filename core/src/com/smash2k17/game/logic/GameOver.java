@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.smash2k17.game.logic.Database.Account;
 
 import java.rmi.RemoteException;
 
@@ -23,8 +24,10 @@ public class GameOver implements Screen {
     private Viewport viewport;
     private Stage stage;
     private Game game;
-    public GameOver(Game game){
+    private Account activeAccount;
+    public GameOver(Game game, Account activeAccount){
         this.game = game;
+        this.activeAccount =activeAccount;
         viewport = new FitViewport(600, 300, new OrthographicCamera());
         stage = new Stage(viewport, ((World) game).batch);
         Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
@@ -45,7 +48,7 @@ public class GameOver implements Screen {
     public void render(float delta) {
         if(Gdx.input.justTouched()) {
             try {
-                game.setScreen(new Map(new World(), new WorldData("test")));
+                game.setScreen(new Map(new World(), new WorldData("test"),activeAccount ));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
