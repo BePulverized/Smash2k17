@@ -8,8 +8,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.smash2k17.game.logic.Menus.LoginScreen;
 
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 
 /**
  * Created by BePul on 27-3-2017.
@@ -18,37 +20,43 @@ public class Player extends Entity {
 
 
     private int lives;
-    private Enemy touchEnemy;
+    private EntityData data;
 
 
     public Player(Map map) {
         super(map);
         this.lives = 3;
-
+        data = new EntityData(0, 200, 300, 1);
     }
 
     @Override
     public void defineEntity() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(300 / com.smash2k17.game.logic.World.PPM, 200/ com.smash2k17.game.logic.World.PPM);
+        bdef.position.set(300 / com.smash2k17.game.logic.WorldData.PPM, 200/ com.smash2k17.game.logic.WorldData.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(15 / com.smash2k17.game.logic.World.PPM);
-        fdef.filter.categoryBits = World.PLAYER_BIT;
-        fdef.filter.maskBits = World.GROUND_BIT | World.OBJECT_BIT | World.ITEM_BIT | World.ENEMY_BIT;
+        shape.setRadius(15 / com.smash2k17.game.logic.WorldData.PPM);
+        fdef.filter.categoryBits = WorldData.PLAYER_BIT;
+        fdef.filter.maskBits = WorldData.GROUND_BIT | WorldData.OBJECT_BIT | WorldData.ITEM_BIT | WorldData.ENEMY_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
 
-
     }
 
+    @Override
     public void update(float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
+        data = new EntityData(0, (int)b2body.getPosition().x, (int)b2body.getPosition().y, 1);
+        try {
+            LoginScreen.conn.sendPlayerData(data);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     private TextureRegion getFrame(float dt) {
@@ -102,9 +110,6 @@ public class Player extends Entity {
 
     }
 
-    public Enemy getTouchEnemy(){ return touchEnemy; }
-
-    public void setTouchEnemy(Enemy te){ this.touchEnemy = te; }
 
     public int getLives() {
         return lives;
@@ -115,7 +120,12 @@ public class Player extends Entity {
     }
 
     @Override
-    public void move(KeyEvent e) {
+    public void Move(KeyEvent e) {
+
+    }
+
+    @Override
+    public void Jump() {
 
     }
 
@@ -131,6 +141,7 @@ public class Player extends Entity {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
                 attack();
         }
+    //hai gimme sec ff iets kijken
     }
 
     public void jump()
@@ -147,22 +158,20 @@ public class Player extends Entity {
         if(currentState != State.ATTACK)
         {
             currentState = State.ATTACK;
-
-            if(touchEnemy != null){
-                touchEnemy.lowerHitpoints(getStrength());
-            }
-
             return true;
         }
         return false;
     }
 
     @Override
-    public void respawn(){
+    public void Respawn(){
         if (hitPoints <= 0 && lives > 0){
             hitPoints = 100;
         }
     }
 
 
+    public EntityData getData() {
+        return data;
+    }
 }

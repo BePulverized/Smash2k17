@@ -4,15 +4,18 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.smash2k17.game.logic.RMI.IClientSignal;
 import com.smash2k17.game.logic.interfaces.IPlayable;
 
 import java.awt.*;
+import java.io.Serializable;
+import java.util.Random;
 
 
 /**
  * Created by BePul on 27-3-2017.
  */
-public abstract class Entity extends Sprite implements IPlayable {
+public abstract class Entity extends Sprite implements IPlayable, Serializable {
 
     public State currentState;
     public State previousState;
@@ -26,11 +29,12 @@ public abstract class Entity extends Sprite implements IPlayable {
     public boolean runningRight;
     int hitPoints;
     private String name;
-    private Point position;
     private int strength;
     private int armor;
     public boolean playerIsDead;
     private com.smash2k17.game.logic.Map map;
+    private EntityData data;
+
     public Entity(com.smash2k17.game.logic.Map map)
     {
         super(map.getTextureAtlas().findRegion("PLAYER"));
@@ -54,14 +58,13 @@ public abstract class Entity extends Sprite implements IPlayable {
 
         playerStand = new TextureRegion(getTexture(),193, 0, 20,30 );
         playerAttack = new TextureRegion(getTexture(),258, 0, 20, 30);
-        setBounds(0,0, 40/ com.smash2k17.game.logic.World.PPM, 40/ com.smash2k17.game.logic.World.PPM);
+        setBounds(0,0, 40/ com.smash2k17.game.logic.WorldData.PPM, 40/ com.smash2k17.game.logic.WorldData.PPM);
         setRegion(playerStand);
         this.world = map.getWorld();
         defineEntity();
         this.name = name;
         this.hitPoints = 100;
-        this.position = position;
-        this.strength = 10;
+        this.strength = 100;
         this.armor = 0;
         this.map = map;
         currentState = State.STANDING;
@@ -69,17 +72,11 @@ public abstract class Entity extends Sprite implements IPlayable {
         stateTimer = 0;
         runningRight = true;
 
-
-    }
-    public synchronized int getStrength(){
-        return strength;
     }
 
-    public synchronized int getHealth(){
+    public int getHealth(){
         return hitPoints;
     }
-
-    public synchronized void setHealth(int hitpoints) { this.hitPoints = hitpoints; }
 
     public void addHealth(int health){if(this.hitPoints < 150){this.hitPoints = this.hitPoints + health;}}
 
@@ -87,17 +84,14 @@ public abstract class Entity extends Sprite implements IPlayable {
 
     public abstract void defineEntity();
 
-    public void attackEnemy(){
-        for (Entity e : map.getEntitys()){
-            if(b2body.getPosition().x >= e.b2body.getPosition().x && (e.b2body.getPosition().x + 50) <= b2body.getPosition().x && e != this){
-                Enemy en = (Enemy)e;
-                //en.lowerHitpoints(strength);
-                System.out.println("Enemy hp: " + en.hitPoints);
-            }
-        }
+    public abstract void update(float dt);
+
+
+    public void Attack(){
+        
     }
 
-    public void respawn(){}
+    public void Respawn(){}
 
     public boolean isDead(){return  playerIsDead;}
 

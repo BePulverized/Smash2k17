@@ -1,5 +1,6 @@
 package com.smash2k17.game.logic.Database;
 
+import com.badlogic.gdx.math.Interpolation;
 import com.smash2k17.game.logic.Product;
 
 import java.math.BigDecimal;
@@ -15,53 +16,59 @@ public class StoreContext implements IStore {
     private static String connPassword = "Wachtwoord1";
 
     public ArrayList<Product> getProducts() throws SQLException {
-        ArrayList<Product> products = new ArrayList<Product>();
+        ArrayList<Product> products = new ArrayList();
         Connection myConn = DriverManager.getConnection(connString, connUser, connPassword);
-        PreparedStatement preparedStmt = null;
+        PreparedStatement preparedStmt;
         ResultSet myRs;
 
         String query = "select name, price from storeitem;";
         preparedStmt = myConn.prepareStatement(query);
         myRs = preparedStmt.executeQuery();
-
-        while (myRs.next()) {
-           products.add( new Product(myRs.getBigDecimal("Price").doubleValue(), myRs.getString("Name")));
-        }
-        myConn.close();
         preparedStmt.close();
-        myRs.close();
+        myConn.close();
+        while (myRs.next()) {
+            products.add(new Product(myRs.getBigDecimal("Price").doubleValue(), myRs.getString("Name")));
+        }
         return products;
     }
 
     public void koopProduct(int idProduct, int idKlant) throws SQLException {
-        Connection myConn = DriverManager.getConnection(connString, connUser, connPassword);
+        Connection myConn = null;
         PreparedStatement preparedStmt = null;
-        String query;
+        try {
+            myConn = DriverManager.getConnection(connString, connUser, connPassword);
+            String query;
 
-        if(getPrijs(idProduct).doubleValue()<= getBalance(idKlant).doubleValue()) {
-            query = " insert into Account_storeitem (storeitemid, accountid)"
-                    + " values (?, ?)";
-            preparedStmt = myConn.prepareStatement(query);
-            preparedStmt.setInt(1, idProduct);
-            preparedStmt.setInt(2, idKlant);
+            if (getPrijs(idProduct).doubleValue() <= getBalance(idKlant).doubleValue()) {
+                query = " insert into Account_storeitem (storeitemid, accountid)"
+                        + " values (?, ?)";
+                preparedStmt = myConn.prepareStatement(query);
+                preparedStmt.setInt(1, idProduct);
+                preparedStmt.setInt(2, idKlant);
 
-            preparedStmt.execute();
+                preparedStmt.execute();
+                preparedStmt.close();
+                myConn.close();
 
-            changeBalance(getPrijs(idProduct).doubleValue() * -1, idKlant);
-            System.out.println("betaling gelukt");
-            myConn.close();
-            preparedStmt.close();
-        }
-        else{
-            System.out.println("saldo onvoldoende");
+                changeBalance(getPrijs(idProduct).doubleValue() * -1, idKlant);
+                System.out.println("betaling gelukt");
+            } else {
+                System.out.println("saldo onvoldoende");
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            closeSQL(preparedStmt, myConn);
         }
     }
 
     public void changeBalance(double bedrag, int id) throws SQLException {
-        Connection myConn = DriverManager.getConnection(connString, connUser, connPassword);
-        PreparedStatement preparedStmt;
-        ResultSet myRs;
-        double balance=getBalance(id).doubleValue();
+        Connection myConn = null;
+        PreparedStatement preparedStmt = null;
+        try {
+            myConn = DriverManager.getConnection(connString, connUser, connPassword);
+
+        double balance = getBalance(id).doubleValue();
 
         balance += bedrag;
 
@@ -70,42 +77,68 @@ public class StoreContext implements IStore {
         preparedStmt.setBigDecimal(1, BigDecimal.valueOf(balance));
         preparedStmt.setInt(2, id);
         preparedStmt.execute();
-
-        myConn.close();
-        preparedStmt.close();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            closeSQL(preparedStmt, myConn);
+        }
     }
 
     public BigDecimal getBalance(int idKlant) throws SQLException {
-        Connection myConn = DriverManager.getConnection(connString, connUser, connPassword);
-        PreparedStatement preparedStmt;
-        ResultSet myRs;
-        String query;
+        Connection myConn = null;
+        PreparedStatement preparedStmt = null;
 
-        query = "select balance from Account where id = ?;";
-        preparedStmt = myConn.prepareStatement(query);
-        preparedStmt.setInt(1, idKlant);
-        myRs = preparedStmt.executeQuery();
-        while (myRs.next()) {
-            return myRs.getBigDecimal("balance");
+        try {
+            myConn = DriverManager.getConnection(connString, connUser, connPassword);
+            ResultSet myRs;
+            String query;
+
+            query = "select balance from Account where id = ?;";
+            preparedStmt = myConn.prepareStatement(query);
+            preparedStmt.setInt(1, idKlant);
+            myRs = preparedStmt.executeQuery();
+            while (myRs.next()) {
+                return myRs.getBigDecimal("balance");
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            closeSQL(preparedStmt, myConn);
         }
+
         return null;
     }
 
     public BigDecimal getPrijs(int idProduct) throws SQLException {
-        Connection myConn = DriverManager.getConnection(connString, connUser, connPassword);
-        PreparedStatement preparedStmt;
-        ResultSet myRs;
-        String query;
+        Connection myConn = null;
+        PreparedStatement preparedStmt = null;
+        try {
+            myConn = DriverManager.getConnection(connString, connUser, connPassword);
+            ResultSet myRs;
+            String query;
 
-        query = "select price from storeitem where id = ?;";
-        preparedStmt = myConn.prepareStatement(query);
-        preparedStmt.setInt(1, idProduct);
-        myRs = preparedStmt.executeQuery();
-        while (myRs.next()) {
-            return myRs.getBigDecimal("price");
+            query = "select price from storeitem where id = ?;";
+            preparedStmt = myConn.prepareStatement(query);
+            preparedStmt.setInt(1, idProduct);
+            myRs = preparedStmt.executeQuery();
+            while (myRs.next()) {
+                return myRs.getBigDecimal("price");
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            closeSQL(preparedStmt, myConn);
         }
         return null;
     }
 
+    public void closeSQL(PreparedStatement preparedStmt,Connection myConn) throws SQLException {
+        if (preparedStmt != null) {
+            preparedStmt.close();
+        }
+        if (myConn != null) {
+            myConn.close();
+        }
+    }
 
 }

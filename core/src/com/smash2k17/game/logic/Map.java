@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -18,9 +19,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.smash2k17.game.logic.Menus.LoginScreen;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import sun.rmi.runtime.Log;
 
 import java.awt.*;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -52,36 +56,37 @@ public class Map implements Screen{
     //Box2d
     private com.badlogic.gdx.physics.box2d.World worldlib;
     // Build
-    private Box2DBuild b2dr;
+   // private Box2DBuild b2dr;
     //Debug
-//    private Box2DDebugRenderer b2dr;
+    private Box2DDebugRenderer b2dr;
 
     //items
     private Player player;
     private Enemy enemy;
-    private ArrayList<Entity> entitys;
     private Array<ItemDrop> items;
+    private ArrayList<Entity> enemies;
     private PriorityQueue<ItemDef> itemsToSpawn;
+    private WorldData worldData;
 
-    public Map(World world)
+    public Map(World world, WorldData worldData)
     {
-        entitys = new ArrayList<Entity>();
+        this.worldData = worldData;
         this.name = name;
         this.gameMode = GameMode.TDM;
         atlas = new TextureAtlas("core\\assets\\PLAYER.pack");
         this.game = world;
         gameCam = new OrthographicCamera();
-        gamePort = new FitViewport(game.getGridWidth() / game.getPPM(), game.getGridHeight() / game.getPPM(), gameCam);
-        ui = new UserInterface(game.batch);
+        gamePort = new FitViewport(game.getGridWidth() / WorldData.PPM, game.getGridHeight() / WorldData.PPM, gameCam);
+        ui = new UserInterface(new SpriteBatch());
         mapLoader = new TmxMapLoader();
         tiledMap = mapLoader.load(Gdx.files.internal("core\\assets\\Map_1.tmx").file().getAbsolutePath());
-        renderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / game.getPPM());
+        renderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / WorldData.PPM);
         gameCam.position.set(gamePort.getWorldWidth() /2, gamePort.getWorldHeight() /2, 0);
         worldlib = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -10), true);
         //build
-        b2dr = new Box2DBuild();
+ //       b2dr = new Box2DBuild();
         //debug
-//        b2dr = new Box2DDebugRenderer();
+        b2dr = new Box2DDebugRenderer();
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
@@ -92,25 +97,27 @@ public class Map implements Screen{
             com.badlogic.gdx.math.Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() /2) / game.getPPM(), (rect.getY() + rect.getHeight() /2) / game.getPPM());
+            bdef.position.set((rect.getX() + rect.getWidth() /2) / WorldData.PPM, (rect.getY() + rect.getHeight() /2) / WorldData.PPM);
 
             body = worldlib.createBody(bdef);
 
-            shape.setAsBox(rect.getWidth() /2 / game.getPPM(), rect.getHeight() /2 / game.getPPM());
+            shape.setAsBox(rect.getWidth() /2 / WorldData.PPM, rect.getHeight() /2 / WorldData.PPM);
             fdef.shape = shape;
             body.createFixture(fdef);
         }
 
         player = new Player(this);
-        enemy = new Enemy(this);
-        entitys.add(player);
-        entitys.add(enemy);
 
+        try {
+            LoginScreen.conn.newPlayer(player.getData(), 0);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        enemies = new ArrayList<Entity>();
         worldlib.setContactListener(new WorldContactListener());
         items = new Array<ItemDrop>();
         itemsToSpawn = new PriorityQueue<ItemDef>();
         UserInterface.updateInfo(player);
-        UserInterface.updateInfo(enemy);
     }
 
     public void spawnItem(ItemDef idef)
@@ -159,8 +166,6 @@ public class Map implements Screen{
         return gameMode;
     }
 
-    public ArrayList<Entity> getEntitys() { return entitys; }
-
     public ArrayList<Point> getDeathzones()
     {
         return  deathZones;
@@ -190,9 +195,15 @@ public class Map implements Screen{
     {
         player.handleInput(dt);
         handleSpawningItems();
+        enemies.clear();
+        if(LoginScreen.conn.getPlayerWorld() != null) {
+            for (EntityData ent : LoginScreen.conn.getPlayerWorld().getPlayers()) {
+                enemies.add(new Enemy(this, ent.getPosition().x, ent.getPosition().y));
+            }
+        }
+        //getworlddata
         worldlib.step(1/60f, 6, 2);
         player.update(dt);
-        enemy.update();
         if(player.currentState != Player.State.DEAD) {
             gameCam.position.x = player.b2body.getPosition().x;
         }
@@ -222,7 +233,10 @@ public class Map implements Screen{
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        enemy.draw(game.batch);
+        for(Entity entity : enemies)
+        {
+            entity.draw(game.batch);
+        }
         for(ItemDrop item : items)
         {
             item.draw(game.batch);

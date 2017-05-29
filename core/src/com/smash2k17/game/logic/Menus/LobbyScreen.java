@@ -8,29 +8,25 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Database.AccountContext;
-import com.smash2k17.game.logic.Database.AccountRepository;
 import com.smash2k17.game.logic.Map;
 import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
+import com.smash2k17.game.logic.WorldData;
 
-import java.io.UnsupportedEncodingException;
 import java.rmi.RemoteException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
+import java.util.ArrayList;
+
 
 /**
  * Created by Martien on 17-Apr-17.
  */
-public class LoginScreen implements Screen {
+public class LobbyScreen implements Screen {
     private World game;
     private SpriteBatch sb;
     private Stage stage;
@@ -41,16 +37,18 @@ public class LoginScreen implements Screen {
     private TextureAtlas atlas;
     private Skin skin;
     private TextButton.TextButtonStyle textButtonStyle;
-    private Account activeAccount;
-    public static ServerConnection conn;
-    private static Account user;
-    private AccountRepository accountRepo = new AccountRepository(new AccountContext());
-
-    public LoginScreen(World w) throws RemoteException {
+    private AccountContext ctxt;
+    private ScrollPane scrollPane;
+    private List<String> list;
+    private ServerConnection conn;
+    private ArrayList<WorldData> worlds;
+    public LobbyScreen(World w, ServerConnection conn) {
         this.game = w;
+        this.conn = conn;
+        ctxt = new AccountContext();
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"), atlas);
-        conn = new ServerConnection();
+
         sb = new SpriteBatch();
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -60,6 +58,7 @@ public class LoginScreen implements Screen {
 
         stage = new Stage(viewport, sb);
         Gdx.input.setInputProcessor(stage);
+
     }
 
     @Override
@@ -67,53 +66,44 @@ public class LoginScreen implements Screen {
         Table main = new Table(skin);
         main.setFillParent(true);
 
-        final TextField nameField = new TextField("",skin);
-        final TextField passField = new TextField("", skin);
-        passField.setPasswordMode(true);
-        passField.setPasswordCharacter("*".charAt(0));
-        TextButton loginBtn = new TextButton("Login", skin);
-        TextButton exitBtn = new TextButton("Exit", skin);
 
-        loginBtn.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                try {
-                    conn = new ServerConnection();
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    user = accountRepo.logIn(nameField.getText(),passField.getText());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                if(user != null) {
-                    game.setScreen(new MainMenuScreen(game, conn, user));
-                }
-
-
+        TextButton joinBtn = new TextButton("Join Game", skin);
+        list = new List<String>(skin);
+        String[] listEntries = new String[3];
+        worlds = conn.getAvWorlds();
+        if(worlds == null)
+        {
+            listEntries[0] = "No games found";
+            list.setItems(listEntries);
+        }
+        else {
+            for (int i = 0, k = 0; i < worlds.size(); i++) {
+                listEntries[k++] = worlds.get(i).toString();
             }
-        });
-        exitBtn.addListener(new ClickListener(){
+            list.setItems(listEntries);
+        }
+
+
+        scrollPane = new ScrollPane(list);
+        scrollPane.setBounds(0, 0, 200, 500 + 100);
+        scrollPane.setSmoothScrolling(false);
+        scrollPane.setPosition(200 / 2 - scrollPane.getWidth() / 4,
+                500 / 2 - scrollPane.getHeight() / 4);
+        scrollPane.setTransform(true);
+        scrollPane.setScale(0.5f);
+
+        joinBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                System.exit(0);
+
+            game.setScreen(new Map(game, worlds.get(list.getSelectedIndex())));
             }
         });
 
-        main.add(nameField);
-        main.add(loginBtn).center();
         main.row();
-        main.add(passField);
-        main.add(exitBtn).width(loginBtn.getWidth()).center();
-        main.row();
+        main.add(joinBtn);
         stage.addActor(main);
+        stage.addActor(scrollPane);
     }
 
     @Override

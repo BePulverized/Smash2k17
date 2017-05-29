@@ -1,5 +1,8 @@
 package com.smash2k17.game.logic.Database;
 
+import java.io.UnsupportedEncodingException;
+import java.rmi.RemoteException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 /**
@@ -7,7 +10,7 @@ import java.sql.SQLException;
  */
 public interface IAccount {
 
-    public Account logIn(String email, String password) throws SQLException;
+    public Account logIn(String email, String password) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException, RemoteException;
 
-    public void addUser(String email, String password, double balance) throws SQLException;
+    public void addUser(String email, String password, double balance) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException;
 }

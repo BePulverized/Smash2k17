@@ -16,13 +16,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Map;
+import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
+import com.smash2k17.game.logic.WorldData;
+import com.sun.security.ntlm.Server;
+
+import java.rmi.RemoteException;
 
 /**
  * Created by Martien on 10-Apr-17.
  */
 public class MainMenuScreen implements Screen {
+    private ServerConnection conn;
     private World game;
     private SpriteBatch sb;
     private Stage stage;
@@ -33,11 +40,12 @@ public class MainMenuScreen implements Screen {
     private Sprite background;
     private TextureAtlas atlas;
     private Skin skin;
-    private TextButtonStyle textButtonStyle;
+    private Account activeAccount;
 
-    public MainMenuScreen(World w) {
+    public MainMenuScreen(World w, ServerConnection conn, Account activeAccount) {
         this.game = w;
-
+        this.conn = conn;
+        this.activeAccount = activeAccount;
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"),atlas);
         background = new Sprite(new Texture("core\\assets\\menubackground.jpg"));
@@ -66,6 +74,7 @@ public class MainMenuScreen implements Screen {
         TextButton playBtn = new TextButton("Play", skin);
         TextButton leaderboardBtn = new TextButton("Leaderboard",skin);
         TextButton shopBtn = new TextButton("Shop",skin);
+        TextButton lobbyBtn = new TextButton("Lobby", skin);
         TextButton optionsBtn = new TextButton("Options",skin);
         TextButton logoutBtn = new TextButton("Logout",skin);
         TextButton exitBtn = new TextButton("Exit",skin);
@@ -76,19 +85,29 @@ public class MainMenuScreen implements Screen {
            @Override
             public void clicked(InputEvent event, float x, float y){
                Gdx.graphics.setWindowedMode(980,500);
-               game.setScreen(new Map(game));
+               game.setScreen(new Map(game, new WorldData("test")));
            }
         });
         logoutBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new LoginScreen(game));
+                try {
+                    game.setScreen(new LoginScreen(game));
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         });
         shopBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new ShopScreen(game));
+                game.setScreen(new ShopScreen(game,conn, activeAccount));
+            }
+        });
+        lobbyBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new LobbyScreen(game, conn));
             }
         });
         exitBtn.addListener(new ClickListener(){
@@ -104,6 +123,7 @@ public class MainMenuScreen implements Screen {
         main.row().left();
         main.add(playBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
         main.add(leaderboardBtn).pad(10,10,10,10);
+        main.add(lobbyBtn).pad(10,10,10,10);
         main.row();
         main.add(shopBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);
         main.add(optionsBtn).width(leaderboardBtn.getWidth()).pad(10,10,10,10);

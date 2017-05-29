@@ -1,6 +1,7 @@
 package com.smash2k17.game.logic.Database;
 
 import java.io.UnsupportedEncodingException;
+import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -8,11 +9,12 @@ import java.sql.*;
 /**
  * Created by Stef on 18-4-2017.
  */
-public class AccountContext {
+public class AccountContext implements IAccount {
 
     private static String connString = "jdbc:mysql://studmysql01.fhict.local/dbi307792?useSSL=false";
     private static String connUser = "dbi307792";
     private static String connPassword = "Wachtwoord1";
+
 
     public String encrypt(String base) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         try {
@@ -37,7 +39,7 @@ public class AccountContext {
         }
     }
 
-    public Account logIn(String email, String password) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    public Account logIn(String email, String password) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException, RemoteException {
         Account result = null;
         Connection myConn = DriverManager.getConnection(connString, connUser, connPassword);
         PreparedStatement preparedStmt;
@@ -45,12 +47,11 @@ public class AccountContext {
         String hash = "";
         String encryptedPassword = encrypt(password);
 
-        String query = "select password, Email, Balance from Account where Email = ?;";
+        String query = "select ID, password, Email, Balance from Account where Email = ?;";
         preparedStmt = myConn.prepareStatement(query);
         preparedStmt.setString(1, email);
         myRs = preparedStmt.executeQuery();
-        preparedStmt.close();
-        myConn.close();
+
         while (myRs.next()) {
             hash = myRs.getString("password");
             result = new Account(myRs.getInt("ID"), myRs.getString("Email"), myRs.getDouble("Balance"));
@@ -61,6 +62,8 @@ public class AccountContext {
         else {
             result = null;
         }
+        preparedStmt.close();
+        myConn.close();
         return result;
     }
 
