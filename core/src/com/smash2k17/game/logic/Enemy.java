@@ -69,12 +69,22 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public void Move(KeyEvent e) {
+    public void move(KeyEvent e) {
 
     }
 
     @Override
-    public void Jump() {
+    public void jump() {
+
+    }
+
+    @Override
+    public void attackEnemy() {
+
+    }
+
+    @Override
+    public void respawn() {
 
     }
 }

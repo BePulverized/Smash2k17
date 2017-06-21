@@ -21,7 +21,9 @@ public class Player extends Entity {
 
     private int lives;
     private EntityData data;
+    private Enemy touchEnemy;
 
+    public void setTouchEnemy(Enemy te){ this.touchEnemy = te; }
 
     public Player(Map map, int id) {
         super(map);
@@ -120,12 +122,7 @@ public class Player extends Entity {
     }
 
     @Override
-    public void Move(KeyEvent e) {
-
-    }
-
-    @Override
-    public void Jump() {
+    public void move(KeyEvent e) {
 
     }
 
@@ -144,6 +141,7 @@ public class Player extends Entity {
     //hai gimme sec ff iets kijken
     }
 
+    @Override
     public void jump()
     {
         if(currentState != State.JUMPING)
@@ -153,11 +151,24 @@ public class Player extends Entity {
         }
     }
 
+    @Override
+    public void attackEnemy() {
+
+    }
+
+    @Override
+    public void respawn() {
+
+    }
+
     public boolean attack()
     {
         if(currentState != State.ATTACK)
         {
             currentState = State.ATTACK;
+            if(touchEnemy != null){
+                touchEnemy.lowerHitpoints(getStrength());
+            }
             return true;
         }
         return false;

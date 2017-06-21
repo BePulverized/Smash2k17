@@ -73,6 +73,7 @@ public abstract class Entity extends Sprite implements IPlayable, Serializable {
         runningRight = true;
 
     }
+    public int getStrength(){ return strength; }
 
     public int getHealth(){
         return hitPoints;
