@@ -23,10 +23,10 @@ public class Player extends Entity {
     private EntityData data;
 
 
-    public Player(Map map) {
+    public Player(Map map, int id) {
         super(map);
         this.lives = 3;
-        data = new EntityData(0, 200, 300, 1);
+        data = new EntityData(id, 200, 300, 1);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Player extends Entity {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(15 / com.smash2k17.game.logic.WorldData.PPM);
+        shape.setRadius(1 / com.smash2k17.game.logic.WorldData.PPM);
         fdef.filter.categoryBits = WorldData.PLAYER_BIT;
         fdef.filter.maskBits = WorldData.GROUND_BIT | WorldData.OBJECT_BIT | WorldData.ITEM_BIT | WorldData.ENEMY_BIT;
 
@@ -49,9 +49,9 @@ public class Player extends Entity {
 
     @Override
     public void update(float dt) {
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        setPosition(b2body.getPosition().x , b2body.getPosition().y);
         setRegion(getFrame(dt));
-        data = new EntityData(0, (int)b2body.getPosition().x, (int)b2body.getPosition().y, 1);
+        data = new EntityData(data.getID(), (double) b2body.getPosition().x, (double) b2body.getPosition().y, 1);
         try {
             LoginScreen.conn.sendPlayerData(data);
         } catch (RemoteException e) {

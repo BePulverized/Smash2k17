@@ -17,14 +17,14 @@ public class Enemy extends Entity {
 
     //public Body b2body;
     private boolean touching = false;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
-    public Enemy(Map map, int x, int y) {
+    public Enemy(Map map, double x, double y) {
         super(map);
         this.x = x;
         this.y = y;
-        setPosition(x / com.smash2k17.game.logic.WorldData.PPM, y/ com.smash2k17.game.logic.WorldData.PPM);
+        setPosition((float)x , (float)y);
 
         //setBounds(getX(), getY(), 16 / com.smash2k17.game.logic.World.PPM, 16 / com.smash2k17.game.logic.World.PPM);
     }
@@ -38,7 +38,7 @@ public class Enemy extends Entity {
     @Override
     public void defineEntity() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(x/ WorldData.PPM,y/WorldData.PPM );
+        bdef.position.set((float)x/ WorldData.PPM,(float)y/WorldData.PPM );
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 

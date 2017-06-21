@@ -42,9 +42,11 @@ public class LobbyScreen implements Screen {
     private List<String> list;
     private ServerConnection conn;
     private ArrayList<WorldData> worlds;
-    public LobbyScreen(World w, ServerConnection conn) {
+    private Account activeAccount;
+    public LobbyScreen(World w, ServerConnection conn, Account activeAccount) {
         this.game = w;
         this.conn = conn;
+        this.activeAccount =activeAccount;
         ctxt = new AccountContext();
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"), atlas);
@@ -96,7 +98,7 @@ public class LobbyScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y){
 
-            game.setScreen(new Map(game, worlds.get(list.getSelectedIndex())));
+            game.setScreen(new Map(game, worlds.get(list.getSelectedIndex()),activeAccount ));
             }
         });
 

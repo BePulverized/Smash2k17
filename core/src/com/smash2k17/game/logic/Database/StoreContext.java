@@ -11,9 +11,9 @@ import java.util.ArrayList;
  * Created by Stef on 18-4-2017.
  */
 public class StoreContext implements IStore {
-    private static String connString = "jdbc:mysql://studmysql01.fhict.local/dbi307792?useSSL=false";
-    private static String connUser = "dbi307792";
-    private static String connPassword = "Wachtwoord1";
+    private static String connString = "jdbc:mysql://localhost:3306:Smash2k17";
+    private static String connUser = "student";
+    private static String connPassword = "Proftaakgroep32C";
 
     public ArrayList<Product> getProducts() throws SQLException {
         ArrayList<Product> products = new ArrayList();
