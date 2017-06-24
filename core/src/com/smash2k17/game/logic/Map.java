@@ -14,15 +14,14 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.utils.Box2DBuild;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Menus.LoginScreen;
+import com.smash2k17.game.logic.RMI.ServerConnection;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import sun.rmi.runtime.Log;
 
 import java.awt.*;
 import java.rmi.RemoteException;
@@ -70,12 +69,14 @@ public class Map implements Screen{
     private PriorityQueue<ItemDef> itemsToSpawn;
     private WorldData worldData;
     private Account activeAccount;
+    private ServerConnection conn;
 
-    public Map(World world, WorldData worldData, Account activeAccount)
+    public Map(World world, WorldData worldData, Account activeAccount, ServerConnection conn)
     {
         this.worldData = worldData;
         this.name = name;
         this.activeAccount =activeAccount;
+        this.conn = conn;
         this.gameMode = GameMode.TDM;
         this.joined = false;
         atlas = new TextureAtlas("core\\assets\\PLAYER.pack");
@@ -189,7 +190,7 @@ public class Map implements Screen{
     }
 
     public void update(float dt) throws RemoteException {
-        WorldData incomingData = LoginScreen.conn.getPlayerWorld();
+        WorldData incomingData = conn.getPlayerWorld();
         player.handleInput(dt);
         handleSpawningItems();
         if(incomingData != null) {
@@ -220,10 +221,11 @@ public class Map implements Screen{
         player.update(dt);
         if(joined == false)
         {
-            LoginScreen.conn.newPlayer(player.getData(), 0);
+            conn.newPlayer(player.getData(), 0);
             joined = true;
         }
         if(player.currentState != Player.State.DEAD) {
+            conn.playerLeave(player.getData());
             gameCam.position.x = player.b2body.getPosition().x;
         }
         gameCam.update();
@@ -287,7 +289,7 @@ public class Map implements Screen{
         game.batch.setProjectionMatrix(ui.stage.getCamera().combined);
         ui.stage.draw();
         if(player.currentState == Player.State.DEAD)
-            game.setScreen(new GameOver(game, activeAccount));
+            game.setScreen(new GameOver(game, worldData, activeAccount, conn));
             dispose();
     }
 

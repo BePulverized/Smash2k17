@@ -108,6 +108,28 @@ public class ServerHost implements IServer{
         }
     }
 
+    @Override
+    public void playerLeave(EntityData ent, IClientSignal signal) throws RemoteException {
+        ent.setSignal(signal);
+        WorldData playerWorld = null;
+        for(WorldData world: worlds)
+        {
+            if(world.getID() == ent.getWorldID())
+            {
+                playerWorld = world;
+            }
+        }
+        playerWorld.removePlayer(ent);
+        System.out.println("Player" + ent.getID() + "removed from server");
+
+        for(EntityData lobby: playerWorld.getPlayers())
+        {
+            if(lobby.getID() != ent.getID()) {
+                lobby.getSignal().signal(playerWorld, "playerjoin");
+            }
+        }
+    }
+
 
     public static void main(String[] args)
     {

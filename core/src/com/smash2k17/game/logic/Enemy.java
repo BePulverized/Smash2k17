@@ -63,7 +63,7 @@ public class Enemy extends Entity {
 
     @Override
     public void update(float dt) {
-        setPosition((float)x , (float)y);
+        setPosition((float)x - getWidth()/2 , (float)y - getHeight()/2);
         setRegion(getFrame(dt));
     }
 

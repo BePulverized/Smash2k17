@@ -98,7 +98,7 @@ public class LoginScreen implements Screen {
 
                 Random rnd = new Random();
 
-                user = new Account(rnd.nextInt(10), "lol", 0);
+                user = new Account(rnd.nextInt(1000), "lol", 0);
                 game.setScreen(new MainMenuScreen(game, conn, user));
 
 

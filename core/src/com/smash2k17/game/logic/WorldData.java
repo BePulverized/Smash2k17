@@ -70,4 +70,6 @@ public class WorldData implements Serializable{
     public int getID() {
         return ID;
     }
+
+    public void removePlayer(EntityData ent){players.remove(ent);}
 }

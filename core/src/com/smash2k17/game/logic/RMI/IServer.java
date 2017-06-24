@@ -19,4 +19,5 @@ public interface IServer extends Remote {
     EntityData getPlayer(int id) throws RemoteException;
     void sendPlayerData(EntityData ent, IClientSignal signal) throws RemoteException;
     void newPlayer(EntityData ent, IClientSignal signal) throws RemoteException;
+    void playerLeave(EntityData ent, IClientSignal signal) throws RemoteException;
 }
