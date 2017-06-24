@@ -31,9 +31,9 @@ public class UserInterface {
         stage.addActor(table);
     }
 
-    public static void updateInfo(Player player)
+    public static void updateInfo(Entity e)
     {
-        System.out.println(player.getHealth());
-        health.setText("Health: " + Integer.toString(player.getHealth()));
+        System.out.println(e.getHealth());
+        health.setText("Health: " + Integer.toString(e.getHealth()));
     }
 }
