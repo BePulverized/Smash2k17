@@ -16,10 +16,23 @@ public class EntityData implements Serializable{
     private double y;
     private IClientSignal signal;
     private int WorldID;
+    private Entity.State state;
+    private float delta;
+    private boolean right;
+    public EntityData(int ID, double x, double y, int worldID, Entity.State state, float delta, boolean right)
+    {
+        this.delta = delta;
+        this.ID = ID;
+        this.state = state;
+        this.x = x;
+        this.y = y;
+        this.WorldID = worldID;
+        this.right = right;
+    }
+
     public EntityData(int ID, double x, double y, int worldID)
     {
         this.ID = ID;
-
         this.x = x;
         this.y = y;
         this.WorldID = worldID;
@@ -55,5 +68,31 @@ public class EntityData implements Serializable{
     public double getY()
     {
         return y;
+    }
+
+    public Entity.State getState()
+    {
+        return state;
+    }
+
+    public void setState(Entity.State state)
+    {
+        this.state = state;
+    }
+
+    public float getDelta() {
+        return delta;
+    }
+
+    public void setDelta(float delta) {
+        this.delta = delta;
+    }
+
+    public boolean getRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
     }
 }

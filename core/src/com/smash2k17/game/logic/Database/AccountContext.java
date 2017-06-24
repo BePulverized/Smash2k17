@@ -11,7 +11,7 @@ import java.sql.*;
  */
 public class AccountContext implements IAccount {
 
-    private static String connString = "jdbc:mysql://localhost:3306/Smash2k17?autoReconnect=true&useSSL=false";
+    private static String connString = "jdbc:mysql://192.168.178.103:3306/Smash2k17?autoReconnect=true&useSSL=false";
     private static String connUser = "student";
     private static String connPassword = "Proftaakgroep32C";
 

@@ -68,14 +68,19 @@ public class ServerHost implements IServer{
             if(entity.getID() == ent.getID())
             {
                 entity.setPosition(ent.getX(), ent.getY());
+                entity.setState(ent.getState());
+                System.out.println(ent.getState().toString());
+                entity.setDelta(ent.getDelta());
+                entity.setRight(ent.getRight());
             }
         }
 
         //signal
         for(EntityData lobby: playerWorld.getPlayers())
         {
-            if(lobby.getID() != ent.getID())
-            lobby.getSignal().signal(playerWorld, "playermovement");
+            if(lobby.getID() != ent.getID()) {
+                lobby.getSignal().signal(playerWorld, "playermovement");
+            }
         }
     }
 
@@ -97,7 +102,9 @@ public class ServerHost implements IServer{
         //signal
         for(EntityData lobby: playerWorld.getPlayers())
         {
-            lobby.getSignal().signal(playerWorld, "playerjoin");
+            if(lobby.getID() != ent.getID()) {
+                lobby.getSignal().signal(playerWorld, "playerjoin");
+            }
         }
     }
 

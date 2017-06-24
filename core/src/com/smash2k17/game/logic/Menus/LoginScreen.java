@@ -22,10 +22,12 @@ import com.smash2k17.game.logic.Map;
 import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
 
+import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.rmi.RemoteException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.Random;
 
 /**
  * Created by Martien on 17-Apr-17.
@@ -82,8 +84,8 @@ public class LoginScreen implements Screen {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-                try {
-                    user = accountRepo.logIn(nameField.getText(),passField.getText());
+                /**try {
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 } catch (RemoteException e) {
@@ -92,10 +94,13 @@ public class LoginScreen implements Screen {
                     e.printStackTrace();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
-                }
-                if(user != null) {
-                    game.setScreen(new MainMenuScreen(game, conn, user));
-                }
+                }**/
+
+                Random rnd = new Random();
+
+                user = new Account(rnd.nextInt(10), "lol", 0);
+                game.setScreen(new MainMenuScreen(game, conn, user));
+
 
 
             }
