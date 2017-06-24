@@ -86,7 +86,7 @@ public class MainMenuScreen implements Screen {
            @Override
             public void clicked(InputEvent event, float x, float y){
                Gdx.graphics.setWindowedMode(980,500);
-               game.setScreen(new Map(game, new WorldData("test"), activeAccount));
+               game.setScreen(new Map(game, new WorldData("test"), activeAccount, conn));
            }
         });
         logoutBtn.addListener(new ClickListener(){

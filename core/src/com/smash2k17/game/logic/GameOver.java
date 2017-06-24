@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.smash2k17.game.logic.Database.Account;
+import com.smash2k17.game.logic.Menus.MainMenuScreen;
+import com.smash2k17.game.logic.RMI.ServerConnection;
 
 import java.rmi.RemoteException;
 
@@ -21,13 +23,17 @@ import java.rmi.RemoteException;
  */
 public class GameOver implements Screen {
 
+    private ServerConnection conn;
     private Viewport viewport;
     private Stage stage;
-    private Game game;
+    private World game;
     private Account activeAccount;
-    public GameOver(Game game, Account activeAccount){
+    private WorldData worldData;
+    public GameOver(World game, WorldData worldData, Account activeAccount, ServerConnection conn){
         this.game = game;
+        this.worldData = worldData;
         this.activeAccount =activeAccount;
+        this.conn = conn;
         viewport = new FitViewport(600, 300, new OrthographicCamera());
         stage = new Stage(viewport, ((World) game).batch);
         Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
@@ -47,11 +53,7 @@ public class GameOver implements Screen {
     @Override
     public void render(float delta) {
         if(Gdx.input.justTouched()) {
-            try {
-                game.setScreen(new Map(new World(), new WorldData("test"),activeAccount ));
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            game.setScreen(new MainMenuScreen(game, conn, activeAccount));
             dispose();
         }
         Gdx.gl.glClearColor(0, 0, 0, 1);

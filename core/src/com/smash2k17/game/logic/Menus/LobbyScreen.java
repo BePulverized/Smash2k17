@@ -19,7 +19,6 @@ import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
 import com.smash2k17.game.logic.WorldData;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 
@@ -98,7 +97,7 @@ public class LobbyScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y){
 
-            game.setScreen(new Map(game, worlds.get(list.getSelectedIndex()),activeAccount ));
+            game.setScreen(new Map(game, worlds.get(list.getSelectedIndex()),activeAccount, conn));
             }
         });
 

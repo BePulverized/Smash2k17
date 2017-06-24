@@ -72,14 +72,19 @@ public class ServerHost implements IServer{
             if(entity.getID() == ent.getID())
             {
                 entity.setPosition(ent.getX(), ent.getY());
+                entity.setState(ent.getState());
+                System.out.println(ent.getState().toString());
+                entity.setDelta(ent.getDelta());
+                entity.setRight(ent.getRight());
             }
         }
 
         //signal
         for(EntityData lobby: playerWorld.getPlayers())
         {
-            if(lobby.getID() != ent.getID())
-            lobby.getSignal().signal(playerWorld, "playermovement");
+            if(lobby.getID() != ent.getID()) {
+                lobby.getSignal().signal(playerWorld, "playermovement");
+            }
         }
     }
 
@@ -101,7 +106,31 @@ public class ServerHost implements IServer{
         //signal
         for(EntityData lobby: playerWorld.getPlayers())
         {
-            lobby.getSignal().signal(playerWorld, "playerjoin");
+            if(lobby.getID() != ent.getID()) {
+                lobby.getSignal().signal(playerWorld, "playerjoin");
+            }
+        }
+    }
+
+    @Override
+    public void playerLeave(EntityData ent, IClientSignal signal) throws RemoteException {
+        ent.setSignal(signal);
+        WorldData playerWorld = null;
+        for(WorldData world: worlds)
+        {
+            if(world.getID() == ent.getWorldID())
+            {
+                playerWorld = world;
+            }
+        }
+        playerWorld.removePlayer(ent);
+        System.out.println("Player" + ent.getID() + "removed from server");
+
+        for(EntityData lobby: playerWorld.getPlayers())
+        {
+            if(lobby.getID() != ent.getID()) {
+                lobby.getSignal().signal(playerWorld, "playerjoin");
+            }
         }
     }
 

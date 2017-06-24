@@ -51,6 +51,16 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
         }
     }
 
+    public void playerLeave(EntityData ent) throws RemoteException{
+        try{
+            remoteService.playerLeave(ent, this);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     // getworlddata
     public WorldData getPlayerWorld()
     {

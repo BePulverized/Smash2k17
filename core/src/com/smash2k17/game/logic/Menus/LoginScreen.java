@@ -24,12 +24,14 @@ import com.smash2k17.game.logic.RMI.IDatabaseService;
 import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
 
+import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.Random;
 
 /**
  * Created by Martien on 17-Apr-17.
@@ -86,24 +88,6 @@ public class LoginScreen implements Screen {
         loginBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-//                try {
-//                    conn = new ServerConnection();
-//                } catch (RemoteException e) {
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    user = accountRepo.logIn(nameField.getText(),passField.getText());
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                } catch (RemoteException e) {
-//                    e.printStackTrace();
-//                } catch (NoSuchAlgorithmException e) {
-//                    e.printStackTrace();
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
-//                    user = new Account(99,"stef", 9999.00);
-
                 try {
                     user = databaseService.login(nameField.getText(),passField.getText());
                 } catch (RemoteException e) {
