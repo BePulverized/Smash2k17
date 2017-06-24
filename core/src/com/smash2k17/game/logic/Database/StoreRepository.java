@@ -29,19 +29,4 @@ public class StoreRepository implements Serializable {
         context.koopProduct(idProduct, idKlant);
     }
 
-    public void changeBalance(double bedrag, int id)throws SQLException
-    {
-        context.changeBalance(bedrag, id);
-    }
-
-    public BigDecimal getBalance(int idKlant) throws SQLException
-    {
-        return context.getBalance(idKlant);
-    }
-
-    public BigDecimal getPrijs(int idProduct) throws SQLException
-    {
-        return context.getPrijs(idProduct);
-    }
-
 }

@@ -106,12 +106,12 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public void Move(KeyEvent e) {
+    public void move(KeyEvent e) {
 
     }
 
     @Override
-    public void Jump() {
+    public void jump() {
         b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
     }
 
@@ -137,5 +137,15 @@ public class Enemy extends Entity {
 
     public void setRight(boolean right) {
         this.right = right;
+    }
+
+    @Override
+    public void attackEnemy() {
+
+    }
+
+    @Override
+    public void respawn() {
+
     }
 }

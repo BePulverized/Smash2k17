@@ -12,6 +12,10 @@ public class Skins extends StoreItem{
         super(price, name, previewImage);
     }
 
+    public Skins(double price, String name) {
+        super(price, name);
+    }
+
     @Override
     public double getPrice() {
         return super.getPrice();
