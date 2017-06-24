@@ -3,6 +3,7 @@ package com.smash2k17.game.logic.Database;
 import com.badlogic.gdx.math.Interpolation;
 import com.smash2k17.game.logic.Product;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Stef on 18-4-2017.
  */
-public class StoreContext implements IStore {
+public class StoreContext implements IStore, Serializable {
     private static String connString = "jdbc:mysql://localhost:3306:Smash2k17";
     private static String connUser = "student";
     private static String connPassword = "Proftaakgroep32C";

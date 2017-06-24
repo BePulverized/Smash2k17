@@ -26,7 +26,7 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
 
     public ServerConnection() throws RemoteException {
         try{
-            remoteService = (IServer) Naming.lookup("//localhost:1099/RmiService");
+            remoteService = (IServer) Naming.lookup("//192.168.44.1:1099/RmiService");
         } catch (NotBoundException e) {
 
         } catch (MalformedURLException e) {
@@ -66,7 +66,6 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
             break;
             case"playermovement":
                 playerWorld = (WorldData) observable;
-
         }
     }
 }

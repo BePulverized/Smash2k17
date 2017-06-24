@@ -2,12 +2,13 @@ package com.smash2k17.game.logic.Database;
 import com.smash2k17.game.logic.StoreItem;
 import com.smash2k17.game.logic.WorldData;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by BePul on 27-3-2017.
  */
-public class Account{
+public class Account implements Serializable{
 
     private int id;
     private String email;

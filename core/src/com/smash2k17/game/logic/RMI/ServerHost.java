@@ -3,6 +3,8 @@ package com.smash2k17.game.logic.RMI;
 import com.smash2k17.game.logic.Entity;
 import com.smash2k17.game.logic.EntityData;
 import com.smash2k17.game.logic.WorldData;
+
+import javax.xml.crypto.Data;
 import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -25,7 +27,9 @@ public class ServerHost implements IServer{
         try{
             Registry rmiRegistry = LocateRegistry.createRegistry(1099);
             IServer rmiServer = (IServer) UnicastRemoteObject.exportObject(this,1099);
+            DatabaseService databaseService = new DatabaseService();
             rmiRegistry.bind("RmiService", rmiServer);
+            rmiRegistry.bind("DatabaseService", databaseService);
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (AlreadyBoundException e) {
@@ -105,7 +109,6 @@ public class ServerHost implements IServer{
     public static void main(String[] args)
     {
         ServerHost host = new ServerHost();
-
 
     }
 }

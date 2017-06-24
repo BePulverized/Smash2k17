@@ -7,6 +7,7 @@ import com.smash2k17.game.logic.RMI.ServerConnection;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Date;
 
@@ -62,6 +63,8 @@ public class World extends Game {
         try {
             setScreen(new LoginScreen(this));
         } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (NotBoundException e) {
             e.printStackTrace();
         }
 
