@@ -112,6 +112,12 @@ public class Map implements Screen{
 
         player = new Player(this, activeAccount.getId());
         enemies = new ArrayList<>();
+
+//        try {
+//            LoginScreen.conn.newPlayer(player.getData(), 0);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
         worldlib.setContactListener(new WorldContactListener());
         items = new Array<>();
         itemsToSpawn = new ArrayList<>();

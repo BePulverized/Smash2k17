@@ -27,10 +27,10 @@ public class ServerHost implements IServer{
         try{
             Registry rmiRegistry = LocateRegistry.createRegistry(1099);
             IServer rmiServer = (IServer) UnicastRemoteObject.exportObject(this,1099);
-            rmiRegistry.bind("RmiService", rmiServer);
+            rmiRegistry.rebind("RmiService", rmiServer);
+            IDatabaseService databaseService = new DatabaseService();
+            rmiRegistry.rebind("databaseService",databaseService);
         } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (AlreadyBoundException e) {
             e.printStackTrace();
         }
         worlds = new ArrayList<WorldData>();
