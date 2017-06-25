@@ -4,14 +4,17 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.interfaces.IPickable;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.awt.*;
+import java.rmi.RemoteException;
 
 /**
  * Created by BePul on 27-3-2017.
  */
 public abstract class ItemDrop extends Sprite implements IPickable {
+    private final EntityData data;
     protected Map map;
     protected com.badlogic.gdx.physics.box2d.World world;
     protected Vector2 velocity;
@@ -21,12 +24,14 @@ public abstract class ItemDrop extends Sprite implements IPickable {
     private Point position;
     private String name;
     private Effect effect;
-
-    public ItemDrop(Map map, float x, float y)
+    private ServerConnection conn;
+    public ItemDrop(Map map, float x, float y, ServerConnection conn, EntityData data)
     {
         this.map = map;
         this.world = map.getWorld();
         setPosition(x, y);
+        this.conn = conn;
+        this.data = data;
         setBounds(getX(), getY(), 16 / WorldData.PPM, 16/ WorldData.PPM);
         defineItem();
         toDestroy = false;
@@ -48,7 +53,7 @@ public abstract class ItemDrop extends Sprite implements IPickable {
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);
     }
-    public abstract void use(Player player);
+    public abstract void use(Player player) throws RemoteException;
 
     public void update(float dt){
         if(toDestroy && !destroyed){
@@ -63,9 +68,9 @@ public abstract class ItemDrop extends Sprite implements IPickable {
             super.draw(batch);
     }
 
-    public void destroy() {
+    public void destroy() throws RemoteException {
         toDestroy = true;
-
+        conn.destroyItem(data, this.getX(), this.getY());
     }
 
     @Override

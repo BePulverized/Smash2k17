@@ -37,13 +37,11 @@ public class Player extends Entity {
         bdef.position.set(300 / com.smash2k17.game.logic.WorldData.PPM, 200/ com.smash2k17.game.logic.WorldData.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
-
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(1 / com.smash2k17.game.logic.WorldData.PPM);
+        shape.setRadius(18 / com.smash2k17.game.logic.WorldData.PPM);
         fdef.filter.categoryBits = WorldData.PLAYER_BIT;
         fdef.filter.maskBits = WorldData.GROUND_BIT | WorldData.OBJECT_BIT | WorldData.ITEM_BIT | WorldData.ENEMY_BIT;
-
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
 
@@ -51,9 +49,9 @@ public class Player extends Entity {
 
     @Override
     public void update(float dt) {
-        setPosition(b2body.getPosition().x , b2body.getPosition().y);
+        setPosition(b2body.getPosition().x - getWidth()/2 , b2body.getPosition().y - getHeight()/2);
         setRegion(getFrame(dt));
-        data = new EntityData(data.getID(), (double) b2body.getPosition().x, (double) b2body.getPosition().y, 1);
+        data = new EntityData(data.getID(), (double) b2body.getPosition().x, (double) b2body.getPosition().y, 1, currentState, dt, runningRight);
         try {
             LoginScreen.conn.sendPlayerData(data);
         } catch (RemoteException e) {
@@ -84,7 +82,7 @@ public class Player extends Entity {
             region.flip(true, false);
             runningRight = false;
         }
-         else if ((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
+        else if ((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
             region.flip(true, false);
             runningRight = true;
         }
@@ -138,7 +136,7 @@ public class Player extends Entity {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
                 attack();
         }
-    //hai gimme sec ff iets kijken
+
     }
 
     @Override
@@ -179,6 +177,11 @@ public class Player extends Entity {
         if (hitPoints <= 0 && lives > 0){
             hitPoints = 100;
         }
+    }
+
+    @Override
+    public void Jump() {
+
     }
 
 

@@ -11,9 +11,9 @@ import java.sql.*;
  */
 public class AccountContext implements IAccount {
 
-    private static String connString = "jdbc:mysql://localhost:3306/Smash2k17?autoReconnect=true&useSSL=false";
+    private static String connString = "jdbc:mysql://localhost:3306/smash2k17";
     private static String connUser = "student";
-    private static String connPassword = "Proftaakgroep32C";
+    private static String connPassword = "proftaakgroep32C";
 
 
     public String encrypt(String base) throws NoSuchAlgorithmException, UnsupportedEncodingException {

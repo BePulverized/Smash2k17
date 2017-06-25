@@ -1,17 +1,14 @@
 package com.smash2k17.game.logic.RMI;
 
-import com.smash2k17.game.logic.Entity;
 import com.smash2k17.game.logic.EntityData;
+import com.smash2k17.game.logic.ItemDef;
 import com.smash2k17.game.logic.WorldData;
 
 
-import java.beans.PropertyChangeEvent;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
@@ -51,6 +48,16 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
         }
     }
 
+    public void playerLeave(EntityData ent) throws RemoteException{
+        try{
+            remoteService.playerLeave(ent, this);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     // getworlddata
     public WorldData getPlayerWorld()
     {
@@ -66,7 +73,15 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
             break;
             case"playermovement":
                 playerWorld = (WorldData) observable;
-
+            break;
         }
+    }
+
+    public ArrayList<ItemDef> getItems(EntityData ent) throws RemoteException {
+        return remoteService.getItems(ent);
+    }
+
+    public void destroyItem(EntityData ent, float x, float y) throws RemoteException {
+        remoteService.destroyItem(ent, x, y);
     }
 }

@@ -58,7 +58,7 @@ public abstract class Entity extends Sprite implements IPlayable, Serializable {
 
         playerStand = new TextureRegion(getTexture(),193, 0, 20,30 );
         playerAttack = new TextureRegion(getTexture(),258, 0, 20, 30);
-        setBounds(0,0, 40/ com.smash2k17.game.logic.WorldData.PPM, 40/ com.smash2k17.game.logic.WorldData.PPM);
+        setBounds(getX(), getY(), 40/ com.smash2k17.game.logic.WorldData.PPM, 40/ com.smash2k17.game.logic.WorldData.PPM);
         setRegion(playerStand);
         this.world = map.getWorld();
         defineEntity();
@@ -95,6 +95,8 @@ public abstract class Entity extends Sprite implements IPlayable, Serializable {
     public void Respawn(){}
 
     public boolean isDead(){return  playerIsDead;}
+
+    public abstract void Jump();
 
     public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING, ATTACK}
 
