@@ -33,7 +33,11 @@ public class WorldContactListener implements ContactListener {
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                    ((ItemDrop)fixB.getUserData()).use((Player) fixA.getUserData());
+                    try {
+                        ((ItemDrop)fixB.getUserData()).use((Player) fixA.getUserData());
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
             case WorldData.ENEMY_BIT | WorldData.PLAYER_BIT:

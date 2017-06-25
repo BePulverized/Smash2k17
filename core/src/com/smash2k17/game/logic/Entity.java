@@ -96,6 +96,8 @@ public abstract class Entity extends Sprite implements IPlayable, Serializable {
 
     public boolean isDead(){return  playerIsDead;}
 
+    public abstract void Jump();
+
     public enum State{ FALLING, JUMPING, STANDING, DEAD, RUNNING, ATTACK}
 
 

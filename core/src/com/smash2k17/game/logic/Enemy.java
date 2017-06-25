@@ -113,6 +113,21 @@ public class Enemy extends Entity {
     }
 
     @Override
+    public void jump() {
+
+    }
+
+    @Override
+    public void attackEnemy() {
+
+    }
+
+    @Override
+    public void respawn() {
+
+    }
+
+    @Override
     public void Jump() {
         b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
     }

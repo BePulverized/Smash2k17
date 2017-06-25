@@ -179,6 +179,11 @@ public class Player extends Entity {
         }
     }
 
+    @Override
+    public void Jump() {
+
+    }
+
 
     public EntityData getData() {
         return data;
