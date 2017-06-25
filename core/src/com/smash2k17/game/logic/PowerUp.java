@@ -4,13 +4,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.smash2k17.game.logic.RMI.ServerConnection;
+
+import java.rmi.RemoteException;
 
 /**
  * Created by BePulverized on 11-4-2017.
  */
 public class PowerUp extends ItemDrop {
-    public PowerUp(Map map, float x, float y) {
-        super(map, x, y);
+
+    public PowerUp(Map map, float x, float y, ServerConnection conn, EntityData data) {
+        super(map, x, y, conn, data);
         setRegion(map.getTextureAtlas().findRegion("PLAYER"), 88, 0, 24,23);
         velocity = new Vector2(0,0);
 
@@ -19,7 +23,7 @@ public class PowerUp extends ItemDrop {
 
 
     @Override
-    public void use(Player player) {
+    public void use(Player player) throws RemoteException {
         destroy();
         player.addHealth(10);
         UserInterface.updateInfo(player);

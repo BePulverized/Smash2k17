@@ -1,6 +1,5 @@
 package com.smash2k17.game.logic;
 
-import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,11 +23,14 @@ public class WorldData implements Serializable{
 
     //Players
     private ArrayList<EntityData> players;
+    //Items
+    private ArrayList<ItemDef> items;
 
     public WorldData(String name){
         this.ID = 1;
         this.name = name;
         players = new ArrayList<EntityData>();
+        items = new ArrayList<ItemDef>();
     }
 
     public ArrayList<EntityData> getPlayers()
@@ -72,4 +74,18 @@ public class WorldData implements Serializable{
     }
 
     public void removePlayer(EntityData ent){players.remove(ent);}
+
+    public void addItem(ItemDef item)
+    {
+        items.add(item);
+    }
+
+    public void removeItem(ItemDef item)
+    {
+        items.remove(item);
+    }
+
+    public ArrayList<ItemDef> getItems() {
+        return items;
+    }
 }

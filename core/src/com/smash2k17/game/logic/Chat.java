@@ -20,12 +20,16 @@ public class Chat {
         return name;
     }
 
+    public void setName(String newName){
+        name = newName;
+    }
+
     public ArrayList<Message> getMessageList()
     {
         return messageList;
     }
 
-    public void AddMessage(String text, String sender)
+    public void addMessage(String text, String sender)
     {
         messageList.add(new Message(text, sender));
     }

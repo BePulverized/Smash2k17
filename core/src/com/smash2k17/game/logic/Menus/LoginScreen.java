@@ -19,7 +19,6 @@ import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Database.AccountContext;
 import com.smash2k17.game.logic.Database.AccountRepository;
 import com.smash2k17.game.logic.Map;
-import com.smash2k17.game.logic.RMI.DatabaseService;
 import com.smash2k17.game.logic.RMI.IDatabaseService;
 import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
@@ -28,7 +27,8 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.*;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Random;
@@ -50,11 +50,18 @@ public class LoginScreen implements Screen {
     private Account activeAccount;
     public static ServerConnection conn;
     private static Account user;
-    private AccountRepository accountRepo = new AccountRepository(new AccountContext());
-    private Registry databaseRegistry;
-    private IDatabaseService databaseService;
+    private Registry reg;
+    private IDatabaseService dbs;
 
-    public LoginScreen(World w) throws RemoteException, NotBoundException {
+    public LoginScreen(World w) throws RemoteException {
+        try {
+            reg = LocateRegistry.getRegistry("localhost", 1099);
+            dbs = (IDatabaseService) reg.lookup("databaseService");
+            System.out.println("Database registry bound!");
+        } catch (NotBoundException e) {
+            System.out.println("Could not bind database registry :(");
+            e.printStackTrace();
+        }
         this.game = w;
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"), atlas);
@@ -68,9 +75,6 @@ public class LoginScreen implements Screen {
 
         stage = new Stage(viewport, sb);
         Gdx.input.setInputProcessor(stage);
-
-        databaseRegistry = LocateRegistry.getRegistry("192.168.44.1", 1099);
-        databaseService = (IDatabaseService) databaseRegistry.lookup("DatabaseService");
     }
 
     @Override
@@ -89,21 +93,30 @@ public class LoginScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 try {
-                    user = databaseService.login(nameField.getText(),passField.getText());
+                    conn = new ServerConnection();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                /**try {
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
+                }**/
+                try {
+                    user = dbs.login(nameField.getText(), passField.getText());
+                    System.out.println("Account received!");
+//                    user = new Account(1, "barry",1);
+                } catch (RemoteException e) {
+                    System.out.println("Login failed :(");
+                    e.printStackTrace();
                 }
-                if(user!=null) {
-                    game.setScreen(new MainMenuScreen(game, conn, user));
-                }
-
-
+                game.setScreen(new MainMenuScreen(game, conn, user));
             }
         });
         exitBtn.addListener(new ClickListener(){

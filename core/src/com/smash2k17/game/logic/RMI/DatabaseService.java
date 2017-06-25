@@ -1,6 +1,8 @@
 package com.smash2k17.game.logic.RMI;
 
-import com.smash2k17.game.logic.Database.*;
+import com.smash2k17.game.logic.Database.Account;
+import com.smash2k17.game.logic.Database.AccountContext;
+import com.smash2k17.game.logic.Database.AccountRepository;
 
 import java.io.UnsupportedEncodingException;
 import java.rmi.RemoteException;
@@ -9,28 +11,24 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 /**
- * Created by Stef on 21-6-2017.
+ * Created by Martien on 25-Jun-17.
  */
+
+
 public class DatabaseService extends UnicastRemoteObject implements IDatabaseService{
-    private AccountRepository accountRepo = new AccountRepository(new AccountContext());
-    private StoreRepository storeRepo = new StoreRepository(new StoreContext());
+    private AccountRepository ar;
 
-    public Account login(String username, String password) throws RemoteException, NoSuchAlgorithmException, SQLException, UnsupportedEncodingException {
-        Account user = accountRepo.logIn(username,password);
-        return user;
+    public DatabaseService() throws RemoteException {
+        ar =  new AccountRepository(new AccountContext());
     }
 
-    public DatabaseService() throws RemoteException
-    {
-
+    @Override
+    public Account login(String username, String password) throws RemoteException {
+        try {
+            return ar.logIn(username, password);
+        } catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-
-    public void koopProduct(int idProduct, int idKlant) throws SQLException, RemoteException
-    {
-        storeRepo.koopProduct(idProduct, idKlant);
-    }
-
-
-
-
 }

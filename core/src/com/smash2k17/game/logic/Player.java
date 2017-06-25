@@ -23,7 +23,10 @@ public class Player extends Entity {
     private EntityData data;
     private Enemy touchEnemy;
 
-    public void setTouchEnemy(Enemy te){ this.touchEnemy = te; }
+    public void setTouchEnemy(Enemy te){
+        this.touchEnemy = te;
+        getAttacked();
+    }
 
     public Player(Map map, int id) {
         super(map);
@@ -57,6 +60,37 @@ public class Player extends Entity {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    public void lowerHitpoints(int attack) {
+            hitPoints -= attack;
+            System.out.println(hitPoints);
+    }
+
+    private void getAttacked() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(touchEnemy != null){
+                    while(touchEnemy.currentState != State.ATTACK){
+                        WorldData incomingData = LoginScreen.conn.getPlayerWorld();
+                        if(incomingData != null) {
+                            for(EntityData ent : incomingData.getPlayers())
+                            {
+                                if(touchEnemy.getId() == ent.getID()) {
+                                    touchEnemy.setState(ent.getState());
+                                }
+                            }
+                        }
+                        System.out.println("State: " + touchEnemy.currentState);
+                    }
+                    if(touchEnemy.currentState == State.ATTACK){
+                        hitPoints -= touchEnemy.getStrength();
+                        System.out.println("Attack!!! hp: " + hitPoints);
+                    }
+                }
+            }
+        });
     }
 
     private TextureRegion getFrame(float dt) {
@@ -164,9 +198,6 @@ public class Player extends Entity {
         if(currentState != State.ATTACK)
         {
             currentState = State.ATTACK;
-            if(touchEnemy != null){
-                touchEnemy.lowerHitpoints(getStrength());
-            }
             return true;
         }
         return false;
@@ -177,6 +208,11 @@ public class Player extends Entity {
         if (hitPoints <= 0 && lives > 0){
             hitPoints = 100;
         }
+    }
+
+    @Override
+    public void Jump() {
+
     }
 
 
