@@ -41,6 +41,7 @@ public class Enemy extends Entity {
     public void setTouching(boolean touching){
         this.touching = touching;
     }
+    public boolean getTouching(){ return touching;}
 
     @Override
     public void defineEntity() {
@@ -65,6 +66,8 @@ public class Enemy extends Entity {
         setPosition((float)x - getWidth()/2 , (float)y - getHeight()/2);
         setRegion(getFrame(dt));
     }
+
+
 
     public void lowerHitpoints(int attack) {
         if(touching){
@@ -105,7 +108,7 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public void Move(KeyEvent e) {
+    public void move(KeyEvent e) {
 
     }
 
