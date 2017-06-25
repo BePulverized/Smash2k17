@@ -2,7 +2,6 @@ package com.smash2k17.game.logic;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Menus.LoginScreen;
 import com.smash2k17.game.logic.RMI.ServerConnection;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -60,11 +59,11 @@ public class World extends Game {
     public void create()
     {
         batch = new SpriteBatch();
-//        try {
-            setScreen(new Map((World)this, new WorldData("loldata"), new Account(1,"lol", 1)));
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            setScreen(new LoginScreen(this));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
 
     }
 

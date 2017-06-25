@@ -118,7 +118,6 @@ public class Map implements Screen{
 //        } catch (RemoteException e) {
 //            e.printStackTrace();
 //        }
-        enemies = new ArrayList<Entity>();
         worldlib.setContactListener(new WorldContactListener());
         items = new Array<>();
         itemsToSpawn = new ArrayList<>();
