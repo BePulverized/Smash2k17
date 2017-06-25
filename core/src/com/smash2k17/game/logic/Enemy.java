@@ -80,7 +80,15 @@ public class Enemy extends Entity {
                 attackEnemy();
                 break;
             case FALLING:
+                if(currentState != State.FALLING)
+                {
+                    currentState = State.FALLING;
+                }
             case STANDING:
+                if(currentState != State.STANDING)
+                {
+                    currentState = State.STANDING;
+                }
             default:
                 region = playerStand;
                 break;
@@ -115,6 +123,7 @@ public class Enemy extends Entity {
 
             if(touchEnemy != null){
                 touchEnemy.lowerHitpoints(getStrength());
+                System.out.println("Attack!!!");
             }
         }
     }

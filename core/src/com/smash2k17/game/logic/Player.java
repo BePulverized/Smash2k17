@@ -14,6 +14,8 @@ import com.smash2k17.game.logic.Menus.LoginScreen;
 import java.awt.event.KeyEvent;
 import java.rmi.RemoteException;
 
+import static com.smash2k17.game.logic.UserInterface.updateInfo;
+
 /**
  * Created by BePul on 27-3-2017.
  */
@@ -22,12 +24,6 @@ public class Player extends Entity {
 
     private int lives;
     private EntityData data;
-    private Enemy touchEnemy;
-
-    public void setTouchEnemy(Enemy te){
-        this.touchEnemy = te;
-        getAttacked();
-    }
 
     public Player(Map map, int id, Account activeAccount) {
         super(map, activeAccount);
@@ -65,33 +61,8 @@ public class Player extends Entity {
 
     public void lowerHitpoints(int attack) {
             hitPoints -= attack;
+            updateInfo(this);
             System.out.println(hitPoints);
-    }
-
-    private void getAttacked() {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if(touchEnemy != null){
-                    while(touchEnemy.currentState != State.ATTACK){
-                        WorldData incomingData = LoginScreen.conn.getPlayerWorld();
-                        if(incomingData != null) {
-                            for(EntityData ent : incomingData.getPlayers())
-                            {
-                                if(touchEnemy.getId() == ent.getID()) {
-                                    touchEnemy.setState(ent.getState());
-                                }
-                            }
-                        }
-                        System.out.println("State: " + touchEnemy.currentState);
-                    }
-                    if(touchEnemy.currentState == State.ATTACK){
-                        hitPoints -= touchEnemy.getStrength();
-                        System.out.println("Attack!!! hp: " + hitPoints);
-                    }
-                }
-            }
-        });
     }
 
     private TextureRegion getFrame(float dt) {
