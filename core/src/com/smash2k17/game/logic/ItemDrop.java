@@ -25,6 +25,7 @@ public abstract class ItemDrop extends Sprite implements IPickable {
     private String name;
     private Effect effect;
     private ServerConnection conn;
+
     public ItemDrop(Map map, float x, float y, ServerConnection conn, EntityData data)
     {
         this.map = map;
@@ -54,6 +55,8 @@ public abstract class ItemDrop extends Sprite implements IPickable {
         body.createFixture(fdef).setUserData(this);
     }
     public abstract void use(Player player) throws RemoteException;
+
+    public abstract void use(Enemy enemy) throws RemoteException;
 
     public void update(float dt){
         if(toDestroy && !destroyed){

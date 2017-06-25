@@ -132,6 +132,20 @@ public class Enemy extends Entity {
         b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        EntityData enemy = (EntityData) obj;
+        if(enemy.getID() == this.getId())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void die()
+    {
+
+    }
 
     public int getId() {
         return id;

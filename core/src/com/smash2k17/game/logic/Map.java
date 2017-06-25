@@ -171,6 +171,7 @@ public class Map implements Screen{
     }
 
     public void update(float dt) throws RemoteException {
+
         WorldData incomingData = conn.getPlayerWorld();
         player.handleInput(dt);
         handleSpawningItems();
@@ -183,21 +184,34 @@ public class Map implements Screen{
                 }
             }
 
+
             for(EntityData ent : incomingData.getPlayers())
             {
                 for(Enemy enemy: enemies)
                 {
-                    if(enemy.getId() == ent.getID())
+                    if(enemy.equals(ent))
                     {
+                        if(ent.getState() == Entity.State.DEAD)
+                        {
+                            enemy.setX(500);
+                            enemy.setY(500);
+                            System.out.println(ent.getX() + " " + ent.getY());
+                            enemy.setState(ent.getState());
+                            enemy.setRight(ent.getRight());
+                            enemy.update(ent.getDelta());
+                        }
                         enemy.setX(ent.getX());
                         enemy.setY(ent.getY());
+                        System.out.println(ent.getX() + " " + ent.getY());
                         enemy.setState(ent.getState());
                         enemy.setRight(ent.getRight());
                         enemy.update(ent.getDelta());
                     }
                 }
             }
+
         }
+        System.out.println(enemies.size());
         //getworlddata
         worldlib.step(1/60f, 6, 2);
 
@@ -208,7 +222,6 @@ public class Map implements Screen{
             joined = true;
         }
         if(player.currentState != Player.State.DEAD) {
-            conn.playerLeave(player.getData());
             gameCam.position.x = player.b2body.getPosition().x;
         }
         gameCam.update();
@@ -260,9 +273,9 @@ public class Map implements Screen{
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        for(Enemy entity : enemies)
+        for(int i = 0; i < enemies.size(); i++)
         {
-                entity.draw(game.batch);
+            enemies.get(i).draw(game.batch);
         }
         for(ItemDrop item : items)
         {
@@ -271,9 +284,10 @@ public class Map implements Screen{
         game.batch.end();
         game.batch.setProjectionMatrix(ui.stage.getCamera().combined);
         ui.stage.draw();
-        if(player.currentState == Player.State.DEAD)
+        if(player.currentState == Player.State.DEAD) {
             game.setScreen(new GameOver(game, worldData, activeAccount, conn));
-            dispose();
+        }
+        dispose();
     }
 
     @Override

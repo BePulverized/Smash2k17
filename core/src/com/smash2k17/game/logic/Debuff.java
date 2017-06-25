@@ -27,6 +27,11 @@ public class Debuff extends ItemDrop {
         UserInterface.updateInfo(player);
     }
 
+    @Override
+    public void use(Enemy enemy) throws RemoteException {
+        destroy();
+    }
+
 
     @Override
     public void update(float dt) {

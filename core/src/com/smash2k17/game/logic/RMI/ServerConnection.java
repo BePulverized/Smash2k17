@@ -1,8 +1,6 @@
 package com.smash2k17.game.logic.RMI;
 
-import com.smash2k17.game.logic.EntityData;
-import com.smash2k17.game.logic.ItemDef;
-import com.smash2k17.game.logic.WorldData;
+import com.smash2k17.game.logic.*;
 
 
 import java.net.MalformedURLException;
@@ -20,7 +18,7 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
     private ArrayList<WorldData> avWorlds;
     private IServer remoteService;
     private WorldData playerWorld;
-
+    private Enemy lastDestroyedEnemy;
     public ServerConnection() throws RemoteException {
         try{
             remoteService = (IServer) Naming.lookup("//localhost:1099/RmiService");
@@ -74,6 +72,10 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
             case"playermovement":
                 playerWorld = (WorldData) observable;
             break;
+            case"playerdied":
+                playerWorld = (WorldData) observable;
+            break;
+
         }
     }
 
@@ -84,4 +86,6 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
     public void destroyItem(EntityData ent, float x, float y) throws RemoteException {
         remoteService.destroyItem(ent, x, y);
     }
+
+
 }

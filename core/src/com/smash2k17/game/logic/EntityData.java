@@ -95,4 +95,14 @@ public class EntityData implements Serializable{
     public void setRight(boolean right) {
         this.right = right;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        EntityData ent = (EntityData) obj;
+        if(ent.getID() == this.getID())
+        {
+            return true;
+        }
+        return false;
+    }
 }

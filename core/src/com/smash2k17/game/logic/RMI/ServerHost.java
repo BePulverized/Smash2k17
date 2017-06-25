@@ -21,6 +21,7 @@ public class ServerHost implements IServer{
     static ArrayList<WorldData> worlds;
     private static long lastBuffDropTime;
     private static long lastDebuffDropTime;
+    private int count;
 
     public ServerHost()
     {
@@ -62,6 +63,7 @@ public class ServerHost implements IServer{
             if(world.getID() == ent.getWorldID())
             {
                 playerWorld = world;
+                System.out.println(playerWorld.getPlayers().size());
             }
         }
         //Verander player in list
@@ -71,16 +73,13 @@ public class ServerHost implements IServer{
             {
                 entity.setPosition(ent.getX(), ent.getY());
                 entity.setState(ent.getState());
-                System.out.println(ent.getState().toString());
                 entity.setDelta(ent.getDelta());
                 entity.setRight(ent.getRight());
             }
         }
-        System.out.println("Playerlist: ");
         //signal
         for(EntityData lobby: playerWorld.getPlayers())
         {
-            System.out.println(lobby.getID());
 
             if(lobby.getID() != ent.getID()) {
                 lobby.getSignal().signal(playerWorld, "playermovement");
@@ -92,6 +91,7 @@ public class ServerHost implements IServer{
     public void newPlayer(EntityData ent, IClientSignal signal) throws RemoteException {
         ent.setSignal(signal);
         WorldData playerWorld = null;
+        boolean existing = false;
         for (WorldData world: worlds)
         {
             if(world.getID() == ent.getWorldID())
@@ -100,7 +100,19 @@ public class ServerHost implements IServer{
             }
         }
         //Voeg player toe in list
-        playerWorld.addPlayer(ent);
+        for(EntityData entityData: playerWorld.getPlayers())
+        {
+            if(entityData.getID() == ent.getID())
+            {
+                existing = true;
+                entityData.setState(Entity.State.STANDING);
+                entityData.setPosition(300,400);
+            }
+        }
+        if(existing == false)
+        {
+            playerWorld.addPlayer(ent);
+        }
         System.out.println("Player" + ent.getID() + "Added to server");
 
         //signal
@@ -125,11 +137,10 @@ public class ServerHost implements IServer{
         }
         playerWorld.removePlayer(ent);
         System.out.println("Player" + ent.getID() + "removed from server");
-
         for(EntityData lobby: playerWorld.getPlayers())
         {
             if(lobby.getID() != ent.getID()) {
-                lobby.getSignal().signal(playerWorld, "playerjoin");
+                lobby.getSignal().signal(playerWorld, "playerdied");
             }
         }
     }
@@ -179,6 +190,7 @@ public class ServerHost implements IServer{
 
     public void destroyItem(EntityData ent, float x, float y)
     {
+        count++;
         WorldData playerWorld = null;
         for (WorldData world: worlds)
         {
@@ -193,13 +205,6 @@ public class ServerHost implements IServer{
             if(item.getPosition().x == x && item.getPosition().y == y)
             {
                 iter.remove();
-            }
-        }
-        for(ItemDef item: playerWorld.getItems())
-        {
-            if(item.getPosition().x == x && item.getPosition().y == y)
-            {
-                playerWorld.removeItem(item);
             }
         }
     }
