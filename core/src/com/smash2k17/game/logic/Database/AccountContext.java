@@ -1,5 +1,6 @@
 package com.smash2k17.game.logic.Database;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
@@ -9,11 +10,11 @@ import java.sql.*;
 /**
  * Created by Stef on 18-4-2017.
  */
-public class AccountContext implements IAccount {
+public class AccountContext implements IAccount, Serializable {
 
-    private static String connString = "jdbc:mysql://localhost:3306/smash2k17";
-    private static String connUser = "student";
-    private static String connPassword = "proftaakgroep32C";
+    private static String connString = "jdbc:mysql://localhost:3306/proftaak?useSSL=false";
+    private static String connUser = "root";
+    private static String connPassword = "password";
 
 
     public String encrypt(String base) throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -44,7 +45,6 @@ public class AccountContext implements IAccount {
         Connection myConn = DriverManager.getConnection(connString, connUser, connPassword);
         PreparedStatement preparedStmt;
         ResultSet myRs;
-        String hash = "";
         String encryptedPassword = encrypt(password);
 
         String query = "select ID, password, Email, Balance from Account where Email = ?;";
@@ -53,10 +53,10 @@ public class AccountContext implements IAccount {
         myRs = preparedStmt.executeQuery();
 
         while (myRs.next()) {
-            hash = myRs.getString("password");
-            result = new Account(myRs.getInt("ID"), myRs.getString("Email"), myRs.getDouble("Balance"));
+            if(encryptedPassword.equals( myRs.getString("password"))) {
+                result = new Account(myRs.getInt("ID"), myRs.getString("Email"), myRs.getDouble("Balance"));
+            }
         }
-
         preparedStmt.close();
         myConn.close();
         return result;

@@ -79,7 +79,7 @@ public class Map implements Screen{
         this.conn = conn;
         this.gameMode = GameMode.TDM;
         this.joined = false;
-        atlas = new TextureAtlas("core\\assets\\PLAYER.pack");
+        atlas = new TextureAtlas(activeAccount.getSkinPath());
         this.game = world;
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(game.getGridWidth() / WorldData.PPM, game.getGridHeight() / WorldData.PPM, gameCam);
@@ -110,7 +110,7 @@ public class Map implements Screen{
             body.createFixture(fdef);
         }
 
-        player = new Player(this, activeAccount.getId());
+        player = new Player(this, activeAccount.getId(), activeAccount);
         enemies = new ArrayList<>();
         worldlib.setContactListener(new WorldContactListener());
         items = new Array<>();
@@ -171,7 +171,6 @@ public class Map implements Screen{
     }
 
     public void update(float dt) throws RemoteException {
-
         WorldData incomingData = conn.getPlayerWorld();
         player.handleInput(dt);
         handleSpawningItems();
@@ -179,39 +178,26 @@ public class Map implements Screen{
             for (EntityData ent : incomingData.getPlayers()) {
                 if(!checkIfEnemyExists(ent)) {
                     if(ent.getID() != activeAccount.getId()) {
-                        enemies.add(new Enemy(this, ent.getX(), ent.getY(), ent.getState(), ent.getRight(), ent.getDelta(), ent.getID()));
+                        enemies.add(new Enemy(this, ent.getX(), ent.getY(), ent.getState(), ent.getRight(), ent.getDelta(), ent.getID(), activeAccount));
                     }
                 }
             }
-
 
             for(EntityData ent : incomingData.getPlayers())
             {
                 for(Enemy enemy: enemies)
                 {
-                    if(enemy.equals(ent))
+                    if(enemy.getId() == ent.getID())
                     {
-                        if(ent.getState() == Entity.State.DEAD)
-                        {
-                            enemy.setX(500);
-                            enemy.setY(500);
-                            System.out.println(ent.getX() + " " + ent.getY());
-                            enemy.setState(ent.getState());
-                            enemy.setRight(ent.getRight());
-                            enemy.update(ent.getDelta());
-                        }
                         enemy.setX(ent.getX());
                         enemy.setY(ent.getY());
-                        System.out.println(ent.getX() + " " + ent.getY());
                         enemy.setState(ent.getState());
                         enemy.setRight(ent.getRight());
                         enemy.update(ent.getDelta());
                     }
                 }
             }
-
         }
-        System.out.println(enemies.size());
         //getworlddata
         worldlib.step(1/60f, 6, 2);
 
@@ -222,6 +208,7 @@ public class Map implements Screen{
             joined = true;
         }
         if(player.currentState != Player.State.DEAD) {
+            conn.playerLeave(player.getData());
             gameCam.position.x = player.b2body.getPosition().x;
         }
         gameCam.update();

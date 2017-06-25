@@ -1,0 +1,11 @@
+PLAYER2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+PLAYER
+  rotate: false
+  xy: 1, 1
+  size: 281, 32
+  orig: 281, 32
+  offset: 0, 0
+  index: -1

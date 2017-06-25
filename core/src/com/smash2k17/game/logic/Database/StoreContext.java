@@ -3,6 +3,7 @@ package com.smash2k17.game.logic.Database;
 import com.badlogic.gdx.math.Interpolation;
 import com.smash2k17.game.logic.Product;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,10 +11,10 @@ import java.util.ArrayList;
 /**
  * Created by Stef on 18-4-2017.
  */
-public class StoreContext implements IStore {
-    private static String connString = "jdbc:mysql://localhost:3306:Smash2k17";
-    private static String connUser = "student";
-    private static String connPassword = "Proftaakgroep32C";
+public class StoreContext implements IStore, Serializable {
+    private static String connString = "jdbc:mysql://localhost:3306/proftaak?useSSL=false";
+    private static String connUser = "root";
+    private static String connPassword = "password";
 
     public ArrayList<Product> getProducts() throws SQLException {
         ArrayList<Product> products = new ArrayList();
@@ -40,7 +41,7 @@ public class StoreContext implements IStore {
             String query;
 
             if (getPrijs(idProduct).doubleValue() <= getBalance(idKlant).doubleValue()) {
-                query = " insert into Account_storeitem (storeitemid, accountid)"
+                query = " insert into account_storeitem (storeitemid, accountid)"
                         + " values (?, ?)";
                 preparedStmt = myConn.prepareStatement(query);
                 preparedStmt.setInt(1, idProduct);

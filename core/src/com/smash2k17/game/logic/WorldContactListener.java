@@ -45,12 +45,14 @@ public class WorldContactListener implements ContactListener {
                 if(fixA.getFilterData().categoryBits == WorldData.PLAYER_BIT){
                     Enemy e = (Enemy)fixB.getUserData();
                     Player p = (Player) fixA.getUserData();
-                    p.setTouchEnemy(e);
+                    e.setTouchEnemy(p);
+                    System.out.println("setTouchEnemy(e): " + e);
                 }
                 else{
                     Enemy e = (Enemy)fixA.getUserData();
                     Player p = (Player) fixB.getUserData();
-                    p.setTouchEnemy(e);
+                    e.setTouchEnemy(p);
+                    System.out.println("setTouchEnemy(e): " + e);
                 }
                 break;
 
@@ -71,12 +73,12 @@ public class WorldContactListener implements ContactListener {
                 if(fixA.getFilterData().categoryBits == WorldData.ENEMY_BIT){
                     Enemy e = (Enemy)fixB.getUserData();
                     Player p = (Player) fixA.getUserData();
-                    p.setTouchEnemy(null);
+                    e.setTouchEnemy(null);
                 }
                 else{
                     Enemy e = (Enemy)fixA.getUserData();
                     Player p = (Player) fixB.getUserData();
-                    p.setTouchEnemy(e);
+                    e.setTouchEnemy(null);
                 }
                 break;
 

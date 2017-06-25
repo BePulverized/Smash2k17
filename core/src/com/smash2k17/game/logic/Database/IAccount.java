@@ -1,5 +1,6 @@
 package com.smash2k17.game.logic.Database;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.rmi.RemoteException;
 import java.security.NoSuchAlgorithmException;

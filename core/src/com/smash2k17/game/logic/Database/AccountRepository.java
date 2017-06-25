@@ -1,5 +1,6 @@
 package com.smash2k17.game.logic.Database;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.rmi.RemoteException;
 import java.security.NoSuchAlgorithmException;
@@ -8,7 +9,7 @@ import java.sql.SQLException;
 /**
  * Created by Stef on 18-4-2017.
  */
-public class AccountRepository {
+public class AccountRepository implements Serializable {
 
     private IAccount context;
 

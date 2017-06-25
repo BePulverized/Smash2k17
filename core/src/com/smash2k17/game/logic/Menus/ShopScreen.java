@@ -21,10 +21,16 @@ import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Database.StoreContext;
 import com.smash2k17.game.logic.Database.StoreRepository;
 import com.smash2k17.game.logic.Map;
+import com.smash2k17.game.logic.RMI.IDatabaseService;
 import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
 import com.sun.security.ntlm.Server;
 
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -37,6 +43,8 @@ import java.util.Random;
      * Created by Martien on 17-Apr-17.
      */
     public class ShopScreen implements Screen {
+        private Registry reg;
+        private IDatabaseService dbs;
         private World game;
         private SpriteBatch sb;
         private Stage stage;
@@ -52,6 +60,7 @@ import java.util.Random;
         private Account activeAccount;
 
         public ShopScreen(World w, ServerConnection conn, Account activeAccount) {
+
             this.game = w;
             this.conn = conn;
             this.activeAccount = activeAccount;
@@ -71,6 +80,18 @@ import java.util.Random;
 
         @Override
         public void show() {
+            try {
+                reg = LocateRegistry.getRegistry("localhost", 1099);
+                dbs = (IDatabaseService) reg.lookup("databaseService");
+                System.out.println("Database registry bound!");
+            } catch (NotBoundException e) {
+                System.out.println("Could not bind database registry :(");
+                e.printStackTrace();
+            } catch (AccessException e) {
+                e.printStackTrace();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
             Table main = new Table(skin);
             Table row1 = new Table(skin);
             Table row2 = new Table(skin);
@@ -79,9 +100,8 @@ import java.util.Random;
 
             final ArrayList<ImageButton> items = new ArrayList<ImageButton>();
             for (int i = 1; i < 3; i++) {
-                final ImageButton s = new ImageButton(new SpriteDrawable(new Sprite(new Texture("kirbyshop" + i + ".png"))));
+                final ImageButton s = new ImageButton(new SpriteDrawable(new Sprite(new Texture("core\\assets\\shop" + i + ".png"))));
                 s.getImageCell().expand().fill();
-
                 items.add(s);
             }
 
@@ -94,7 +114,7 @@ import java.util.Random;
                 }
             });
             main.add("");
-            main.add(new Label("WELCOME TO THE KIRBY SHOP!", skin));
+            main.add(new Label("WELCOME TO THE SKIN SHOP!", skin));
             main.add(tb).right();
             main.row();
 
@@ -109,42 +129,46 @@ import java.util.Random;
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
                                 try {
-                                    storeRepo.koopProduct(1, activeAccount.getId());
+                                    dbs.koopProduct(1, activeAccount.getId());
                                 } catch (SQLException e) {
                                     e.printStackTrace();
+                                } catch (RemoteException e) {
+                                    e.printStackTrace();
                                 }
+                                activeAccount.setSkinPath("core\\assets\\PLAYER.pack");
                             }
                         });
 
                         row1.add(ib).width(100).height(100);
-
                         row1.row();
-                        row1.add(new Label("Kirby", skin));
+                        row1.add(new Label("Default", skin));
                         row1.row();
                         break;
                     case 2:
                         ib.getImage();
-
                         ib.addListener(new ClickListener() {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
                                 try {
-                                    storeRepo.koopProduct(2, activeAccount.getId());
+                                    dbs.koopProduct(2, activeAccount.getId());
                                 } catch (SQLException e) {
                                     e.printStackTrace();
+                                } catch (RemoteException e) {
+                                    e.printStackTrace();
                                 }
+                                activeAccount.setSkinPath("core\\assets\\PLAYER2.pack");
                             }
                         });
                         row2.add(ib).width(100).height(100);
                         row2.row();
-                        row2.add(new Label("Kirby", skin));
+                        row2.add(new Label("Robert", skin));
                         row2.row();
                         break;
                     case 3:
                         ib.getImage();
                         row3.add(ib).width(100).height(100);
                         row3.row();
-                        row3.add(new Label("Kirby", skin));
+                        row3.add(new Label(" ", skin));
                         row3.row();
                         break;
                     default:

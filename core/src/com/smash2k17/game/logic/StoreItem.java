@@ -1,11 +1,12 @@
 package com.smash2k17.game.logic;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Created by BePul on 27-3-2017.
  */
-public abstract class StoreItem {
+public abstract class StoreItem implements Serializable {
 
     private double price;
     private String name;

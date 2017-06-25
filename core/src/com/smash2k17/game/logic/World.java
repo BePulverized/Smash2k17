@@ -7,6 +7,7 @@ import com.smash2k17.game.logic.RMI.ServerConnection;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Date;
 
@@ -14,7 +15,6 @@ import java.util.Date;
  * Created by BePul on 27-3-2017.
  */
 public class World extends Game {
-
 
     public SpriteBatch batch;
     private int gridWidth;
@@ -26,8 +26,6 @@ public class World extends Game {
         gridWidth = 400;
     }
 
-
-
     public int getGridWidth()
     {
         return  gridWidth;
@@ -37,8 +35,6 @@ public class World extends Game {
     {
         return gridHeight;
     }
-
-
 
     public void endWorld()
     {

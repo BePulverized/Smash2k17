@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.World;
+import com.smash2k17.game.logic.Database.Account;
 
 import javax.swing.text.Position;
 import java.awt.*;
@@ -18,14 +19,14 @@ public class Enemy extends Entity {
 
     private State state;
     //public Body b2body;
-    private boolean touching = false;
+    private Player touchEnemy;
     private double x;
     private double y;
     private int id;
     private boolean right;
 
-    public Enemy(Map map, double x, double y, State state, boolean right, float dt, int id) {
-        super(map);
+    public Enemy(Map map, double x, double y, State state, boolean right, float dt, int id, Account activeAccount) {
+        super(map, activeAccount);
         this.x = x;
         this.y = y;
         this.state = state;
@@ -37,11 +38,9 @@ public class Enemy extends Entity {
     }
 
 
-
-    public void setTouching(boolean touching){
-        this.touching = touching;
+    public void setTouchEnemy(Player te){
+        this.touchEnemy = te;
     }
-    public boolean getTouching(){ return touching;}
 
     @Override
     public void defineEntity() {
@@ -54,7 +53,6 @@ public class Enemy extends Entity {
         shape.setRadius(18 / com.smash2k17.game.logic.WorldData.PPM);
         fdef.filter.categoryBits = WorldData.ENEMY_BIT;
         fdef.filter.maskBits = com.smash2k17.game.logic.WorldData.GROUND_BIT | com.smash2k17.game.logic.WorldData.OBJECT_BIT | com.smash2k17.game.logic.WorldData.ITEM_BIT | WorldData.PLAYER_BIT;
-
         fdef.shape = shape;
         fdef.restitution = 0.5f;
         b2body.createFixture(fdef).setUserData(this);
@@ -65,15 +63,6 @@ public class Enemy extends Entity {
         b2body.setTransform((float)x, (float)y, 0);
         setPosition((float)x - getWidth()/2 , (float)y - getHeight()/2);
         setRegion(getFrame(dt));
-    }
-
-
-
-    public void lowerHitpoints(int attack) {
-        if(touching){
-            hitPoints -= attack;
-            System.out.println(hitPoints);
-        }
     }
 
     private TextureRegion getFrame(float dt) {
@@ -88,9 +77,18 @@ public class Enemy extends Entity {
                 break;
             case ATTACK:
                 region = playerAttack;
+                attackEnemy();
                 break;
             case FALLING:
+                if(currentState != State.FALLING)
+                {
+                    currentState = State.FALLING;
+                }
             case STANDING:
+                if(currentState != State.STANDING)
+                {
+                    currentState = State.STANDING;
+                }
             default:
                 region = playerStand;
                 break;
@@ -119,7 +117,15 @@ public class Enemy extends Entity {
 
     @Override
     public void attackEnemy() {
+        if(currentState != State.ATTACK)
+        {
+            currentState = State.ATTACK;
 
+            if(touchEnemy != null){
+                touchEnemy.lowerHitpoints(getStrength());
+                System.out.println("Attack!!!");
+            }
+        }
     }
 
     @Override

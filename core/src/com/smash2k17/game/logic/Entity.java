@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.RMI.IClientSignal;
 import com.smash2k17.game.logic.interfaces.IPlayable;
 
@@ -34,37 +35,36 @@ public abstract class Entity extends Sprite implements IPlayable, Serializable {
     public boolean playerIsDead;
     private com.smash2k17.game.logic.Map map;
     private EntityData data;
+    private Account activeAccount;
 
-    public Entity(com.smash2k17.game.logic.Map map)
+    public Entity(com.smash2k17.game.logic.Map map, Account activeAccount)
     {
         super(map.getTextureAtlas().findRegion("PLAYER"));
+        this.activeAccount = activeAccount;
         this.map = map;
         com.badlogic.gdx.utils.Array<TextureRegion> frames = new com.badlogic.gdx.utils.Array<TextureRegion>();
-        for(int i = 1; i < 4; i++) {
-            frames.add(new TextureRegion(getTexture(), 176 + (i * 19), 0, 18, 30));
-            playerRun = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
-        }
+
+            for (int i = 1; i < 4; i++) {
+                frames.add(new TextureRegion(getTexture(), 176 + (i * 19), 0, 18, 30));
+                playerRun = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
+            }
             frames.clear();
 
+            for (int i = 2; i < 6; i++) {
+                frames.add(new TextureRegion(getTexture(), 1 + (12 * 16), 0, 20, 30));
+                playerJump = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
 
-        for(int i = 2; i < 6; i++)
-        {
-            frames.add(new TextureRegion(getTexture(),1 +(12*16), 0, 20, 30));
-            playerJump = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
+            }
+            playerStand = new TextureRegion(getTexture(),193, 0, 20,30 );
+            playerAttack = new TextureRegion(getTexture(),258, 0, 20, 30);
+            setBounds(getX(), getY(), 40/ com.smash2k17.game.logic.WorldData.PPM, 40/ com.smash2k17.game.logic.WorldData.PPM);
+            setRegion(playerStand);
 
-        }
-
-
-
-        playerStand = new TextureRegion(getTexture(),193, 0, 20,30 );
-        playerAttack = new TextureRegion(getTexture(),258, 0, 20, 30);
-        setBounds(getX(), getY(), 40/ com.smash2k17.game.logic.WorldData.PPM, 40/ com.smash2k17.game.logic.WorldData.PPM);
-        setRegion(playerStand);
         this.world = map.getWorld();
         defineEntity();
         this.name = name;
         this.hitPoints = 100;
-        this.strength = 100;
+        this.strength = 10;
         this.armor = 0;
         this.map = map;
         currentState = State.STANDING;

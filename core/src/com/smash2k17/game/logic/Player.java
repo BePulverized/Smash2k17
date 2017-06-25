@@ -8,10 +8,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Menus.LoginScreen;
 
 import java.awt.event.KeyEvent;
 import java.rmi.RemoteException;
+
+import static com.smash2k17.game.logic.UserInterface.updateInfo;
 
 /**
  * Created by BePul on 27-3-2017.
@@ -21,12 +24,9 @@ public class Player extends Entity {
 
     private int lives;
     private EntityData data;
-    private Enemy touchEnemy;
 
-    public void setTouchEnemy(Enemy te){ this.touchEnemy = te; }
-
-    public Player(Map map, int id) {
-        super(map);
+    public Player(Map map, int id, Account activeAccount) {
+        super(map, activeAccount);
         this.lives = 3;
         data = new EntityData(id, 200, 300, 1);
     }
@@ -65,6 +65,12 @@ public class Player extends Entity {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    public void lowerHitpoints(int attack) {
+            hitPoints -= attack;
+            updateInfo(this);
+            System.out.println(hitPoints);
     }
 
     private TextureRegion getFrame(float dt) {
@@ -172,9 +178,6 @@ public class Player extends Entity {
         if(currentState != State.ATTACK)
         {
             currentState = State.ATTACK;
-            if(touchEnemy != null){
-                touchEnemy.lowerHitpoints(getStrength());
-            }
             return true;
         }
         return false;
