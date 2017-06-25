@@ -16,7 +16,6 @@ import java.util.Date;
  */
 public class World extends Game {
 
-
     public SpriteBatch batch;
     private int gridWidth;
     private int gridHeight;
@@ -27,8 +26,6 @@ public class World extends Game {
         gridWidth = 400;
     }
 
-
-
     public int getGridWidth()
     {
         return  gridWidth;
@@ -38,8 +35,6 @@ public class World extends Game {
     {
         return gridHeight;
     }
-
-
 
     public void endWorld()
     {
@@ -63,8 +58,6 @@ public class World extends Game {
         try {
             setScreen(new LoginScreen(this));
         } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (NotBoundException e) {
             e.printStackTrace();
         }
 

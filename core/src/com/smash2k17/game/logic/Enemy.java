@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.World;
+import com.smash2k17.game.logic.Database.Account;
 
 import javax.swing.text.Position;
 import java.awt.*;
@@ -24,8 +25,8 @@ public class Enemy extends Entity {
     private int id;
     private boolean right;
 
-    public Enemy(Map map, double x, double y, State state, boolean right, float dt, int id) {
-        super(map);
+    public Enemy(Map map, double x, double y, State state, boolean right, float dt, int id, Account activeAccount) {
+        super(map, activeAccount);
         this.x = x;
         this.y = y;
         this.state = state;
@@ -35,6 +36,7 @@ public class Enemy extends Entity {
         setRegion(getFrame(dt));
         //setBounds(getX(), getY(), 16 / com.smash2k17.game.logic.World.PPM, 16 / com.smash2k17.game.logic.World.PPM);
     }
+
 
     public void setTouchEnemy(Player te){
         this.touchEnemy = te;
@@ -51,7 +53,6 @@ public class Enemy extends Entity {
         shape.setRadius(18 / com.smash2k17.game.logic.WorldData.PPM);
         fdef.filter.categoryBits = WorldData.ENEMY_BIT;
         fdef.filter.maskBits = com.smash2k17.game.logic.WorldData.GROUND_BIT | com.smash2k17.game.logic.WorldData.OBJECT_BIT | com.smash2k17.game.logic.WorldData.ITEM_BIT | WorldData.PLAYER_BIT;
-
         fdef.shape = shape;
         fdef.restitution = 0.5f;
         b2body.createFixture(fdef).setUserData(this);

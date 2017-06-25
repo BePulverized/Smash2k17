@@ -2,6 +2,7 @@ package com.smash2k17.game.logic.RMI;
 
 import com.badlogic.gdx.utils.TimeUtils;
 import com.smash2k17.game.logic.*;
+import com.smash2k17.game.logic.Database.Account;
 
 import java.awt.*;
 import java.rmi.AlreadyBoundException;
@@ -11,6 +12,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
+import static java.lang.Thread.activeCount;
 import static java.lang.Thread.sleep;
 
 /**
@@ -203,7 +205,6 @@ public class ServerHost implements IServer{
             }
         }
     }
-
 
     public static void main(String[] args)
     {

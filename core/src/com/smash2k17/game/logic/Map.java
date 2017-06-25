@@ -79,7 +79,7 @@ public class Map implements Screen{
         this.conn = conn;
         this.gameMode = GameMode.TDM;
         this.joined = false;
-        atlas = new TextureAtlas("core\\assets\\PLAYER.pack");
+        atlas = new TextureAtlas(activeAccount.getSkinPath());
         this.game = world;
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(game.getGridWidth() / WorldData.PPM, game.getGridHeight() / WorldData.PPM, gameCam);
@@ -110,7 +110,7 @@ public class Map implements Screen{
             body.createFixture(fdef);
         }
 
-        player = new Player(this, activeAccount.getId());
+        player = new Player(this, activeAccount.getId(), activeAccount);
         enemies = new ArrayList<>();
 
 //        try {
@@ -184,7 +184,7 @@ public class Map implements Screen{
             for (EntityData ent : incomingData.getPlayers()) {
                 if(!checkIfEnemyExists(ent)) {
                     if(ent.getID() != activeAccount.getId()) {
-                        enemies.add(new Enemy(this, ent.getX(), ent.getY(), ent.getState(), ent.getRight(), ent.getDelta(), ent.getID()));
+                        enemies.add(new Enemy(this, ent.getX(), ent.getY(), ent.getState(), ent.getRight(), ent.getDelta(), ent.getID(), activeAccount));
                     }
                 }
             }
@@ -265,7 +265,8 @@ public class Map implements Screen{
         b2dr.render(worldlib, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
-        player.draw(game.batch);
+            player.draw(game.batch);
+
         for(Enemy entity : enemies)
         {
                 entity.draw(game.batch);

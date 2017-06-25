@@ -1,6 +1,7 @@
 package com.smash2k17.game.logic.RMI;
 
 import com.smash2k17.game.logic.*;
+import com.smash2k17.game.logic.Database.Account;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

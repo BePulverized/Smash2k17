@@ -16,13 +16,14 @@ public class Account implements Serializable{
     private double balance;
     private ArrayList<StoreItem> inventory;
     private ArrayList<WorldData> avWorlds;
-
+    private String skinPath;
 
     public Account(int id, String email, double balance) {
         this.id = id;
         this.email = email;
         this.balance = balance;
-        inventory = new ArrayList<StoreItem>();//
+        inventory = new ArrayList<StoreItem>();
+        skinPath = "core\\assets\\PLAYER.pack";
     }
 
     public String getEmail() {
@@ -41,5 +42,13 @@ public class Account implements Serializable{
 
     public int getId() {
         return id;
+    }
+
+    public String getSkinPath() {
+        return skinPath;
+    }
+
+    public void setSkinPath(String skinPath) {
+        this.skinPath = skinPath;
     }
 }

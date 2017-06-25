@@ -1,8 +1,6 @@
 package com.smash2k17.game.logic.RMI;
 
-import com.smash2k17.game.logic.Database.Account;
-import com.smash2k17.game.logic.Database.AccountContext;
-import com.smash2k17.game.logic.Database.AccountRepository;
+import com.smash2k17.game.logic.Database.*;
 
 import java.io.UnsupportedEncodingException;
 import java.rmi.RemoteException;
@@ -17,9 +15,11 @@ import java.sql.SQLException;
 
 public class DatabaseService extends UnicastRemoteObject implements IDatabaseService{
     private AccountRepository ar;
+    private StoreRepository sr;
 
     public DatabaseService() throws RemoteException {
         ar =  new AccountRepository(new AccountContext());
+        sr = new StoreRepository(new StoreContext());
     }
 
     @Override
@@ -31,4 +31,11 @@ public class DatabaseService extends UnicastRemoteObject implements IDatabaseSer
             return null;
         }
     }
+
+    public void koopProduct(int idProduct, int idKlant) throws SQLException, RemoteException
+    {
+        sr.koopProduct(idProduct, idKlant);
+    }
+
+
 }

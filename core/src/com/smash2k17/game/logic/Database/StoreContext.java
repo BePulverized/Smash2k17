@@ -41,7 +41,7 @@ public class StoreContext implements IStore, Serializable {
             String query;
 
             if (getPrijs(idProduct).doubleValue() <= getBalance(idKlant).doubleValue()) {
-                query = " insert into Account_storeitem (storeitemid, accountid)"
+                query = " insert into account_storeitem (storeitemid, accountid)"
                         + " values (?, ?)";
                 preparedStmt = myConn.prepareStatement(query);
                 preparedStmt.setInt(1, idProduct);

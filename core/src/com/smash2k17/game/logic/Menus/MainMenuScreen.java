@@ -96,8 +96,6 @@ public class MainMenuScreen implements Screen {
                     game.setScreen(new LoginScreen(game));
                 } catch (RemoteException e) {
                     e.printStackTrace();
-                } catch (NotBoundException e) {
-                    e.printStackTrace();
                 }
             }
         });

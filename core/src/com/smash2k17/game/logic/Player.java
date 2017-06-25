@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Menus.LoginScreen;
 
 import java.awt.event.KeyEvent;
@@ -28,8 +29,8 @@ public class Player extends Entity {
         getAttacked();
     }
 
-    public Player(Map map, int id) {
-        super(map);
+    public Player(Map map, int id, Account activeAccount) {
+        super(map, activeAccount);
         this.lives = 3;
         data = new EntityData(id, 200, 300, 1);
     }
