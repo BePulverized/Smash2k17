@@ -48,8 +48,6 @@ public class Map implements Screen{
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
     private TextureAtlas atlas;
-    private long lastBuffDropTime;
-    private long lastDebuffDropTime;
     private boolean joined;
     // Interface
     private UserInterface ui;
@@ -66,7 +64,7 @@ public class Map implements Screen{
     private Enemy enemy;
     private Array<ItemDrop> items;
     private ArrayList<Enemy> enemies;
-    private PriorityQueue<ItemDef> itemsToSpawn;
+    private ArrayList<ItemDef> itemsToSpawn;
     private WorldData worldData;
     private Account activeAccount;
     private ServerConnection conn;
@@ -114,43 +112,24 @@ public class Map implements Screen{
         enemies = new ArrayList<>();
         worldlib.setContactListener(new WorldContactListener());
         items = new Array<>();
-        itemsToSpawn = new PriorityQueue<>();
+        itemsToSpawn = new ArrayList<>();
         UserInterface.updateInfo(player);
     }
 
-    public void spawnItem(ItemDef idef)
-    {
-        itemsToSpawn.add(idef);
-        lastBuffDropTime = TimeUtils.millis();
-        lastDebuffDropTime = TimeUtils.millis();
-    }
-
-    public void handleSpawningItems()
-    {
-        Random rnddebuff = new Random();
-        if(TimeUtils.millis() - lastDebuffDropTime > 5000 && items.size < 2) {
-            int randomx = rnddebuff.nextInt(6 + 1 - 1) + 1;
-            int randomy = rnddebuff.nextInt(3 +1 - 1) + 1;
-            spawnItem(new ItemDef(new Vector2(randomx, randomy), Debuff.class));
-        }
-        Random rndbuff = new Random();
-        if(TimeUtils.millis() - lastBuffDropTime > 4000 && items.size < 2) {
-            int randomx = rndbuff.nextInt(6 + 1 - 1) + 1;
-            int randomy = rndbuff.nextInt(3 +1 - 1) + 1;
-            spawnItem(new ItemDef(new Vector2(randomx, randomy), PowerUp.class));
-        }
-        if(!itemsToSpawn.isEmpty())
+    public void handleSpawningItems() throws RemoteException {
+        itemsToSpawn = conn.getItems(player.getData());
+        if(itemsToSpawn.size() > 0)
         {
-
-            ItemDef idef = itemsToSpawn.poll();
-            if(idef.type == PowerUp.class)
+            ItemDef idef = itemsToSpawn.get(itemsToSpawn.size() - 1);
+            if(idef.type.equals("Powerup"))
             {
-                items.add(new PowerUp(this, idef.position.x, idef.position.y));
+                items.add(new PowerUp(this, idef.position.x, idef.position.y, conn, player.getData()));
             }
-            if(idef.type == Debuff.class)
+            if(idef.type.equals("Debuff"))
             {
-                items.add(new Debuff(this, idef.position.x, idef.position.y));
+                items.add(new Debuff(this, idef.position.x, idef.position.y, conn, player.getData()));
             }
+            itemsToSpawn.remove(itemsToSpawn.size() -1);
         }
     }
 
@@ -195,7 +174,7 @@ public class Map implements Screen{
         handleSpawningItems();
         if(incomingData != null) {
             for (EntityData ent : incomingData.getPlayers()) {
-                if(checkIfEnemyExists(ent) == false) {
+                if(!checkIfEnemyExists(ent)) {
                     enemies.add(new Enemy(this, ent.getX(), ent.getY(), ent.getState(), ent.getRight(), ent.getDelta(), ent.getID()));
                 }
             }

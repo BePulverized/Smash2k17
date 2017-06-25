@@ -45,24 +45,23 @@ public class Enemy extends Entity {
     @Override
     public void defineEntity() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set((float)x/ WorldData.PPM,(float)y/WorldData.PPM );
+        bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
-
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(15 / com.smash2k17.game.logic.WorldData.PPM);
-        fdef.filter.categoryBits = com.smash2k17.game.logic.WorldData.ENEMY_BIT;
-        fdef.filter.maskBits = com.smash2k17.game.logic.WorldData.GROUND_BIT | com.smash2k17.game.logic.WorldData.OBJECT_BIT | com.smash2k17.game.logic.WorldData.ITEM_BIT | com.smash2k17.game.logic.WorldData.PLAYER_BIT;
+        shape.setRadius(18 / com.smash2k17.game.logic.WorldData.PPM);
+        fdef.filter.categoryBits = WorldData.ENEMY_BIT;
+        fdef.filter.maskBits = com.smash2k17.game.logic.WorldData.GROUND_BIT | com.smash2k17.game.logic.WorldData.OBJECT_BIT | com.smash2k17.game.logic.WorldData.ITEM_BIT;
 
         fdef.shape = shape;
         fdef.restitution = 0.5f;
         b2body.createFixture(fdef).setUserData(this);
-
     }
 
     @Override
     public void update(float dt) {
+        b2body.setTransform((float)x, (float)y, 0);
         setPosition((float)x - getWidth()/2 , (float)y - getHeight()/2);
         setRegion(getFrame(dt));
     }
