@@ -18,7 +18,7 @@ public class Enemy extends Entity {
 
     private State state;
     //public Body b2body;
-    private boolean touching = false;
+    private Player touchEnemy;
     private double x;
     private double y;
     private int id;
@@ -36,12 +36,9 @@ public class Enemy extends Entity {
         //setBounds(getX(), getY(), 16 / com.smash2k17.game.logic.World.PPM, 16 / com.smash2k17.game.logic.World.PPM);
     }
 
-
-
-    public void setTouching(boolean touching){
-        this.touching = touching;
+    public void setTouchEnemy(Player te){
+        this.touchEnemy = te;
     }
-    public boolean getTouching(){ return touching;}
 
     @Override
     public void defineEntity() {
@@ -67,15 +64,6 @@ public class Enemy extends Entity {
         setRegion(getFrame(dt));
     }
 
-
-
-    public void lowerHitpoints(int attack) {
-        if(touching){
-            hitPoints -= attack;
-            System.out.println(hitPoints);
-        }
-    }
-
     private TextureRegion getFrame(float dt) {
 
         TextureRegion region;
@@ -88,6 +76,7 @@ public class Enemy extends Entity {
                 break;
             case ATTACK:
                 region = playerAttack;
+                attackEnemy();
                 break;
             case FALLING:
             case STANDING:
@@ -119,7 +108,14 @@ public class Enemy extends Entity {
 
     @Override
     public void attackEnemy() {
+        if(currentState != State.ATTACK)
+        {
+            currentState = State.ATTACK;
 
+            if(touchEnemy != null){
+                touchEnemy.lowerHitpoints(getStrength());
+            }
+        }
     }
 
     @Override

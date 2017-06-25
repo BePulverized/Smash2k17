@@ -64,7 +64,7 @@ public abstract class Entity extends Sprite implements IPlayable, Serializable {
         defineEntity();
         this.name = name;
         this.hitPoints = 100;
-        this.strength = 100;
+        this.strength = 10;
         this.armor = 0;
         this.map = map;
         currentState = State.STANDING;
