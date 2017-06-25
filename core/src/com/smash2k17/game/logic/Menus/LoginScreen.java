@@ -98,7 +98,17 @@ public class LoginScreen implements Screen {
 
                 Random rnd = new Random();
 
-                user = new Account(rnd.nextInt(1000), "lol", 0);
+                try {
+                    user = accountRepo.logIn(nameField.getText(), passField.getText());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 game.setScreen(new MainMenuScreen(game, conn, user));
 
 

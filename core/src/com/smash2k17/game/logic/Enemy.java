@@ -53,7 +53,7 @@ public class Enemy extends Entity {
         CircleShape shape = new CircleShape();
         shape.setRadius(18 / com.smash2k17.game.logic.WorldData.PPM);
         fdef.filter.categoryBits = WorldData.ENEMY_BIT;
-        fdef.filter.maskBits = com.smash2k17.game.logic.WorldData.GROUND_BIT | com.smash2k17.game.logic.WorldData.OBJECT_BIT | com.smash2k17.game.logic.WorldData.ITEM_BIT;
+        fdef.filter.maskBits = com.smash2k17.game.logic.WorldData.GROUND_BIT | com.smash2k17.game.logic.WorldData.OBJECT_BIT | com.smash2k17.game.logic.WorldData.ITEM_BIT | WorldData.PLAYER_BIT;
 
         fdef.shape = shape;
         fdef.restitution = 0.5f;

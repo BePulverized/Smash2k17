@@ -76,10 +76,12 @@ public class ServerHost implements IServer{
                 entity.setRight(ent.getRight());
             }
         }
-
+        System.out.println("Playerlist: ");
         //signal
         for(EntityData lobby: playerWorld.getPlayers())
         {
+            System.out.println(lobby.getID());
+
             if(lobby.getID() != ent.getID()) {
                 lobby.getSignal().signal(playerWorld, "playermovement");
             }

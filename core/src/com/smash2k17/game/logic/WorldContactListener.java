@@ -42,7 +42,7 @@ public class WorldContactListener implements ContactListener {
                 break;
             case WorldData.ENEMY_BIT | WorldData.PLAYER_BIT:
                 System.out.println("Enemy player touch");
-                if(fixA.getFilterData().categoryBits == WorldData.ENEMY_BIT){
+                if(fixA.getFilterData().categoryBits == WorldData.PLAYER_BIT){
                     Enemy e = (Enemy)fixB.getUserData();
                     Player p = (Player) fixA.getUserData();
                     p.setTouchEnemy(e);

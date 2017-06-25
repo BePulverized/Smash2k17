@@ -177,7 +177,9 @@ public class Map implements Screen{
         if(incomingData != null) {
             for (EntityData ent : incomingData.getPlayers()) {
                 if(!checkIfEnemyExists(ent)) {
-                    enemies.add(new Enemy(this, ent.getX(), ent.getY(), ent.getState(), ent.getRight(), ent.getDelta(), ent.getID()));
+                    if(ent.getID() != activeAccount.getId()) {
+                        enemies.add(new Enemy(this, ent.getX(), ent.getY(), ent.getState(), ent.getRight(), ent.getDelta(), ent.getID()));
+                    }
                 }
             }
 
@@ -260,7 +262,7 @@ public class Map implements Screen{
         player.draw(game.batch);
         for(Enemy entity : enemies)
         {
-            entity.draw(game.batch);
+                entity.draw(game.batch);
         }
         for(ItemDrop item : items)
         {
