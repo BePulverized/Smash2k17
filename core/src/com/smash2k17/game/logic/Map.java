@@ -64,9 +64,9 @@ public class Map implements Screen{
     //items
     private Player player;
     private Enemy enemy;
-    private Array<ItemDrop> items;
+    protected Array<ItemDrop> items;
     private ArrayList<Entity> enemies;
-    private PriorityQueue<ItemDef> itemsToSpawn;
+    protected PriorityQueue<ItemDef> itemsToSpawn;
     private WorldData worldData;
     private Account activeAccount;
 
@@ -76,7 +76,7 @@ public class Map implements Screen{
         this.name = name;
         this.activeAccount =activeAccount;
         this.gameMode = GameMode.TDM;
-        atlas = new TextureAtlas("core\\assets\\PLAYER.pack");
+        atlas = new TextureAtlas("core/assets/PLAYER.pack");
         this.game = world;
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(game.getGridWidth() / WorldData.PPM, game.getGridHeight() / WorldData.PPM, gameCam);

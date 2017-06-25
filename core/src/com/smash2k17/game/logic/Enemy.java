@@ -34,6 +34,7 @@ public class Enemy extends Entity {
     public void setTouching(boolean touching){
         this.touching = touching;
     }
+    public boolean getTouching(){ return touching;}
 
     @Override
     public void defineEntity() {

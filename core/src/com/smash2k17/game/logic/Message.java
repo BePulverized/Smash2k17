@@ -25,5 +25,11 @@ public class Message {
         return text;
     }
 
+    public String getSender() { return sender;}
+
+    protected void setTimeStamp(Date date){this.timeStamp = date;}
+
+
+
 
 }
