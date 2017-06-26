@@ -14,7 +14,7 @@ public class AccountContext implements IAccount, Serializable {
 
     private static String connString = "jdbc:mysql://localhost:3306/smash2k17";
     private static String connUser = "student";
-    private static String connPassword = "proftaakgroep32C";
+    private static String connPassword = "Proftaakgroep32C";
 
 
     public String encrypt(String base) throws NoSuchAlgorithmException, UnsupportedEncodingException {

@@ -208,8 +208,11 @@ public class Map implements Screen{
             joined = true;
         }
         if(player.currentState != Player.State.DEAD) {
-            conn.playerLeave(player.getData());
             gameCam.position.x = player.b2body.getPosition().x;
+        }
+        if(player.currentState == Player.State.DEAD)
+        {
+            conn.playerLeave(player.getData());
         }
         gameCam.update();
         renderer.setView(gameCam);
