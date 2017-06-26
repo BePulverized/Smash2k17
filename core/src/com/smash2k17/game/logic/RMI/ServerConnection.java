@@ -23,8 +23,8 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
     private Enemy lastDestroyedEnemy;
     public ServerConnection() throws RemoteException {
         try{
-            remoteService = (IServer) Naming.lookup("//localhost:1100/RmiService");
-            databaseService = (IDatabaseService) Naming.lookup("//localhost:1099/databaseService");
+            remoteService = (IServer) Naming.lookup("//169.254.214.27:1100/RmiService");
+            databaseService = (IDatabaseService) Naming.lookup("//169.254.214.27:1099/databaseService");
         } catch (NotBoundException e) {
 
         } catch (MalformedURLException e) {

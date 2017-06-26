@@ -52,12 +52,12 @@ public class Player extends Entity {
         if(getState() == State.DEAD) {
             setPosition(200,300);
             setRegion(getFrame(dt));
-            data = new EntityData(data.getID(), 200, 300, 1, currentState, dt, runningRight);
+            data = new EntityData(data.getID(), 200, 300, 1, currentState.toString(), dt, runningRight);
         }
         else{
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
             setRegion(getFrame(dt));
-            data = new EntityData(data.getID(), (double) b2body.getPosition().x, (double) b2body.getPosition().y, 1, currentState, dt, runningRight);
+            data = new EntityData(data.getID(), (double) b2body.getPosition().x, (double) b2body.getPosition().y, 1, currentState.toString(), dt, runningRight);
         }
 
         try {

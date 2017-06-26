@@ -16,10 +16,10 @@ public class EntityData implements Serializable{
     private double y;
     private IClientSignal signal;
     private int WorldID;
-    private Entity.State state;
+    private String state;
     private float delta;
     private boolean right;
-    public EntityData(int ID, double x, double y, int worldID, Entity.State state, float delta, boolean right)
+    public EntityData(int ID, double x, double y, int worldID, String state, float delta, boolean right)
     {
         this.delta = delta;
         this.ID = ID;
@@ -70,12 +70,12 @@ public class EntityData implements Serializable{
         return y;
     }
 
-    public Entity.State getState()
+    public String  getState()
     {
         return state;
     }
 
-    public void setState(Entity.State state)
+    public void setState(String state)
     {
         this.state = state;
     }

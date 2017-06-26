@@ -120,7 +120,7 @@ public class ServerHost implements IServer{
             if(entityData.getID() == ent.getID())
             {
                 existing = true;
-                entityData.setState(Entity.State.STANDING);
+                entityData.setState("STANDING");
                 entityData.setPosition(300,400);
             }
         }
@@ -226,20 +226,21 @@ public class ServerHost implements IServer{
 
     public static void main(String[] args)
     {
+        System.setProperty("java.rmi.server.hostname", "169.254.214.27");
         ServerHost host = new ServerHost();
         lastBuffDropTime = 0;
         lastDebuffDropTime = 0;
-        Timer t = new Timer();
-        t.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                for(WorldData worldData: worlds)
-                {
-                    handleItemSpawns(worldData.getItems());
-                    System.out.println(worldData.toString() + " items: " + worldData.getItems().size());
-                }
-            }
-        },0, 5000);
+//        Timer t = new Timer();
+//        t.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                for(WorldData worldData: worlds)
+//                {
+//                    handleItemSpawns(worldData.getItems());
+//                    System.out.println(worldData.toString() + " items: " + worldData.getItems().size());
+//                }
+//            }
+//        },0, 5000);
 
 
     }

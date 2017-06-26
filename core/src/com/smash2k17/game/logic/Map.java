@@ -178,7 +178,7 @@ public class Map implements Screen{
             for (EntityData ent : incomingData.getPlayers()) {
                 if(!checkIfEnemyExists(ent)) {
                     if(ent.getID() != activeAccount.getId()) {
-                        enemies.add(new Enemy(this, ent.getX(), ent.getY(), ent.getState(), ent.getRight(), ent.getDelta(), ent.getID(), activeAccount));
+                        enemies.add(new Enemy(this, ent.getX(), ent.getY(), Entity.State.valueOf(ent.getState()), ent.getRight(), ent.getDelta(), ent.getID(), activeAccount));
                     }
                 }
             }
@@ -191,7 +191,7 @@ public class Map implements Screen{
                     {
                         enemy.setX(ent.getX());
                         enemy.setY(ent.getY());
-                        enemy.setState(ent.getState());
+                        enemy.setState(Entity.State.valueOf(ent.getState()));
                         enemy.setRight(ent.getRight());
                         enemy.update(ent.getDelta());
                     }
