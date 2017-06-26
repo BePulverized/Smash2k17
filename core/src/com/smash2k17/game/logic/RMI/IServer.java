@@ -2,6 +2,7 @@ package com.smash2k17.game.logic.RMI;
 
 import com.smash2k17.game.logic.*;
 import com.smash2k17.game.logic.Database.Account;
+import com.sun.org.apache.regexp.internal.RE;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -19,4 +20,5 @@ public interface IServer extends Remote {
     void playerLeave(EntityData ent, IClientSignal signal) throws RemoteException;
     ArrayList<ItemDef> getItems(EntityData ent) throws RemoteException;
     void destroyItem(EntityData ent, float x, float y) throws RemoteException;
+    WorldData getWorld(EntityData ent) throws RemoteException;
 }

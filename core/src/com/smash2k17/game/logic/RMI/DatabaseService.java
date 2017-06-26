@@ -23,8 +23,8 @@ public class DatabaseService implements IDatabaseService{
     private StoreRepository sr;
 
     public DatabaseService() throws RemoteException {
-        Registry rmiRegistry = LocateRegistry.createRegistry(1100);
-        IDatabaseService databaseService = (IDatabaseService)UnicastRemoteObject.exportObject(this, 1100);
+        Registry rmiRegistry = LocateRegistry.createRegistry(1099);
+        IDatabaseService databaseService = (IDatabaseService)UnicastRemoteObject.exportObject(this, 1099);
         rmiRegistry.rebind("databaseService",databaseService);
         ar =  new AccountRepository(new AccountContext());
         sr = new StoreRepository(new StoreContext());

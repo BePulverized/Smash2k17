@@ -28,8 +28,8 @@ public class ServerHost implements IServer{
     public ServerHost()
     {
         try{
-            Registry rmiRegistry = LocateRegistry.createRegistry(1099);
-            IServer rmiServer = (IServer) UnicastRemoteObject.exportObject(this,1099);
+            Registry rmiRegistry = LocateRegistry.createRegistry(1100);
+            IServer rmiServer = (IServer) UnicastRemoteObject.exportObject(this,1100);
             rmiRegistry.rebind("RmiService", rmiServer);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -85,6 +85,21 @@ public class ServerHost implements IServer{
                 lobby.getSignal().signal(playerWorld, "playermovement");
             }
         }
+    }
+
+    public WorldData getWorld(EntityData ent)
+    {
+        WorldData playerWorld = null;
+        boolean existing = false;
+        for (WorldData world: worlds)
+        {
+            if(world.getID() == ent.getWorldID())
+            {
+                playerWorld = world;
+            }
+        }
+
+        return playerWorld;
     }
 
     @Override

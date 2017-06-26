@@ -98,7 +98,7 @@ public class Map implements Screen{
         FixtureDef fdef = new FixtureDef();
         Body body;
 
-        for(MapObject object: tiledMap.getLayers().get(3).getObjects().getByType(RectangleMapObject.class))
+        for(MapObject object: tiledMap.getLayers().get(2).getObjects().getByType(RectangleMapObject.class))
         {
             com.badlogic.gdx.math.Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
@@ -171,7 +171,7 @@ public class Map implements Screen{
     }
 
     public void update(float dt) throws RemoteException {
-        WorldData incomingData = conn.getPlayerWorld();
+        WorldData incomingData = conn.getPlayerWorld(player.getData());
         player.handleInput(dt);
         handleSpawningItems();
         if(incomingData != null) {

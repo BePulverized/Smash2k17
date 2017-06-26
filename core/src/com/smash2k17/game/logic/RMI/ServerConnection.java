@@ -23,8 +23,8 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
     private Enemy lastDestroyedEnemy;
     public ServerConnection() throws RemoteException {
         try{
-            remoteService = (IServer) Naming.lookup("//localhost:1099/RmiService");
-            databaseService = (IDatabaseService) Naming.lookup("//localhost:1100/databaseService");
+            remoteService = (IServer) Naming.lookup("//localhost:1100/RmiService");
+            databaseService = (IDatabaseService) Naming.lookup("//localhost:1099/databaseService");
         } catch (NotBoundException e) {
 
         } catch (MalformedURLException e) {
@@ -60,9 +60,8 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
     }
 
     // getworlddata
-    public WorldData getPlayerWorld()
-    {
-        return playerWorld;
+    public WorldData getPlayerWorld(EntityData ent) throws RemoteException {
+        return remoteService.getWorld(ent);
     }
 
     @Override

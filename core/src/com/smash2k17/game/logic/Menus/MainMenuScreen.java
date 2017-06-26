@@ -49,7 +49,7 @@ public class MainMenuScreen implements Screen {
         this.activeAccount = activeAccount;
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"),atlas);
-        background = new Sprite(new Texture("core\\assets\\menubackground.jpg"));
+        background = new Sprite(new Texture("core\\assets\\menubackground.png"));
         sb =  new SpriteBatch();
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
