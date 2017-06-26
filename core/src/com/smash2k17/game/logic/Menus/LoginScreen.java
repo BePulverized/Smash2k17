@@ -19,6 +19,7 @@ import com.smash2k17.game.logic.Database.Account;
 import com.smash2k17.game.logic.Database.AccountContext;
 import com.smash2k17.game.logic.Database.AccountRepository;
 import com.smash2k17.game.logic.Map;
+import com.smash2k17.game.logic.RMI.DatabaseService;
 import com.smash2k17.game.logic.RMI.IDatabaseService;
 import com.smash2k17.game.logic.RMI.ServerConnection;
 import com.smash2k17.game.logic.World;
@@ -54,14 +55,6 @@ public class LoginScreen implements Screen {
     private IDatabaseService dbs;
 
     public LoginScreen(World w) throws RemoteException {
-        try {
-            reg = LocateRegistry.getRegistry("localhost", 1099);
-            dbs = (IDatabaseService) reg.lookup("databaseService");
-            System.out.println("Database registry bound!");
-        } catch (NotBoundException e) {
-            System.out.println("Could not bind database registry :(");
-            e.printStackTrace();
-        }
         this.game = w;
         atlas = new TextureAtlas("core\\assets\\uiskin\\uiskin.atlas");
         skin = new Skin(Gdx.files.internal("core\\assets\\uiskin\\uiskin.json"), atlas);
@@ -109,7 +102,7 @@ public class LoginScreen implements Screen {
                     e.printStackTrace();
                 }**/
                 try {
-                    user = dbs.login(nameField.getText(), passField.getText());
+                    user = conn.login(nameField.getText(), passField.getText());
                     System.out.println("Account received!");
 //                    user = new Account(1, "barry",1);
                 } catch (RemoteException e) {

@@ -1,6 +1,7 @@
 package com.smash2k17.game.logic.RMI;
 
 import com.smash2k17.game.logic.*;
+import com.smash2k17.game.logic.Database.Account;
 
 
 import java.net.MalformedURLException;
@@ -17,11 +18,13 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
 
     private ArrayList<WorldData> avWorlds;
     private IServer remoteService;
+    private IDatabaseService databaseService;
     private WorldData playerWorld;
     private Enemy lastDestroyedEnemy;
     public ServerConnection() throws RemoteException {
         try{
             remoteService = (IServer) Naming.lookup("//localhost:1099/RmiService");
+            databaseService = (IDatabaseService) Naming.lookup("//localhost:1100/databaseService");
         } catch (NotBoundException e) {
 
         } catch (MalformedURLException e) {
@@ -77,6 +80,10 @@ public class ServerConnection extends UnicastRemoteObject implements IClientSign
             break;
 
         }
+    }
+
+    public Account login(String email, String password) throws RemoteException {
+        return databaseService.login(email, password);
     }
 
     public ArrayList<ItemDef> getItems(EntityData ent) throws RemoteException {

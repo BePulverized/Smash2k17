@@ -12,7 +12,7 @@ public class WorldData implements Serializable{
     public static final float PPM = 100;
     public static final short OBJECT_BIT = 32;
     public static final short ITEM_BIT = 256;
-    public static final short PLAYER_BIT = 3;
+    public static final short PLAYER_BIT = 2;
     public static final short ENEMY_BIT = 2;
     public static final short GROUND_BIT = 1;
     private Date dateCreated;

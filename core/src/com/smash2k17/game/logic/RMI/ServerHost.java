@@ -31,8 +31,6 @@ public class ServerHost implements IServer{
             Registry rmiRegistry = LocateRegistry.createRegistry(1099);
             IServer rmiServer = (IServer) UnicastRemoteObject.exportObject(this,1099);
             rmiRegistry.rebind("RmiService", rmiServer);
-            IDatabaseService databaseService = new DatabaseService();
-            rmiRegistry.rebind("databaseService",databaseService);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

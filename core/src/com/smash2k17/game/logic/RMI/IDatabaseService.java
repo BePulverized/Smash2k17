@@ -10,6 +10,6 @@ import java.sql.SQLException;
  * Created by Martien on 25-Jun-17.
  */
 public interface IDatabaseService extends Remote{
-    public Account login(String username, String password)throws RemoteException;
-    public void koopProduct(int idProduct, int idKlant) throws SQLException, RemoteException;
+    Account login(String username, String password)throws RemoteException;
+    void koopProduct(int idProduct, int idKlant) throws SQLException, RemoteException;
 }
